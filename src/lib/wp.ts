@@ -1,5 +1,5 @@
 import apiFetch from '@wordpress/api-fetch';
-import { WpImage } from '../types';
+import { ImageLike, WpImage } from '../types';
 
 export const loadImage = (img: HTMLImageElement) => {
     return new Promise((resolve) => (img.onload = resolve));
@@ -8,7 +8,7 @@ export const loadImage = (img: HTMLImageElement) => {
 export const importImage = async (
     imageUrl: string,
     metadata: {
-        alt: string;
+        alt?: string;
         filename: string;
         caption: string;
     },
@@ -42,5 +42,15 @@ export const importImage = async (
         path: 'wp/v2/media',
         method: 'POST',
         body: formData,
+    });
+};
+
+export const setImage = async (
+    image: ImageLike,
+): Promise<WpImage | undefined> => {
+    const caption = 'The prompt the user typed';
+    return await importImage('the image url', {
+        filename: `stable-diffusion-${image.id}.jpg`,
+        caption,
     });
 };

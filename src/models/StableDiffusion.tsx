@@ -1,11 +1,12 @@
 import { useRef } from '@wordpress/element';
 import { useGlobalState } from '../state/global';
+import { ImageLike } from '../types';
 
-type MondalContentProps = {
-    setImage: (image: any) => void;
+type StableDiffusionProps = {
+    setImage: (image: ImageLike) => void;
 };
 
-export const ModalContent = ({ setImage }: MondalContentProps) => {
+export const StableDiffusion = ({ setImage }: StableDiffusionProps) => {
     const { loading } = useGlobalState();
     const gridRef = useRef<HTMLDivElement>(null);
 

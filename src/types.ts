@@ -1,3 +1,16 @@
+export type AvailableModels =
+    | 'stability-ai/stable-diffusion'
+    | 'methexis-inc/img2prompt'
+    | 'tencentarc/gfpgan'
+    | 'deforum/deforum_stable_diffusion';
+
+export type ModelAttributes = {
+    id: AvailableModels;
+    name: string;
+    description: string;
+    active: boolean;
+};
+
 export type ImageLike = {
     alt?: string;
     caption?: string;
@@ -9,6 +22,7 @@ export type ImageLike = {
     linkTarget?: string;
     linkClass?: string;
 };
+
 export type WpImage = {
     id: number;
     source_url: string;

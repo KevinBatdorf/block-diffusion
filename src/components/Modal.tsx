@@ -2,21 +2,22 @@ import { useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Dialog } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { StableDiffusion } from '../models/StableDiffusion';
+import { AvailableModels, ImageLike } from '../types';
 import { ModalCloseButton } from './ModalCloseButton';
-import { ModalContent } from './ModalContent';
 
 type ModalProps = {
-    open: boolean;
-    setImage: (image: any) => void;
+    modelName?: AvailableModels;
+    setImage: (image: ImageLike) => void;
     onClose: () => void;
 };
 
-export const Modal = ({ open, onClose, setImage }: ModalProps) => {
+export const Modal = ({ modelName, onClose, setImage }: ModalProps) => {
     const initialFocus = useRef(null);
 
     return (
         <AnimatePresence>
-            {open && (
+            {Boolean(modelName) && (
                 <Dialog
                     className="stable-diffusion-editor stable-diffusion-modal"
                     static
@@ -26,7 +27,7 @@ export const Modal = ({ open, onClose, setImage }: ModalProps) => {
                     key="modal"
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    open={open}
+                    open={Boolean(modelName)}
                     onClose={onClose}>
                     <div className="absolute mx-auto w-full h-full md:p-8">
                         <div
@@ -49,7 +50,10 @@ export const Modal = ({ open, onClose, setImage }: ModalProps) => {
                                 {__('Stable Diffusion', 'stable-diffusion')}
                             </Dialog.Title>
                             <div className="flex flex-col w-full relative">
-                                <ModalContent setImage={setImage} />
+                                <ModalContent
+                                    setImage={setImage}
+                                    modelName={modelName}
+                                />
                             </div>
                         </motion.div>
                     </div>
@@ -57,4 +61,15 @@ export const Modal = ({ open, onClose, setImage }: ModalProps) => {
             )}
         </AnimatePresence>
     );
+};
+
+type ModalContent = {
+    setImage: (image: ImageLike) => void;
+    modelName?: AvailableModels;
+};
+const ModalContent = ({ setImage, modelName }: ModalContent) => {
+    if (modelName === 'stability-ai/stable-diffusion') {
+        return <StableDiffusion setImage={setImage} />;
+    }
+    return null;
 };

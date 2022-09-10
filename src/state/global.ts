@@ -1,36 +1,29 @@
 import create from 'zustand';
-import { persist, devtools } from 'zustand/middleware';
+import { devtools } from 'zustand/middleware';
+import { AvailableModels } from '../types';
 
 type GlobalState = {
-    importing: string | boolean;
-    prompt?: string;
+    importingMessage: string;
     loading: boolean;
-    setImporting: (loading: string | boolean) => void;
+    currentInterface?: AvailableModels;
+    setImportingMessage: (loading: string) => void;
     setLoading: (loading: boolean) => void;
-    setPrompt: (searchTerm: string) => void;
+    setCurrentInterface: (currentInterface?: AvailableModels) => void;
 };
 
 export const useGlobalState = create<GlobalState>()(
-    devtools(
-        persist(
-            (set) => ({
-                importing: false,
-                loading: false,
-                prompt: undefined,
-                setPrompt: (prompt) => {
-                    set(() => ({ prompt }));
-                },
-                setImporting: (importing: boolean | string) => {
-                    set((state) => ({ ...state, importing }));
-                },
-                setLoading: (loading: boolean) => {
-                    set((state) => ({ ...state, loading }));
-                },
-            }),
-            {
-                name: 'stable-diffusion-state',
-                getStorage: () => localStorage,
-            },
-        ),
-    ),
+    devtools((set) => ({
+        importingMessage: '',
+        loading: false,
+        currentInterface: undefined,
+        setImportingMessage: (importingMessage: string) => {
+            set({ importingMessage });
+        },
+        setLoading: (loading: boolean) => {
+            set({ loading });
+        },
+        setCurrentInterface: (currentInterface: AvailableModels) => {
+            set({ currentInterface });
+        },
+    })),
 );

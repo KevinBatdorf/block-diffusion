@@ -5,32 +5,53 @@ import {
     useState,
 } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { importImage } from '../lib/wp';
+import { setImage } from '../lib/wp';
 import { useGlobalState } from '../state/global';
-import { ImageLike, WpImage } from '../types';
+import { ImageLike } from '../types';
 import { Modal } from './Modal';
+import { ModalSelect } from './ModelSelect';
 
 type LoaderProps = {
-    attributes: ImageLike;
     setAttributes: (attributes: ImageLike) => void;
     clientId?: string;
 };
 
-export const Loader = ({
-    attributes,
-    setAttributes,
-    clientId,
-}: LoaderProps) => {
-    const [showModal, setShowModal] = useState(false);
-    const { importing, setImporting, setLoading } = useGlobalState();
+export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
+    const [showSelectScreen, setShowSelectScreen] = useState(true);
+    const {
+        setImportingMessage,
+        setLoading,
+        currentInterface,
+        setCurrentInterface,
+    } = useGlobalState();
     const timerRef = useRef(0);
     const rafRef = useRef(0);
+
+    const handleImageImport = (image: ImageLike) => {
+        setImage(image).then((newImage) => {
+            if (!newImage) return;
+            setAttributes({
+                id: newImage.id,
+                caption: newImage.caption.raw,
+                url: newImage.source_url,
+                alt: newImage.alt_text,
+            });
+            setImportingMessage(__('Done!', 'stable-diffusion'));
+
+            // Artificial delay to avoid closing too quickly
+            timerRef.current = window.setTimeout(() => {
+                rafRef.current = window.requestAnimationFrame(() => {
+                    setCurrentInterface(undefined);
+                });
+            }, 1000);
+        });
+    };
 
     useEffect(() => {
         const namespace = 'kevinbatdorf/stable-diffusion-open';
         const open = (event: CustomEvent<{ clientId: string }>) => {
             if (event?.detail?.clientId !== clientId) return;
-            setShowModal(true);
+            setShowSelectScreen(true);
         };
         window.addEventListener(namespace, open as (e: Event) => void);
         return () => {
@@ -38,61 +59,29 @@ export const Loader = ({
         };
     }, [clientId]);
 
-    // TODO: if the user has an image set, warn them we may replace it
-    // attributes?.id
-
-    const setImage = async (image: any) => {
-        if (importing) return;
-        const caption = 'The prompt the user typed';
-        const newImage: WpImage | undefined = await importImage(
-            'the image url',
-            {
-                alt: image?.alt_description ?? '',
-                filename: `unsplash-image-${image.id}.jpg`,
-                caption,
-            },
-        );
-        if (!newImage) return;
-        const getHref = (dest: string) => {
-            if (dest === 'media') return newImage?.source_url;
-            if (dest === 'attachment') return newImage?.link;
-            return attributes?.href;
-        };
-        setAttributes({
-            id: newImage.id,
-            caption: newImage.caption.raw,
-            linkDestination: attributes?.linkDestination ?? '',
-            linkTarget: attributes?.linkTarget ?? '',
-            linkClass: attributes?.linkClass ?? '',
-            rel: attributes?.rel ?? '',
-            href: getHref(attributes?.linkDestination ?? ''),
-            url: newImage.source_url,
-            alt: newImage.alt_text,
-        });
-
-        setImporting(__('Done!', 'stable-diffusion'));
-
-        timerRef.current = window.setTimeout(() => {
-            rafRef.current = window.requestAnimationFrame(() => {
-                setShowModal(false);
-            });
-        }, 1000);
-    };
-
     useLayoutEffect(() => {
-        if (showModal) {
+        if (currentInterface) {
             setLoading(false);
-            setImporting(false);
+            setImportingMessage('');
+            // Keep the select modal closed if model interface is open
+            setShowSelectScreen(false);
         }
         window.clearTimeout(timerRef.current);
         window.clearTimeout(rafRef.current);
-    }, [showModal, setImporting, setLoading]);
+    }, [currentInterface, setImportingMessage, setLoading]);
 
     return (
-        <Modal
-            setImage={setImage}
-            open={showModal}
-            onClose={() => setShowModal(false)}
-        />
+        <>
+            <ModalSelect
+                open={showSelectScreen}
+                setModel={setCurrentInterface}
+                onClose={() => setShowSelectScreen(false)}
+            />
+            <Modal
+                setImage={handleImageImport}
+                modelName={currentInterface}
+                onClose={() => setCurrentInterface(undefined)}
+            />
+        </>
     );
 };
