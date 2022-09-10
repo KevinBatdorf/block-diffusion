@@ -1,4 +1,4 @@
-.rust-starter-editor {
+.stable-diffusion-editor {
     --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
     --tw-ring-offset-width: 0px;
     --tw-ring-offset-color: transparent;
@@ -11,9 +11,9 @@
     --tw-scale-x: 1;
     --tw-scale-y: 1;
 }
-.rust-starter-editor *,
-.rust-starter-editor *:after,
-.rust-starter-editor *:before {
+.stable-diffusion-editor *,
+.stable-diffusion-editor *:after,
+.stable-diffusion-editor *:before {
     box-sizing: border-box;
     border: 0 solid #e5e7eb;
 }
@@ -21,3 +21,7 @@
 @tailwind components;
 @tailwind utilities;
 /* Add more styles here specific to the editor only */
+
+.stable-diffusion-editor.stable-diffusion-modal {
+    @apply fixed z-high inset-0 overflow-y-auto;
+}

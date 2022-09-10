@@ -1,22 +1,16 @@
 {
     "$schema": "https://schemas.wp.org/trunk/block.json",
     "apiVersion": 2,
-    "name": "kevinbatdorf/rust-starter",
+    "name": "kevinbatdorf/stable-diffusion",
     "version": "0.1.0",
-    "title": "Rust Starter",
+    "title": "Stable Diffusion",
     "category": "common",
-    "description": "My amazing block",
-    "attributes": {
-        "text": {
-            "type": "string",
-            "source": "text"
-        }
-    },
+    "description": "Run AI prompts through a stable diffusion model using the Replicate API.",
+    "attributes": {},
     "supports": {
         "html": false
     },
-    "textdomain": "rust-starter",
+    "textdomain": "stable-diffusion",
     "editorScript": "file:./index.js",
-    "editorStyle": "file:./index.css",
-    "style": "file:./style-index.css"
+    "editorStyle": "file:./index.css"
 }

@@ -1,4 +1,4 @@
-=== Rust Starter ===
+=== Stable Diffusion ===
 Contributors:      kbat82
 Tags:              block
 Tested up to:      6.0

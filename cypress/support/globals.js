@@ -20,6 +20,6 @@ beforeEach(() => {
 
 afterEach(() => {
     cy.saveDraft(); // so we can leave without an alert
-    // cy.uninstallPlugin('rust-starter')
+    // cy.uninstallPlugin('stable-diffusion')
     cy.logoutUser();
 });
