@@ -13,7 +13,6 @@ if (!function_exists('stable_diffusion_register_settings')) {
                     'type' => 'object',
                     'properties' => [
                         "version" => [ 'type' => ['string', 'number'] ],
-                        'prompts' => [ 'type' => ['array', 'null'] ],
                         'apiKey' => [ 'type' => ['string', 'null'] ],
                     ],
                 ],

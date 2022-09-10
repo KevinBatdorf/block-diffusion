@@ -3,9 +3,6 @@ import create from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
 type GlobalTypes = {
-    prompts: string[];
-    addPrompt: (prompt: string) => void;
-    clearPrompts: () => void;
     apiKey: string;
     setApiKey: (apiKey: string) => void;
     deleteApiKey: () => void;
@@ -21,14 +18,6 @@ export const useGlobalStore = create<GlobalTypes>()(
     persist(
         devtools(
             (set) => ({
-                prompts: [],
-                addPrompt: (prompt: string) => {
-                    // Only save past 10 prompts
-                    set((state) => ({
-                        prompts: [prompt, ...state.prompts].slice(0, 10),
-                    }));
-                },
-                clearPrompts: () => set({ prompts: [] }),
                 apiKey: '',
                 setApiKey: (apiKey) => set({ apiKey }),
                 deleteApiKey: () => set({ apiKey: '' }),
