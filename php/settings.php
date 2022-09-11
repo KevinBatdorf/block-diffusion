@@ -12,8 +12,8 @@ if (!function_exists('stable_diffusion_register_settings')) {
                 'schema' => [
                     'type' => 'object',
                     'properties' => [
-                        "version" => [ 'type' => ['string', 'number'] ],
-                        'apiKey' => [ 'type' => ['string', 'null'] ],
+                        "version" => [ 'type' => ['string', 'number']],
+                        'apiToken' => [ 'type' => ['string', 'null']],
                     ],
                 ],
             ],

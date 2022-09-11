@@ -1,11 +1,12 @@
 import apiFetch from '@wordpress/api-fetch';
+import { useEffect, useState } from '@wordpress/element';
 import create from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
-type GlobalTypes = {
-    apiKey: string;
-    setApiKey: (apiKey: string) => void;
-    deleteApiKey: () => void;
+type AuthTypes = {
+    apiToken: string;
+    storeApiToken: (apiToken: string) => void;
+    deleteApiToken: () => void;
 };
 const path = '/wp/v2/settings';
 const getSettings = async (name: string) => {
@@ -14,13 +15,13 @@ const getSettings = async (name: string) => {
     // @ts-ignore-next-line
     return allSettings?.[name];
 };
-export const useGlobalStore = create<GlobalTypes>()(
+export const useAuthStore = create<AuthTypes>()(
     persist(
         devtools(
             (set) => ({
-                apiKey: '',
-                setApiKey: (apiKey) => set({ apiKey }),
-                deleteApiKey: () => set({ apiKey: '' }),
+                apiToken: '',
+                storeApiToken: (apiToken) => set({ apiToken }),
+                deleteApiToken: () => set({ apiToken: '' }),
             }),
             { name: 'Stable Diffusion Data' },
         ),
@@ -38,9 +39,9 @@ export const useGlobalStore = create<GlobalTypes>()(
                     const { state, version } = JSON.parse(value);
                     const data = {
                         [name]: Object.assign(
-                            (await getSettings(name)) ?? {},
+                            (await getSettings(name)) ?? { apiToken: '' },
                             state,
-                            version,
+                            { version },
                         ),
                     };
                     await apiFetch({ path, method: 'POST', data });
@@ -50,3 +51,16 @@ export const useGlobalStore = create<GlobalTypes>()(
         },
     ),
 );
+
+export const useAuthStoreReady = () => {
+    const [hydrated, setHydrated] = useState(useAuthStore.persist.hasHydrated);
+    useEffect(() => {
+        const unsubFinishHydration = useAuthStore.persist.onFinishHydration(
+            () => setHydrated(true),
+        );
+        return () => {
+            unsubFinishHydration();
+        };
+    }, []);
+    return hydrated;
+};

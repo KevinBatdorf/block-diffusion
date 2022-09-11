@@ -25,3 +25,6 @@
 .stable-diffusion-editor.stable-diffusion-modal {
     @apply fixed z-high inset-0 overflow-y-auto;
 }
+.ringed {
+    @apply rounded-none border border-gray-900 focus:outline-none focus:ring-1 ring-offset-1 ring-wp-theme-500 focus:shadow-none;
+}

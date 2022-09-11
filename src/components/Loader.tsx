@@ -81,6 +81,10 @@ export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
                 setImage={handleImageImport}
                 modelName={currentInterface}
                 onClose={() => setCurrentInterface(undefined)}
+                onGoBack={() => {
+                    setCurrentInterface(undefined);
+                    setShowSelectScreen(true);
+                }}
             />
         </>
     );
