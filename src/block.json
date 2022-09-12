@@ -5,7 +5,7 @@
     "version": "0.1.0",
     "title": "AI Prompts",
     "category": "media",
-    "description": "Run AI prompts through a stable diffusion model using the Replicate API.",
+    "description": "Run text prompts through various AI models using the Replicate cloud API.",
     "attributes": {},
     "supports": {
         "html": false
