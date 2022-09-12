@@ -1,6 +1,11 @@
 import apiFetch from '@wordpress/api-fetch';
 import { Button } from '@wordpress/components';
-import { useEffect, useRef, useState } from '@wordpress/element';
+import {
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from '@wordpress/element';
 import { sprintf, __ } from '@wordpress/i18n';
 import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -127,7 +132,9 @@ export const StableDiffusion = ({
             return;
         }
         setStatusMessage(
-            generateData?.status ? `${generateData?.status}...` : '',
+            generateData?.status
+                ? `${generateData?.status}...`
+                : __('Enter a prompt to start', 'stable-diffusion'),
         );
     }, [generateData, importingMessage]);
 
@@ -265,7 +272,7 @@ export const StableDiffusion = ({
                     </div>
                 </AnimatePresence>
                 <div
-                    className="border-2 border-gray-900 flex items-center justify-center bg-cover mx-auto"
+                    className="border border-gray-900 flex items-center justify-center bg-cover mx-auto"
                     style={{
                         maxWidth: `${width}px`,
                         maxHeight: 'calc(100% - 2.5rem)',
