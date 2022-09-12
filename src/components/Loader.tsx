@@ -14,11 +14,7 @@ type LoaderProps = {
     clientId?: string;
 };
 
-export const Loader = ({
-    setAttributes,
-    clientId,
-    attributes,
-}: LoaderProps) => {
+export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
     const {
         setImportingMessage,
         setCurrentInterface,
@@ -61,7 +57,7 @@ export const Loader = ({
             // Artificial delay to avoid closing too quickly
             setTimeout(() => {
                 requestAnimationFrame(() => onClose());
-            }, 1500);
+            }, 1000);
         });
     };
 

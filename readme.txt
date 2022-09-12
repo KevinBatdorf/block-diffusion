@@ -38,8 +38,8 @@ This plugin provides an interface to the Replicate API and requires you have an 
 
 == Screenshots ==
 
-1. Choose from various models to run
-2. "a gentleman otter in a 19th century portrait"
+1. "phase shift into an era of human+AI art collab"
+2. Choose from various models to run
 3. "a cyberpunk puppy"
 
 == Changelog ==
