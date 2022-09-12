@@ -33,7 +33,7 @@ export const Modal = ({ setImage, onClose }: ModalProps) => {
             key="main-modal"
             open={Boolean(currentInterface)}
             onClose={onClose}>
-            <div className="absolute mx-auto w-full h-full md:p-8 md:flex justify-center items-center z-high">
+            <div className="absolute mx-auto w-full h-full overflow-hidden md:p-8 md:flex justify-center items-center z-high">
                 <div className="fixed inset-0 bg-black/60" aria-hidden="true" />
                 <AnimatePresence>
                     <motion.div
@@ -42,7 +42,7 @@ export const Modal = ({ setImage, onClose }: ModalProps) => {
                         initial={{ y: 5 }}
                         animate={{ y: 0 }}
                         exit={{ y: 0, opacity: 0 }}
-                        className="sm:flex relative shadow-2xl sm:overflow-hidden max-w-screen-2xl mx-auto bg-white">
+                        className="sm:flex relative h-full shadow-2xl sm:overflow-hidden max-w-screen-2xl mx-auto bg-white">
                         <Dialog.Title className="sr-only">
                             {
                                 models.find((m) => m.id === currentInterface)

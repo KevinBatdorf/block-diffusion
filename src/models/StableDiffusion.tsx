@@ -106,6 +106,10 @@ export const StableDiffusion = ({
     }, [processing, setMaybeImporting]);
 
     useEffect(() => {
+        setGenerateId('');
+    }, [width, height]);
+
+    useEffect(() => {
         if (generateData?.status === 'succeeded') {
             importButtonRef.current?.focus();
         }
@@ -257,10 +261,10 @@ export const StableDiffusion = ({
                     </div>
                 </AnimatePresence>
                 <div
-                    className="bg-gray-100 flex items-center justify-center"
+                    className="bg-gray-100 flex items-center justify-center bg-cover"
                     style={{
                         maxWidth: `${width}px`,
-                        maxHeight: '100%',
+                        maxHeight: 'calc(100% - 2.5rem)',
                         aspectRatio: `${width}/${height}`,
                         backgroundImage: generateData?.output
                             ? `url(${generateData?.output?.[0]})`
