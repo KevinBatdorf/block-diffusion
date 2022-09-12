@@ -14,10 +14,10 @@ export type ModelAttributes = {
 };
 
 export type ImageLike = {
+    id: number | string;
+    url: string;
+    caption: string;
     alt?: string;
-    caption?: string;
-    id?: number;
-    url?: string;
     linkDestination?: string;
     href?: string;
     rel?: string;
@@ -56,10 +56,18 @@ export type ModelData = {
 };
 
 export type PredictionData = {
+    id: string;
     completed_at?: Date;
     created_at?: Date;
     error?: string;
     metrics?: { predict_time?: number };
     output?: string[];
     status?: 'starting' | 'processing' | 'succeeded' | 'failed' | 'canceled';
+    input?: StableDiffusionInputs;
+};
+
+export type StableDiffusionInputs = {
+    prompt: string;
+    width: number;
+    height: number;
 };

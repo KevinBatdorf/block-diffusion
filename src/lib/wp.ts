@@ -48,9 +48,8 @@ export const importImage = async (
 export const setImage = async (
     image: ImageLike,
 ): Promise<WpImage | undefined> => {
-    const caption = 'The prompt the user typed';
-    return await importImage('the image url', {
-        filename: `stable-diffusion-${image.id}.jpg`,
-        caption,
+    return await importImage(image.url, {
+        filename: `ai-prompt-${image.id}.jpg`,
+        caption: image.caption,
     });
 };

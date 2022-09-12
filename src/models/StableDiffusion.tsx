@@ -1,12 +1,13 @@
 import apiFetch from '@wordpress/api-fetch';
 import { Button } from '@wordpress/components';
-import { useState } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { sprintf, __ } from '@wordpress/i18n';
 import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useModel } from '../hooks/useModel';
 import { usePrediction } from '../hooks/usePrediction';
 import { useAuthStore } from '../state/auth';
+import { useGlobalState } from '../state/global';
 import { ImageLike, ModelData } from '../types';
 
 type StableDiffusionProps = {
@@ -21,19 +22,28 @@ export const StableDiffusion = ({
     initialFocus,
 }: StableDiffusionProps) => {
     const { data: modelInfo } = useModel('stability-ai/stable-diffusion');
+    const { importingMessage } = useGlobalState();
     const { apiToken } = useAuthStore();
     const [errorMsg, setErrorMsg] = useState('');
+    const [statusMessage, setStatusMessage] = useState('');
     const [prompt, setPrompt] = useState('');
     const [width, setWidth] = useState('512');
     const [height, setHeight] = useState('512');
     const hwvalues = [128, 256, 512, 768, 1024];
-    const [generateId, setGenerateId] = useState<string>(
-        '3s3oeclvsbaqffwppp7xpaehtu',
-    );
+    const [generateId, setGenerateId] = useState<string>('');
     const { data: generateData } = usePrediction(generateId);
+
+    const processing = ['starting', 'processing'].includes(
+        generateData?.status ?? '',
+    );
+    const formItemClass = classNames('w-full text-lg ringed border', {
+        'bg-gray-200 border-gray-200': processing,
+        'border-gray-900': !processing,
+    });
 
     const handleSubmit = async () => {
         setErrorMsg('');
+        setGenerateId('');
         if (!prompt) {
             setErrorMsg(__('Please enter a prompt', 'stable-diffusion'));
             return;
@@ -75,13 +85,33 @@ export const StableDiffusion = ({
             data: { id: generateId },
         });
 
-    const handleReset = () => {
-        setPrompt('');
-        setWidth('512');
-        setHeight('512');
-        setErrorMsg('');
-        setGenerateId('');
+    const handleImport = () => {
+        if (!generateData?.output?.length) return;
+        setImage({
+            url: generateData.output[0],
+            id: generateData?.id || generateId,
+            caption: generateData?.input?.prompt || prompt,
+        });
     };
+
+    useEffect(() => {
+        if (importingMessage) return;
+        if (generateData?.metrics?.predict_time) {
+            const time = sprintf(
+                __('Billed time: %s', 'stable-diffusion'),
+                generateData.metrics.predict_time,
+            );
+            setStatusMessage(time);
+            return;
+        }
+        setStatusMessage(
+            generateData?.status ? `${generateData?.status}...` : '',
+        );
+    }, [generateData, importingMessage]);
+
+    useEffect(() => {
+        if (importingMessage) setStatusMessage(importingMessage);
+    }, [importingMessage]);
 
     return (
         <>
@@ -100,16 +130,11 @@ export const StableDiffusion = ({
                         </label>
                         <textarea
                             ref={initialFocus}
-                            className={classNames(
-                                'w-full text-lg ringed border',
-                                {
-                                    'bg-gray-200 border-gray-200': !!generateId,
-                                },
-                            )}
+                            className={formItemClass}
                             id="replicate-prompt"
                             value={prompt}
                             rows={4}
-                            disabled={!!generateId}
+                            disabled={processing}
                             onChange={(e) => setPrompt(e.target.value)}
                         />
                     </div>
@@ -121,13 +146,8 @@ export const StableDiffusion = ({
                         </label>
                         <select
                             id="replicate-width"
-                            className={classNames(
-                                'w-full text-lg ringed border',
-                                {
-                                    'bg-gray-200 border-gray-200': !!generateId,
-                                },
-                            )}
-                            disabled={!!generateId}
+                            className={formItemClass}
+                            disabled={processing}
                             onChange={(e) => setWidth(e.target.value)}
                             value={width}>
                             {hwvalues.map((value) => (
@@ -145,13 +165,8 @@ export const StableDiffusion = ({
                         </label>
                         <select
                             id="replicate-height"
-                            className={classNames(
-                                'w-full text-lg ringed border',
-                                {
-                                    'bg-gray-200 border-gray-200': !!generateId,
-                                },
-                            )}
-                            disabled={!!generateId}
+                            className={formItemClass}
+                            disabled={processing}
                             onChange={(e) => setHeight(e.target.value)}
                             value={height}>
                             {hwvalues.map((value) => (
@@ -166,8 +181,7 @@ export const StableDiffusion = ({
                             <GoButton
                                 onSubmit={handleSubmit}
                                 onCancel={handleCancel}
-                                onReset={handleReset}
-                                status={generateData?.status}
+                                processing={processing}
                             />
                         </AnimatePresence>
                     </div>
@@ -197,45 +211,34 @@ export const StableDiffusion = ({
                     <div
                         className="mb-2 -mt-4 h-10"
                         style={{ maxWidth: `${width}px` }}>
-                        {generateData?.metrics?.predict_time ? (
+                        {statusMessage && (
                             <motion.div
                                 className="h-full flex items-end justify-between"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}>
-                                <span className="font-mono">
-                                    {sprintf(
-                                        __(
-                                            'Billed time: %s',
-                                            'stable-diffusion',
-                                        ),
-                                        generateData.metrics.predict_time,
-                                    )}
-                                </span>
-                                {generateData?.status === 'succeeded' && (
-                                    <Button
-                                        ref={(
-                                            item: HTMLButtonElement | null,
-                                        ) => {
-                                            item?.focus();
-                                        }}
-                                        type="button"
-                                        variant="primary">
-                                        {__(
-                                            'Import into editor',
-                                            'stable-diffusion',
-                                        )}
-                                    </Button>
-                                )}
-                            </motion.div>
-                        ) : (
-                            generateData?.status && (
-                                <motion.div
-                                    className="h-full font-mono flex items-end"
+                                <motion.span
+                                    className="font-mono"
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}>
-                                    {generateData?.status}
-                                </motion.div>
-                            )
+                                    {statusMessage}
+                                </motion.span>
+                                {generateData?.status === 'succeeded' &&
+                                    !importingMessage && (
+                                        <Button
+                                            ref={(item: HTMLButtonElement) =>
+                                                item?.focus()
+                                            }
+                                            onClick={handleImport}
+                                            type="button"
+                                            disabled={Boolean(importingMessage)}
+                                            variant="primary">
+                                            {__(
+                                                'Import into editor',
+                                                'stable-diffusion',
+                                            )}
+                                        </Button>
+                                    )}
+                            </motion.div>
                         )}
                     </div>
                 </AnimatePresence>
@@ -256,29 +259,27 @@ export const StableDiffusion = ({
 };
 
 const GoButton = ({
-    status,
+    processing,
     onSubmit,
-    onReset,
     onCancel,
 }: {
-    status?: string;
+    processing: boolean;
     onSubmit: () => void;
-    onReset: () => void;
     onCancel: () => void;
 }) => {
-    if (!status) {
+    const { importingMessage } = useGlobalState();
+    if (importingMessage)
         return (
             <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}>
-                <Button onClick={onSubmit} variant="primary">
-                    {__('Submit', 'stable-diffusion')}
+                <Button onClick={() => undefined} disabled variant="primary">
+                    {__('Importing...', 'stable-diffusion')}
                 </Button>
             </motion.span>
         );
-    }
-    if (['starting', 'processing'].includes(status)) {
+    if (processing) {
         return (
             <motion.span
                 initial={{ opacity: 0 }}
@@ -295,8 +296,8 @@ const GoButton = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}>
-            <Button onClick={onReset} variant="primary">
-                {__('Reset', 'stable-diffusion')}
+            <Button onClick={onSubmit} variant="primary">
+                {__('Submit', 'stable-diffusion')}
             </Button>
         </motion.span>
     );

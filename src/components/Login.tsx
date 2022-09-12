@@ -95,12 +95,15 @@ export const Login = ({ initialFocus }: LoginProps) => {
 
 export const LoginWrapper = ({ children }: { children: React.ReactNode }) => (
     <div className="flex max-w-screen-md2">
-        <div
+        <a
+            href="https://replicate.com/stability-ai/stable-diffusion?prediction=qffyxjvmbvfdbao7vvv2oss2gq"
+            target="_blank"
+            rel="noreferrer"
+            title="multicolor hyperspace"
             className="w-96 h-96 bg-cover flex-shrink-0"
-            style={{
-                backgroundImage: `url(${image})`,
-            }}
-        />
+            style={{ backgroundImage: `url(${image})` }}>
+            <span className="sr-only">multicolor hyperspace</span>
+        </a>
         <div className="flex flex-col">
             {children}
             <div className="px-8 mb-2 flex gap-x-2">

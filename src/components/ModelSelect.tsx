@@ -46,10 +46,18 @@ export const ModalSelect = ({ open, setModel, onClose }: ModalProps) => {
                             <Dialog.Title className="sr-only">
                                 {__('Select Model', 'stable-diffusion')}
                             </Dialog.Title>
-                            <div
+                            <a
+                                href="https://replicate.com/stability-ai/stable-diffusion?prediction=rjcl54wakbbrfcajzllmidreya"
+                                target="_blank"
+                                rel="noreferrer"
+                                title="phase shift into an era of human+AI art collab"
                                 className="w-full bg-cover aspect-square hidden md:block"
-                                style={{ backgroundImage: `url(${image})` }}
-                            />
+                                style={{ backgroundImage: `url(${image})` }}>
+                                <span className="sr-only">
+                                    phase shift into an era of human+AI art
+                                    collab
+                                </span>
+                            </a>
                             <div className="flex flex-col w-full relative max-h-screen">
                                 <div className="flex items-center justify-between w-full border-b p-4">
                                     <div className="text-lg font-medium">

@@ -3,7 +3,8 @@ import { useSelect } from '@wordpress/data';
 import { Loader } from './Loader';
 
 export const BlockFilter = (
-    CurrentMenuItems: React.ComponentType,
+    // eslint-disable-next-line
+    CurrentMenuItems: any,
     // eslint-disable-next-line
     props: any,
 ) => {

@@ -17,25 +17,23 @@ type LoaderProps = {
 };
 
 export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
-    const [showSelectScreen, setShowSelectScreen] = useState(true);
-    const {
-        setImportingMessage,
-        setLoading,
-        currentInterface,
-        setCurrentInterface,
-    } = useGlobalState();
+    const [showSelectScreen, setShowSelectScreen] = useState(false);
+    const { setImportingMessage, currentInterface, setCurrentInterface } =
+        useGlobalState();
     const timerRef = useRef(0);
     const rafRef = useRef(0);
 
     const handleImageImport = (image: ImageLike) => {
-        setImage(image).then((newImage) => {
+        setImportingMessage(__('Importing...', 'stable-diffusion'));
+        setImage(image).then(async (newImage) => {
             if (!newImage) return;
             setAttributes({
                 id: newImage.id,
                 caption: newImage.caption.raw,
                 url: newImage.source_url,
-                alt: newImage.alt_text,
+                alt: newImage.alt_text ?? newImage.caption.raw,
             });
+            await new Promise((r) => setTimeout(r, 1000));
             setImportingMessage(__('Done!', 'stable-diffusion'));
 
             // Artificial delay to avoid closing too quickly
@@ -43,7 +41,7 @@ export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
                 rafRef.current = window.requestAnimationFrame(() => {
                     setCurrentInterface(undefined);
                 });
-            }, 1000);
+            }, 1500);
         });
     };
 
@@ -61,14 +59,13 @@ export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
 
     useLayoutEffect(() => {
         if (currentInterface) {
-            setLoading(false);
             setImportingMessage('');
             // Keep the select modal closed if model interface is open
             setShowSelectScreen(false);
         }
         window.clearTimeout(timerRef.current);
         window.clearTimeout(rafRef.current);
-    }, [currentInterface, setImportingMessage, setLoading]);
+    }, [currentInterface, setImportingMessage]);
 
     return (
         <>

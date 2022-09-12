@@ -5,12 +5,13 @@ import blockConfig from './block.json';
 import { BlockFilter } from './components/BlockFilter';
 import { BlockReplacer } from './components/BlockReplacer';
 import './editor.css';
+import { blockIcon } from './icons';
 
 registerBlockType('kevinbatdorf/stable-diffusion', {
     ...blockConfig,
-    icon: undefined,
+    icon: blockIcon,
     attributes: {},
-    title: __('Stable Diffusion', 'stable-diffusion'),
+    title: __('AI Prompt', 'stable-diffusion'),
     edit: ({ clientId }) => <BlockReplacer clientId={clientId} />,
     save: () => null,
 });
