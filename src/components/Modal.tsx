@@ -3,6 +3,7 @@ import { useEffect, useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { arrowLeft } from '@wordpress/icons';
 import { Dialog } from '@headlessui/react';
+import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
 import { models } from '../models';
 import { StableDiffusion } from '../models/StableDiffusion';
@@ -21,6 +22,7 @@ export const Modal = ({ setImage, onClose }: ModalProps) => {
     const initialFocus = useRef(null);
     const { currentInterface, setCurrentInterface, setShowSelectScreen } =
         useGlobalState();
+    const { apiToken } = useAuthStore();
 
     useEffect(() => {
         if (currentInterface) setShowSelectScreen(false);
@@ -42,7 +44,11 @@ export const Modal = ({ setImage, onClose }: ModalProps) => {
                         initial={{ y: 5 }}
                         animate={{ y: 0 }}
                         exit={{ y: 0, opacity: 0 }}
-                        className="sm:flex relative h-full shadow-2xl sm:overflow-hidden max-w-screen-2xl mx-auto bg-white">
+                        className={classNames(
+                            'sm:flex relative shadow-2xl sm:overflow-hidden max-w-screen-2xl mx-auto bg-white',
+                            // Full height on model interfaces (kind of a hack to keep the login screen constrained)
+                            { 'h-full': apiToken },
+                        )}>
                         <Dialog.Title className="sr-only">
                             {
                                 models.find((m) => m.id === currentInterface)
