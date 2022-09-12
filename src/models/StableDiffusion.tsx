@@ -37,6 +37,7 @@ export const StableDiffusion = ({
     const processing = ['starting', 'processing'].includes(
         generateData?.status ?? '',
     );
+    const canImport = generateData?.status === 'succeeded' && !importingMessage;
     const formItemClass = classNames('w-full text-lg ringed border', {
         'bg-gray-200 border-gray-200': processing,
         'border-gray-900': !processing,
@@ -227,14 +228,18 @@ export const StableDiffusion = ({
                     </div>
                 </AnimatePresence>
             </div>
-            <div className="w-full h-full overflow-hidden p-8">
+            <div className="w-full h-full overflow-hidden p-8 bg-gray-50">
                 <AnimatePresence>
-                    <div
-                        className="mb-2 -mt-4 h-10"
-                        style={{ maxWidth: `${width}px` }}>
+                    <div className="mb-2 -mt-4 h-10 w-full">
                         {statusMessage && (
                             <motion.div
-                                className="h-full flex items-end justify-between"
+                                className={classNames(
+                                    'h-full flex items-center',
+                                    {
+                                        'justify-between': canImport,
+                                        'justify-center': !canImport,
+                                    },
+                                )}
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}>
                                 <motion.span
@@ -243,25 +248,24 @@ export const StableDiffusion = ({
                                     animate={{ opacity: 1 }}>
                                     {statusMessage}
                                 </motion.span>
-                                {generateData?.status === 'succeeded' &&
-                                    !importingMessage && (
-                                        <Button
-                                            ref={importButtonRef}
-                                            onClick={handleImport}
-                                            type="button"
-                                            variant="primary">
-                                            {__(
-                                                'Import into editor',
-                                                'stable-diffusion',
-                                            )}
-                                        </Button>
-                                    )}
+                                {canImport && (
+                                    <Button
+                                        ref={importButtonRef}
+                                        onClick={handleImport}
+                                        type="button"
+                                        variant="primary">
+                                        {__(
+                                            'Import into editor',
+                                            'stable-diffusion',
+                                        )}
+                                    </Button>
+                                )}
                             </motion.div>
                         )}
                     </div>
                 </AnimatePresence>
                 <div
-                    className="bg-gray-100 flex items-center justify-center bg-cover"
+                    className="border-2 border-gray-900 flex items-center justify-center bg-cover mx-auto"
                     style={{
                         maxWidth: `${width}px`,
                         maxHeight: 'calc(100% - 2.5rem)',
