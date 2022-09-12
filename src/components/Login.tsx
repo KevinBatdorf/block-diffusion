@@ -77,7 +77,7 @@ export const Login = ({ initialFocus }: LoginProps) => {
             </form>
             <p>
                 {__(
-                    'This plugin interfaces with the Replicate API and requires and active API token.',
+                    'This plugin connects to the Replicate API and requires an active API token.',
                     'stable-diffusion',
                 )}
             </p>
