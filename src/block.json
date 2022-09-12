@@ -4,7 +4,7 @@
     "name": "kevinbatdorf/stable-diffusion",
     "version": "0.1.0",
     "title": "AI Prompts",
-    "category": "common",
+    "category": "media",
     "description": "Run AI prompts through a stable diffusion model using the Replicate API.",
     "attributes": {},
     "supports": {
