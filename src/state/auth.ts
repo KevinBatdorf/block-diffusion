@@ -13,7 +13,7 @@ const getSettings = async (name: string) => {
     const allSettings = await apiFetch({ path });
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore-next-line
-    return allSettings?.[name];
+    return allSettings?.[name] || { apiToken: '', version: 0 };
 };
 export const useAuthStore = create<AuthTypes>()(
     persist(
