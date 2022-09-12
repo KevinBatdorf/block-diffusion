@@ -104,7 +104,7 @@ export const LoginWrapper = ({ children }: { children: React.ReactNode }) => (
             style={{ backgroundImage: `url(${image})` }}>
             <span className="sr-only">multicolor hyperspace</span>
         </a>
-        <div className="flex flex-col">
+        <div className="flex flex-col overflow-hidden">
             {children}
             <div className="px-8 mb-2 flex gap-x-2">
                 <a

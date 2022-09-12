@@ -1,5 +1,4 @@
 export type AvailableModels =
-    | 'your-collection'
     | 'stability-ai/stable-diffusion'
     | 'methexis-inc/img2prompt'
     | 'tencentarc/gfpgan'

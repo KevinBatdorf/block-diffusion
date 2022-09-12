@@ -35,8 +35,8 @@ This plugin provides an interface to the Replicate API and requires you have an 
 
 == Screenshots ==
 
-1. A view of the interface
-2. "A web designer sitting at their desk working on their WordPress website."
+1. Choose from various models to run
+2. A view of the interface
 
 == Changelog ==
 

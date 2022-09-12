@@ -1,9 +1,4 @@
-import {
-    useEffect,
-    useLayoutEffect,
-    useRef,
-    useState,
-} from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { setImage } from '../lib/wp';
 import { useGlobalState } from '../state/global';
@@ -17,11 +12,9 @@ type LoaderProps = {
 };
 
 export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
-    const [showSelectScreen, setShowSelectScreen] = useState(false);
-    const { setImportingMessage, currentInterface, setCurrentInterface } =
+    const { setImportingMessage, setCurrentInterface, setShowSelectScreen } =
         useGlobalState();
-    const timerRef = useRef(0);
-    const rafRef = useRef(0);
+    const [open, setOpen] = useState(false);
 
     const handleImageImport = (image: ImageLike) => {
         setImportingMessage(__('Importing...', 'stable-diffusion'));
@@ -37,8 +30,8 @@ export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
             setImportingMessage(__('Done!', 'stable-diffusion'));
 
             // Artificial delay to avoid closing too quickly
-            timerRef.current = window.setTimeout(() => {
-                rafRef.current = window.requestAnimationFrame(() => {
+            setTimeout(() => {
+                requestAnimationFrame(() => {
                     setCurrentInterface(undefined);
                 });
             }, 1500);
@@ -49,40 +42,21 @@ export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
         const namespace = 'kevinbatdorf/stable-diffusion-open';
         const open = (event: CustomEvent<{ clientId: string }>) => {
             if (event?.detail?.clientId !== clientId) return;
+            setOpen(true);
             setShowSelectScreen(true);
         };
         window.addEventListener(namespace, open as (e: Event) => void);
         return () => {
             window.removeEventListener(namespace, open as (e: Event) => void);
         };
-    }, [clientId]);
+    }, [clientId, setShowSelectScreen]);
 
-    useLayoutEffect(() => {
-        if (currentInterface) {
-            setImportingMessage('');
-            // Keep the select modal closed if model interface is open
-            setShowSelectScreen(false);
-        }
-        window.clearTimeout(timerRef.current);
-        window.clearTimeout(rafRef.current);
-    }, [currentInterface, setImportingMessage]);
+    if (!open) return null;
 
     return (
         <>
-            <ModalSelect
-                open={showSelectScreen}
-                setModel={setCurrentInterface}
-                onClose={() => setShowSelectScreen(false)}
-            />
-            <Modal
-                setImage={handleImageImport}
-                modelName={currentInterface}
-                onClose={() => setCurrentInterface(undefined)}
-                onGoBack={() => {
-                    setCurrentInterface(undefined);
-                    setShowSelectScreen(true);
-                }}
-            />
+            <ModalSelect />
+            <Modal setImage={handleImageImport} />
         </>
     );
 };

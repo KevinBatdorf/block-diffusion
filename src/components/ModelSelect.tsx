@@ -6,30 +6,28 @@ import { AnimatePresence, motion } from 'framer-motion';
 import image from '../assets/select.png';
 import { models } from '../models';
 import { useAuthStore } from '../state/auth';
+import { useGlobalState } from '../state/global';
 import { AvailableModels } from '../types';
 import { ModalCloseButton } from './ModalCloseButton';
 
-type ModalProps = {
-    open: boolean;
-    setModel: (model: AvailableModels) => void;
-    onClose: () => void;
-};
-
-export const ModalSelect = ({ open, setModel, onClose }: ModalProps) => {
+export const ModalSelect = () => {
     const { deleteApiToken, apiToken } = useAuthStore();
+    const { setCurrentInterface, setShowSelectScreen, showSelectScreen } =
+        useGlobalState();
+    const onClose = () => setShowSelectScreen(false);
+
     return (
         <AnimatePresence>
-            {open && (
+            {Boolean(showSelectScreen) && (
                 <Dialog
                     className="stable-diffusion-editor stable-diffusion-modal"
                     static
-                    data-cy-up="main-modal"
                     // initialFocus={initialFocus}
                     as={motion.div}
                     key="modal"
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    open={open}
+                    open={Boolean(showSelectScreen)}
                     onClose={onClose}>
                     <div className="absolute mx-auto w-full h-full md:p-8 flex flex-col justify-center items-center gap-2">
                         <div
@@ -74,7 +72,7 @@ export const ModalSelect = ({ open, setModel, onClose }: ModalProps) => {
                                             key={model.id}
                                             {...model}
                                             onClick={() =>
-                                                setModel(
+                                                setCurrentInterface(
                                                     model.id as AvailableModels,
                                                 )
                                             }
