@@ -7,6 +7,8 @@ type GlobalState = {
     currentInterface?: AvailableModels;
     showSelectScreen: boolean;
     imageBlockId: string;
+    maybeImporting: boolean;
+    setMaybeImporting: (maybeImporting: boolean) => void;
     setShowSelectScreen: (show: boolean) => void;
     setImportingMessage: (loading: string) => void;
     setCurrentInterface: (currentInterface?: AvailableModels) => void;
@@ -19,6 +21,8 @@ export const useGlobalState = create<GlobalState>()(
         currentInterface: undefined,
         showSelectScreen: false,
         imageBlockId: '',
+        maybeImporting: false,
+        setMaybeImporting: (maybeImporting) => set({ maybeImporting }),
         setShowSelectScreen: (show) => set({ showSelectScreen: show }),
         setImportingMessage: (importingMessage: string) => {
             set({ importingMessage });

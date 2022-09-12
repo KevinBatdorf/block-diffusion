@@ -22,7 +22,7 @@ export const StableDiffusion = ({
     initialFocus,
 }: StableDiffusionProps) => {
     const { data: modelInfo } = useModel('stability-ai/stable-diffusion');
-    const { importingMessage } = useGlobalState();
+    const { importingMessage, setMaybeImporting } = useGlobalState();
     const { apiToken } = useAuthStore();
     const [errorMsg, setErrorMsg] = useState('');
     const [statusMessage, setStatusMessage] = useState('');
@@ -58,6 +58,7 @@ export const StableDiffusion = ({
             );
             return;
         }
+        setMaybeImporting(true);
         const response = await apiFetch<GenerateResponse>({
             path: `kevinbatdorf/stable-diffusion/generate?cache=${Date.now()}`,
             method: 'POST',
@@ -72,6 +73,7 @@ export const StableDiffusion = ({
             }
         });
         if (response?.error) {
+            setMaybeImporting(false);
             setErrorMsg(response.error);
             return;
         }
@@ -94,6 +96,14 @@ export const StableDiffusion = ({
             caption: generateData?.input?.prompt || prompt,
         });
     };
+
+    useEffect(() => {
+        if (generateData?.error) setErrorMsg(generateData.error);
+    }, [generateData?.error]);
+
+    useEffect(() => {
+        if (!processing) setMaybeImporting(false);
+    }, [processing, setMaybeImporting]);
 
     useEffect(() => {
         if (generateData?.status === 'succeeded') {
@@ -271,7 +281,8 @@ const GoButton = ({
     onSubmit: () => void;
     onCancel: () => void;
 }) => {
-    const { importingMessage } = useGlobalState();
+    const { importingMessage, maybeImporting } = useGlobalState();
+    console.log({ maybeImporting, processing });
     if (importingMessage)
         return (
             <motion.span
@@ -300,7 +311,10 @@ const GoButton = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}>
-            <Button onClick={onSubmit} variant="primary">
+            <Button
+                onClick={onSubmit}
+                variant="primary"
+                disabled={maybeImporting}>
                 {__('Submit', 'stable-diffusion')}
             </Button>
         </motion.span>

@@ -37,6 +37,7 @@ This plugin provides an interface to the Replicate API and requires you have an 
 
 1. Choose from various models to run
 2. "a gentleman otter in a 19th century portrait"
+3. "a cyberpunk puppy"
 
 == Changelog ==
 
