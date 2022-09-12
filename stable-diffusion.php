@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Stable Diffusion - AI Image Generation with the Replicate API
+ * Plugin Name:       AI Prompts - AI Image Generation with the Replicate API
  * Description:       AI Image Generation Using The Replicate API
  * Requires at least: 5.8
  * Requires PHP:      7.0

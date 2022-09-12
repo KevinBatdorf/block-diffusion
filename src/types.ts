@@ -1,4 +1,5 @@
 export type AvailableModels =
+    | 'your-collection'
     | 'stability-ai/stable-diffusion'
     | 'methexis-inc/img2prompt'
     | 'tencentarc/gfpgan'
@@ -9,6 +10,7 @@ export type ModelAttributes = {
     name: string;
     description: string;
     active: boolean;
+    hideFromList: boolean;
 };
 
 export type ImageLike = {
@@ -39,4 +41,25 @@ export type WpImage = {
     title: { raw: string };
     slug: string;
     status: string;
+};
+
+export type ModelData = {
+    url?: string;
+    description?: string;
+    name?: string;
+    owner?: string;
+    visibility?: string;
+    paper_url?: string;
+    license_url?: string;
+    github_url?: string;
+    latest_version?: { id?: string };
+};
+
+export type PredictionData = {
+    completed_at?: Date;
+    created_at?: Date;
+    error?: string;
+    metrics?: { predict_time?: number };
+    output?: string[];
+    status?: 'starting' | 'processing' | 'succeeded' | 'failed' | 'canceled';
 };

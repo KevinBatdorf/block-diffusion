@@ -1,8 +1,11 @@
-import { useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Dialog } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore-next-line
+import image from '../assets/select.png';
 import { models } from '../models';
+import { useAuthStore } from '../state/auth';
 import { AvailableModels } from '../types';
 import { ModalCloseButton } from './ModalCloseButton';
 
@@ -12,78 +15,96 @@ type ModalProps = {
     onClose: () => void;
 };
 
-export const ModalSelect = ({ open, setModel, onClose }: ModalProps) => (
-    <AnimatePresence>
-        {open && (
-            <Dialog
-                className="stable-diffusion-editor stable-diffusion-modal"
-                static
-                data-cy-up="main-modal"
-                // initialFocus={initialFocus}
-                as={motion.div}
-                key="modal"
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                open={open}
-                onClose={onClose}>
-                <div className="absolute mx-auto w-full h-full md:p-8 flex justify-center items-center">
-                    <div
-                        className="fixed inset-0 bg-black/60"
-                        aria-hidden="true"
-                    />
-                    <motion.div
-                        key="modal"
-                        id="stable-diffusion-modal-select-inner"
-                        initial={{ y: 5 }}
-                        animate={{ y: 0 }}
-                        exit={{ y: 0, opacity: 0 }}
-                        className="sm:flex w-full relative shadow-2xl sm:overflow-hidden max-w-xl bg-white">
-                        <Dialog.Title className="sr-only">
-                            {__('Select Model', 'stable-diffusion')}
-                        </Dialog.Title>
-                        <div className="flex flex-col w-full relative">
-                            <div className="flex items-center justify-between w-full border-b p-4">
-                                <div className="text-lg font-medium">
-                                    {__(
-                                        'Select a model to continue',
-                                        'stable-diffusion',
-                                    )}
+export const ModalSelect = ({ open, setModel, onClose }: ModalProps) => {
+    const { deleteApiToken, apiToken } = useAuthStore();
+    return (
+        <AnimatePresence>
+            {open && (
+                <Dialog
+                    className="stable-diffusion-editor stable-diffusion-modal"
+                    static
+                    data-cy-up="main-modal"
+                    // initialFocus={initialFocus}
+                    as={motion.div}
+                    key="modal"
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    open={open}
+                    onClose={onClose}>
+                    <div className="absolute mx-auto w-full h-full md:p-8 flex flex-col justify-center items-center gap-2">
+                        <div
+                            className="fixed inset-0 bg-black/60"
+                            aria-hidden="true"
+                        />
+                        <motion.div
+                            key="modal"
+                            id="stable-diffusion-modal-select-inner"
+                            initial={{ y: 5 }}
+                            animate={{ y: 0 }}
+                            exit={{ y: 0, opacity: 0 }}
+                            className="sm:flex w-full relative shadow-2xl sm:overflow-hidden max-w-screen-md2 bg-white">
+                            <Dialog.Title className="sr-only">
+                                {__('Select Model', 'stable-diffusion')}
+                            </Dialog.Title>
+                            <div
+                                className="w-full bg-cover aspect-square hidden md:block"
+                                style={{ backgroundImage: `url(${image})` }}
+                            />
+                            <div className="flex flex-col w-full relative max-h-screen">
+                                <div className="flex items-center justify-between w-full border-b p-4">
+                                    <div className="text-lg font-medium">
+                                        {__(
+                                            'Select a model to continue',
+                                            'stable-diffusion',
+                                        )}
+                                    </div>
+                                    <ModalCloseButton onClose={onClose} />
                                 </div>
-                                <ModalCloseButton onClose={onClose} />
+                                <div className="p-4 space-y-4 overflow-y-scroll">
+                                    {models.map((model) => (
+                                        <ModelButton
+                                            key={model.id}
+                                            {...model}
+                                            onClick={() =>
+                                                setModel(
+                                                    model.id as AvailableModels,
+                                                )
+                                            }
+                                        />
+                                    ))}
+                                </div>
                             </div>
-                            <div className="p-4 space-y-4">
-                                {models.map((model) => (
-                                    <ModelButton
-                                        key={model.id}
-                                        {...model}
-                                        onClick={() =>
-                                            setModel(
-                                                model.id as AvailableModels,
-                                            )
-                                        }
-                                    />
-                                ))}
-                            </div>
+                        </motion.div>
+                        <div className="absolute bottom-8">
+                            {Boolean(apiToken) && (
+                                <button
+                                    className="relative z-30 text-white bg-transparent focus:outline-none focus:ring-1 ring-offset-1 ring-wp-theme-500 focus:shadow-none opacity-80 hover:opacity-100"
+                                    onClick={deleteApiToken}>
+                                    {__('Logout', 'stable-diffusion')}
+                                </button>
+                            )}
                         </div>
-                    </motion.div>
-                </div>
-            </Dialog>
-        )}
-    </AnimatePresence>
-);
-
+                    </div>
+                </Dialog>
+            )}
+        </AnimatePresence>
+    );
+};
 type ModelButtonProps = {
     name: string;
     description: string;
     active: boolean;
+    hideFromList: boolean;
     onClick: () => void;
 };
 const ModelButton = ({
     name,
     description,
     active,
+    hideFromList,
     onClick,
 }: ModelButtonProps) => {
+    if (hideFromList) return null;
     if (!active) {
         return (
             <div className="text-left w-full p-4 bg-gray-50 border border-gray-500">

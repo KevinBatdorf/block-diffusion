@@ -10,6 +10,7 @@ export const models: ModelAttributes[] = [
             'stable-diffusion',
         ),
         active: true,
+        hideFromList: false,
     },
     {
         id: 'tencentarc/gfpgan',
@@ -19,6 +20,7 @@ export const models: ModelAttributes[] = [
             'stable-diffusion',
         ),
         active: false,
+        hideFromList: false,
     },
     {
         id: 'methexis-inc/img2prompt',
@@ -28,6 +30,7 @@ export const models: ModelAttributes[] = [
             'stable-diffusion',
         ),
         active: false,
+        hideFromList: false,
     },
     {
         id: 'deforum/deforum_stable_diffusion',
@@ -37,5 +40,6 @@ export const models: ModelAttributes[] = [
             'stable-diffusion',
         ),
         active: false,
+        hideFromList: false,
     },
 ];

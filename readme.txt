@@ -1,4 +1,4 @@
-=== Stable Diffusion - Turn AI prompts into images  ===
+=== AI Prompts - Turn AI prompts into images  ===
 Contributors:      kbat82
 Tags:              block
 Tested up to:      6.0
@@ -13,6 +13,12 @@ Run AI prompts through a stable diffusion model using the Replicate API.
 A new era of content creation is here. With machine learning and advanced models, we are now capable of creating unique images based on text prompts alone. We are only lmiited by our imagination.
 
 This plugin interfaces with the Replicate API and allows you to run open-source models via their cloud API.
+
+= Features =
+- Stable Diffusion
+- Reverse Image To Prompt (coming soon)
+- AI Prompt Animation (coming soon)
+- Face Restoration (coming soon)
 
 = More info =
 - Follow [@kevinbatdorf](https://twitter.com/kevinbatdorf) on Twitter
