@@ -48,6 +48,15 @@ export const StableDiffusion = ({
         'border-gray-900': !processing,
     });
 
+    const imageOutput = {
+        maxWidth: `${width}px`,
+        maxHeight: 'calc(100% - 2.5rem)',
+        aspectRatio: `${width}/${height}`,
+        backgroundImage: generateData?.output
+            ? `url(${generateData?.output?.[0]})`
+            : undefined,
+    };
+
     const handleSubmit = async () => {
         setErrorMsg('');
         setGenerateId('');
@@ -271,16 +280,11 @@ export const StableDiffusion = ({
                         )}
                     </div>
                 </AnimatePresence>
-                <div
-                    className="border border-gray-900 flex items-center justify-center bg-cover mx-auto"
-                    style={{
-                        maxWidth: `${width}px`,
-                        maxHeight: 'calc(100% - 2.5rem)',
-                        aspectRatio: `${width}/${height}`,
-                        backgroundImage: generateData?.output
-                            ? `url(${generateData?.output?.[0]})`
-                            : undefined,
-                    }}
+                <motion.div
+                    transition={{ type: 'Tween' }}
+                    className="border border-gray-900 flex items-center justify-center bg-cover mx-auto bg-gray-100"
+                    animate={imageOutput}
+                    initial={imageOutput}
                 />
             </div>
         </>
@@ -297,7 +301,6 @@ const GoButton = ({
     onCancel: () => void;
 }) => {
     const { importingMessage, maybeImporting } = useGlobalState();
-    console.log({ maybeImporting, processing });
     if (importingMessage)
         return (
             <motion.span
