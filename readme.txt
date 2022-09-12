@@ -22,7 +22,7 @@ This plugin interfaces with the Replicate API and allows you to run open-source 
 
 = More info =
 - Follow [@kevinbatdorf](https://twitter.com/kevinbatdorf) on Twitter
-- View on [GitHub](https://github.com/KevinBatdorf/stable-diffusion)
+- View on [GitHub](https://github.com/KevinBatdorf/stable-diffusion-block)
 
 = Terms and Privacy =
 This plugin provides an interface to the Replicate API and requires you have an active account at replicate.com with an active API token. This plugin is not affiliated with Replicate and only uses their public Http API. Your servers speak directly with replicate.com.
