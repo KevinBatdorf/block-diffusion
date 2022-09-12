@@ -1,11 +1,6 @@
 import apiFetch from '@wordpress/api-fetch';
 import { Button } from '@wordpress/components';
-import {
-    useEffect,
-    useLayoutEffect,
-    useRef,
-    useState,
-} from '@wordpress/element';
+import { useEffect, useRef, useState } from '@wordpress/element';
 import { sprintf, __ } from '@wordpress/i18n';
 import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -32,7 +27,7 @@ export const StableDiffusion = ({
     const [errorMsg, setErrorMsg] = useState('');
     const [statusMessage, setStatusMessage] = useState('');
     const [prompt, setPrompt] = useState('');
-    const [width, setWidth] = useState('512');
+    const [width, setWidth] = useState('768');
     const [height, setHeight] = useState('512');
     const importButtonRef = useRef<HTMLButtonElement>(null);
     const hwvalues = [128, 256, 512, 768, 1024];
