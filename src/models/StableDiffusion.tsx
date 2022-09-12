@@ -52,7 +52,7 @@ export const StableDiffusion = ({
         maxWidth: `${width}px`,
         maxHeight: 'calc(100% - 2.5rem)',
         aspectRatio: `${width}/${height}`,
-        backgroundImage: generateData?.output
+        backgroundImage: generateData?.output?.length
             ? `url(${generateData?.output?.[0]})`
             : undefined,
     };
@@ -143,7 +143,7 @@ export const StableDiffusion = ({
         setStatusMessage(
             generateData?.status
                 ? `${generateData?.status}...`
-                : __('Enter a prompt to start', 'stable-diffusion'),
+                : __('Enter a prompt to begin', 'stable-diffusion'),
         );
     }, [generateData, importingMessage]);
 
@@ -281,6 +281,10 @@ export const StableDiffusion = ({
                     </div>
                 </AnimatePresence>
                 <motion.div
+                    role="button"
+                    onClick={() => {
+                        initialFocus?.current?.focus();
+                    }}
                     transition={{ type: 'Tween' }}
                     className="border border-gray-900 flex items-center justify-center bg-cover mx-auto bg-gray-100"
                     animate={imageOutput}
