@@ -37,7 +37,7 @@ export const Login = ({ initialFocus }: LoginProps) => {
     }
 
     return (
-        <div className="p-8 flex flex-col flex-grow">
+        <div className="p-8 flex flex-col flex-grow bg-white">
             <form
                 onSubmit={(e) => {
                     e.preventDefault();

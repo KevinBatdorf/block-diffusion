@@ -148,7 +148,7 @@ export const StableDiffusion = ({
 
     return (
         <>
-            <div className="flex flex-col justify-between md:w-96 flex-shrink-0">
+            <div className="flex flex-col justify-between md:w-96 flex-shrink-0 overflow-y-scroll bg-white">
                 <form
                     className="flex flex-col gap-y-4 flex-shrink-0 p-8 flex-grow"
                     onSubmit={(e) => {
@@ -230,7 +230,7 @@ export const StableDiffusion = ({
                         style={{ minHeight: '250px' }}>
                         {modelInfo && (
                             <motion.div
-                                className="p-8 pt-0"
+                                className="p-8 pt-0 pb-4"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}>
                                 <ModelMetadata {...modelInfo} />
