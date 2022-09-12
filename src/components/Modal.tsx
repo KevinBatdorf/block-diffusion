@@ -14,9 +14,10 @@ import { ModalCloseButton } from './ModalCloseButton';
 
 type ModalProps = {
     setImage: (image: ImageLike) => void;
+    onClose: () => void;
 };
 
-export const Modal = ({ setImage }: ModalProps) => {
+export const Modal = ({ setImage, onClose }: ModalProps) => {
     const initialFocus = useRef(null);
     const { currentInterface, setCurrentInterface, setShowSelectScreen } =
         useGlobalState();
@@ -26,56 +27,44 @@ export const Modal = ({ setImage }: ModalProps) => {
     }, [currentInterface, setShowSelectScreen]);
 
     return (
-        <AnimatePresence>
-            {Boolean(currentInterface) && (
-                <Dialog
-                    className="stable-diffusion-editor stable-diffusion-modal"
-                    static
-                    initialFocus={initialFocus}
-                    as={motion.div}
-                    key="modal"
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    open={Boolean(currentInterface)}
-                    onClose={() => setCurrentInterface(undefined)}>
-                    <div className="absolute mx-auto w-full h-full md:p-8 md:flex justify-center items-center">
-                        <div
-                            className="fixed inset-0 bg-black/60"
-                            aria-hidden="true"
-                        />
-                        <motion.div
-                            key="modal"
-                            id="stable-diffusion-modal-inner"
-                            initial={{ y: 5 }}
-                            animate={{ y: 0 }}
-                            exit={{ y: 0, opacity: 0 }}
-                            className="sm:flex relative shadow-2xl sm:overflow-hidden max-w-screen-2xl mx-auto bg-white">
-                            <Dialog.Title className="sr-only">
-                                {
-                                    models.find(
-                                        (m) => m.id === currentInterface,
-                                    )?.name
-                                }
-                            </Dialog.Title>
-                            <div className="md:flex flex-col w-full relative">
-                                <ModalContent
-                                    setImage={setImage}
-                                    modelName={currentInterface}
-                                    onClose={() =>
-                                        setCurrentInterface(undefined)
-                                    }
-                                    onGoBack={() => {
-                                        setCurrentInterface(undefined);
-                                        setShowSelectScreen(true);
-                                    }}
-                                    initialFocus={initialFocus}
-                                />
-                            </div>
-                        </motion.div>
-                    </div>
-                </Dialog>
-            )}
-        </AnimatePresence>
+        <Dialog
+            className="stable-diffusion-editor stable-diffusion-modal"
+            initialFocus={initialFocus}
+            key="main-modal"
+            open={Boolean(currentInterface)}
+            onClose={onClose}>
+            <div className="absolute mx-auto w-full h-full md:p-8 md:flex justify-center items-center z-high">
+                <div className="fixed inset-0 bg-black/60" aria-hidden="true" />
+                <AnimatePresence>
+                    <motion.div
+                        key="modal"
+                        id="stable-diffusion-modal-inner"
+                        initial={{ y: 5 }}
+                        animate={{ y: 0 }}
+                        exit={{ y: 0, opacity: 0 }}
+                        className="sm:flex relative shadow-2xl sm:overflow-hidden max-w-screen-2xl mx-auto bg-white">
+                        <Dialog.Title className="sr-only">
+                            {
+                                models.find((m) => m.id === currentInterface)
+                                    ?.name
+                            }
+                        </Dialog.Title>
+                        <div className="md:flex flex-col w-full relative">
+                            <ModalContent
+                                setImage={setImage}
+                                modelName={currentInterface}
+                                onClose={onClose}
+                                onGoBack={() => {
+                                    setCurrentInterface(undefined);
+                                    setShowSelectScreen(true);
+                                }}
+                                initialFocus={initialFocus}
+                            />
+                        </div>
+                    </motion.div>
+                </AnimatePresence>
+            </div>
+        </Dialog>
     );
 };
 

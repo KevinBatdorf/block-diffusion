@@ -1,6 +1,6 @@
 import apiFetch from '@wordpress/api-fetch';
 import { Button } from '@wordpress/components';
-import { useEffect, useState } from '@wordpress/element';
+import { useEffect, useRef, useState } from '@wordpress/element';
 import { sprintf, __ } from '@wordpress/i18n';
 import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -29,6 +29,7 @@ export const StableDiffusion = ({
     const [prompt, setPrompt] = useState('');
     const [width, setWidth] = useState('512');
     const [height, setHeight] = useState('512');
+    const importButtonRef = useRef<HTMLButtonElement>(null);
     const hwvalues = [128, 256, 512, 768, 1024];
     const [generateId, setGenerateId] = useState<string>('');
     const { data: generateData } = usePrediction(generateId);
@@ -93,6 +94,12 @@ export const StableDiffusion = ({
             caption: generateData?.input?.prompt || prompt,
         });
     };
+
+    useEffect(() => {
+        if (generateData?.status === 'succeeded') {
+            importButtonRef.current?.focus();
+        }
+    }, [generateData?.status]);
 
     useEffect(() => {
         if (importingMessage) return;
@@ -225,12 +232,9 @@ export const StableDiffusion = ({
                                 {generateData?.status === 'succeeded' &&
                                     !importingMessage && (
                                         <Button
-                                            ref={(item: HTMLButtonElement) =>
-                                                item?.focus()
-                                            }
+                                            ref={importButtonRef}
                                             onClick={handleImport}
                                             type="button"
-                                            disabled={Boolean(importingMessage)}
                                             variant="primary">
                                             {__(
                                                 'Import into editor',

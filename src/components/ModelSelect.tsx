@@ -10,90 +10,78 @@ import { useGlobalState } from '../state/global';
 import { AvailableModels } from '../types';
 import { ModalCloseButton } from './ModalCloseButton';
 
-export const ModalSelect = () => {
+export const ModalSelect = ({ onClose }: { onClose: () => void }) => {
     const { deleteApiToken, apiToken } = useAuthStore();
-    const { setCurrentInterface, setShowSelectScreen, showSelectScreen } =
-        useGlobalState();
-    const onClose = () => setShowSelectScreen(false);
+    const { setCurrentInterface, showSelectScreen } = useGlobalState();
 
     return (
-        <AnimatePresence>
-            {Boolean(showSelectScreen) && (
-                <Dialog
-                    className="stable-diffusion-editor stable-diffusion-modal"
-                    static
-                    // initialFocus={initialFocus}
-                    as={motion.div}
-                    key="modal"
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    open={Boolean(showSelectScreen)}
-                    onClose={onClose}>
-                    <div className="absolute mx-auto w-full h-full md:p-8 flex flex-col justify-center items-center gap-2">
-                        <div
-                            className="fixed inset-0 bg-black/60"
-                            aria-hidden="true"
-                        />
-                        <motion.div
-                            key="modal"
-                            id="stable-diffusion-modal-select-inner"
-                            initial={{ y: 5 }}
-                            animate={{ y: 0 }}
-                            exit={{ y: 0, opacity: 0 }}
-                            className="sm:flex w-full relative shadow-2xl sm:overflow-hidden max-w-screen-md2 bg-white">
-                            <Dialog.Title className="sr-only">
-                                {__('Select Model', 'stable-diffusion')}
-                            </Dialog.Title>
-                            <a
-                                href="https://replicate.com/stability-ai/stable-diffusion?prediction=rjcl54wakbbrfcajzllmidreya"
-                                target="_blank"
-                                rel="noreferrer"
-                                title="phase shift into an era of human+AI art collab"
-                                className="w-full bg-cover aspect-square hidden md:block"
-                                style={{ backgroundImage: `url(${image})` }}>
-                                <span className="sr-only">
-                                    phase shift into an era of human+AI art
-                                    collab
-                                </span>
-                            </a>
-                            <div className="flex flex-col w-full relative max-h-screen">
-                                <div className="flex items-center justify-between w-full border-b p-4">
-                                    <div className="text-lg font-medium">
-                                        {__(
-                                            'Select a model to continue',
-                                            'stable-diffusion',
-                                        )}
-                                    </div>
-                                    <ModalCloseButton onClose={onClose} />
+        <Dialog
+            className="stable-diffusion-editor stable-diffusion-modal"
+            // initialFocus={initialFocus}
+            key="select-modal"
+            open={Boolean(showSelectScreen)}
+            onClose={onClose}>
+            <div className="absolute mx-auto w-full h-full md:p-8 flex flex-col justify-center items-center gap-2">
+                <div className="fixed inset-0 bg-black/60" aria-hidden="true" />
+                <AnimatePresence>
+                    <motion.div
+                        key="modal"
+                        id="stable-diffusion-modal-select-inner"
+                        initial={{ y: 5 }}
+                        animate={{ y: 0 }}
+                        exit={{ y: 0, opacity: 0 }}
+                        className="sm:flex w-full relative shadow-2xl sm:overflow-hidden max-w-screen-md2 bg-white z-high">
+                        <Dialog.Title className="sr-only">
+                            {__('Select Model', 'stable-diffusion')}
+                        </Dialog.Title>
+                        <a
+                            href="https://replicate.com/stability-ai/stable-diffusion?prediction=rjcl54wakbbrfcajzllmidreya"
+                            target="_blank"
+                            rel="noreferrer"
+                            title="phase shift into an era of human+AI art collab"
+                            className="w-full bg-cover aspect-square hidden md:block"
+                            style={{ backgroundImage: `url(${image})` }}>
+                            <span className="sr-only">
+                                phase shift into an era of human+AI art collab
+                            </span>
+                        </a>
+                        <div className="flex flex-col w-full relative max-h-screen">
+                            <div className="flex items-center justify-between w-full border-b p-4">
+                                <div className="text-lg font-medium">
+                                    {__(
+                                        'Select a model to continue',
+                                        'stable-diffusion',
+                                    )}
                                 </div>
-                                <div className="p-4 space-y-4 overflow-y-scroll">
-                                    {models.map((model) => (
-                                        <ModelButton
-                                            key={model.id}
-                                            {...model}
-                                            onClick={() =>
-                                                setCurrentInterface(
-                                                    model.id as AvailableModels,
-                                                )
-                                            }
-                                        />
-                                    ))}
-                                </div>
+                                <ModalCloseButton onClose={onClose} />
                             </div>
-                        </motion.div>
-                        <div className="absolute bottom-8">
-                            {Boolean(apiToken) && (
-                                <button
-                                    className="relative z-30 text-white bg-transparent focus:outline-none focus:ring-1 ring-offset-1 ring-wp-theme-500 focus:shadow-none opacity-80 hover:opacity-100"
-                                    onClick={deleteApiToken}>
-                                    {__('Logout', 'stable-diffusion')}
-                                </button>
-                            )}
+                            <div className="p-4 space-y-4 overflow-y-scroll">
+                                {models.map((model) => (
+                                    <ModelButton
+                                        key={model.id}
+                                        {...model}
+                                        onClick={() =>
+                                            setCurrentInterface(
+                                                model.id as AvailableModels,
+                                            )
+                                        }
+                                    />
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                </Dialog>
-            )}
-        </AnimatePresence>
+                    </motion.div>
+                </AnimatePresence>
+                <div className="absolute bottom-8">
+                    {Boolean(apiToken) && (
+                        <button
+                            className="relative z-30 text-white bg-transparent focus:outline-none focus:ring-1 ring-offset-1 ring-wp-theme-500 focus:shadow-none opacity-80 hover:opacity-100"
+                            onClick={deleteApiToken}>
+                            {__('Logout', 'stable-diffusion')}
+                        </button>
+                    )}
+                </div>
+            </div>
+        </Dialog>
     );
 };
 type ModelButtonProps = {

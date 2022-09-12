@@ -36,7 +36,7 @@ This plugin provides an interface to the Replicate API and requires you have an 
 == Screenshots ==
 
 1. Choose from various models to run
-2. A view of the interface
+2. "a gentleman otter in a 19th century portrait"
 
 == Changelog ==
 
