@@ -281,7 +281,7 @@ export const StableDiffusion = ({
                         initialFocus?.current?.focus();
                     }}
                     transition={{ type: 'Tween' }}
-                    className="border border-gray-900 flex items-center justify-center bg-cover mx-auto bg-gray-100"
+                    className="border border-gray-500 flex items-center justify-center bg-cover mx-auto"
                     animate={imageOutput}
                     initial={imageOutput}
                 />
