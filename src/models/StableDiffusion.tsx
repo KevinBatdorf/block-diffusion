@@ -59,7 +59,7 @@ export const StableDiffusion = ({
             return;
         }
         const response = await apiFetch<GenerateResponse>({
-            path: 'kevinbatdorf/stable-diffusion/generate',
+            path: `kevinbatdorf/stable-diffusion/generate?cache=${Date.now()}`,
             method: 'POST',
             headers: { Authorization: `Token ${apiToken}` },
             data: {

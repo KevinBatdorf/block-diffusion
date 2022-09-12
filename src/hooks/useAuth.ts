@@ -6,7 +6,7 @@ import { useAuthStore, useAuthStoreReady } from '../state/auth';
 const fetcher = async (apiToken: string) => {
     await apiFetch({
         method: 'POST',
-        path: 'kevinbatdorf/stable-diffusion/login',
+        path: `kevinbatdorf/stable-diffusion/login?cache=${Date.now()}`,
         headers: { Authorization: `Token ${apiToken}` },
     });
     // If it doesn't throw, it's good

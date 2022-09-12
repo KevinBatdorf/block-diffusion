@@ -9,7 +9,7 @@ const fetcher = (
 ): Promise<ModelData> =>
     apiFetch({
         method: 'GET',
-        path: `kevinbatdorf/stable-diffusion/get-model?model=${model}`,
+        path: `kevinbatdorf/stable-diffusion/get-model?model=${model}&cache=${Date.now()}`,
         headers: { Authorization: `Token ${apiToken}` },
     });
 

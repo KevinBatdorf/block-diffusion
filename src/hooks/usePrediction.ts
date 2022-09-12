@@ -10,7 +10,7 @@ const fetcher = (
 ): Promise<PredictionData> =>
     apiFetch({
         method: 'GET',
-        path: `kevinbatdorf/stable-diffusion/get-prediction?id=${predictionId}`,
+        path: `kevinbatdorf/stable-diffusion/get-prediction?id=${predictionId}&cache=${Date.now()}`,
         headers: { Authorization: `Token ${apiToken}` },
     });
 
