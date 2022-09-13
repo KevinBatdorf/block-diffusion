@@ -34,7 +34,7 @@ There are no plans to lock any features behind a pro or premium plugin. All feat
 
 = More Info =
 - Follow [@kevinbatdorf](https://twitter.com/kevinbatdorf) on Twitter
-- View on [GitHub](https://github.com/KevinBatdorf/stable-diffusion-block)
+- View on [GitHub](https://github.com/KevinBatdorf/block-diffusion)
 
 = Terms and Privacy =
 This plugin provides an interface to the Replicate API and requires you have an active account at replicate.com with an active API token. This plugin is not affiliated with Replicate and only uses their public Http API. Your servers speak directly with replicate.com.
