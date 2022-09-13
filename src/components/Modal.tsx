@@ -151,7 +151,7 @@ const ContentWrapper = ({
                 className={classNames(
                     'overflow-y-scroll md:flex flex-grow w-screen max-w-full md:pt-0 bg-gray-50 divide-x',
                     // Full height on model interfaces (kind of a hack to keep the login screen constrained)
-                    { 'h-screen lg:h-auto pt-20': apiToken },
+                    { 'h-screen lg:h-auto pt-16': apiToken },
                 )}>
                 {children}
             </div>
