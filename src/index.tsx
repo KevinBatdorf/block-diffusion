@@ -11,7 +11,7 @@ registerBlockType('kevinbatdorf/stable-diffusion', {
     ...blockConfig,
     icon: blockIcon,
     attributes: {},
-    title: __('Image Prompt', 'stable-diffusion'),
+    title: __('Block Diffusion', 'stable-diffusion'),
     edit: ({ clientId }) => <BlockReplacer clientId={clientId} />,
     save: () => null,
 });
