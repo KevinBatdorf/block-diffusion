@@ -64,6 +64,7 @@ export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
     useEffect(() => {
         const namespace = 'kevinbatdorf/stable-diffusion-open';
         const open = (event: CustomEvent<{ clientId: string }>) => {
+            console.log(event?.detail?.clientId, clientId);
             if (event?.detail?.clientId !== clientId) return;
             setOpen(true);
             setShowSelectScreen(true);

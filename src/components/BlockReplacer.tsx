@@ -20,7 +20,6 @@ export const BlockReplacer = ({ clientId }: { clientId: string }) => {
         replaceBlock(clientId, [blockData]).then(() => {
             const { clientId } = blockData;
             // Open the modal
-            console.log('opening modal');
             window.dispatchEvent(
                 new CustomEvent('kevinbatdorf/stable-diffusion-open', {
                     bubbles: true,
