@@ -145,7 +145,7 @@ const ContentWrapper = ({
             </div>
             <ModalCloseButton onClose={onClose} />
         </div>
-        <div className="overflow-y-scroll md:flex flex-grow w-screen max-w-full pt-20 md:pt-0 bg-gray-50 divide-x">
+        <div className="overflow-y-scroll md:flex flex-grow w-screen max-w-full h-screen md:h-auto pt-20 md:pt-0 bg-gray-50 divide-x">
             {children}
         </div>
     </>
