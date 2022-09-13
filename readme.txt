@@ -1,4 +1,4 @@
-=== Block Diffusion - AI generated images from text prompts  ===
+=== Block Diffusion - Generate images from text prompts  ===
 Contributors:      kbat82
 Tags:              block, stable diffusion, ai, prompt, artificial intelligence
 Tested up to:      6.0
