@@ -2,7 +2,7 @@
 Contributors:      kbat82
 Tags:              block, stable diffusion, ai, prompt, artificial intelligence
 Tested up to:      6.0
-Stable tag:        0.1.2
+Stable tag:        0.1.3
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,6 +51,9 @@ This plugin provides an interface to the Replicate API and requires you have an 
 2. Choose from various models to run
 
 == Changelog ==
+
+= 0.1.3 =
+- Update block label in editor
 
 = 0.1.2 =
 - Update plugin name and description text
