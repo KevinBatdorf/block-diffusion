@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Block Diffusion - Image AI Generation
+ * Plugin Name:       Block Diffusion
  * Description:       AI Image Generation from text prompts using the Replicate API.
  * Requires at least: 5.8
  * Requires PHP:      7.0
