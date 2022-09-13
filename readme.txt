@@ -1,4 +1,4 @@
-=== AI Prompts - Turn AI prompts into images  ===
+=== Block Diffusion - AI generated images from text prompts  ===
 Contributors:      kbat82
 Tags:              block, stable diffusion, ai, prompt, artificial intelligence
 Tested up to:      6.0
@@ -10,18 +10,27 @@ Run text prompts through various AI models using the Replicate cloud API.
 
 == Description ==
 
-A new era of content creation is here. With machine learning and advanced models, we are now capable of creating unique images based on text prompts alone. We are only lmiited by our imagination. Use artifical intelligence to unlock your creativity and wow your visitors.
+A new era of content creation is here. With machine learning and advanced models, we are now capable of creating unique images based on text prompts alone. We are only lmiited by our imagination. Block Diffusion lets you use artifical intelligence to unlock your creativity and give unique experiences to your visitors.
 
 This plugin interfaces with the Replicate API and allows you to run open-source models via their cloud API.
 
 = Features =
 - Stable Diffusion
-- Reverse Image To Prompt (coming soon)
-- AI Prompt Animation (coming soon)
-- Face Restoration (coming soon)
+- Reverse Image To Prompt (planned)
+- AI Prompt Animation (planned)
+- Face Restoration (planned)
 
 = Pro version =
-There are no plans to lock any features behind a pro or premium plugin. All features will be added to this version on wordpress.org. Over time I plan to add all features supported by Replicate, as well as additional features for the WordPress community specifically. If you are interested in helping support the development of this plugin, please [sponsor the project on GitHub](https://github.com/sponsors/KevinBatdorf).
+There are no plans to lock any features behind a pro or premium plugin. All features will be added to this version on wordpress.org. Over time I plan to add all features supported by Replicate, as well as additional features for the WordPress community specifically. If you are interested in helping support the development of this plugin, in the spirit of open source, you may [sponsor the project on GitHub](https://github.com/sponsors/KevinBatdorf) (there are monthly and one-time payment options). Thank you.
+
+= Upcoming Features =
+- Use an existing image as starting point
+- Add an image mask to only generate specific areas
+- Help with prompt ideas and inspiration
+- Run multiple image predictions at once
+- Have more control over the image generation steps
+- View your prediction history
+- Model selection from collections
 
 = More Info =
 - Follow [@kevinbatdorf](https://twitter.com/kevinbatdorf) on Twitter
@@ -40,7 +49,6 @@ This plugin provides an interface to the Replicate API and requires you have an 
 
 1. "phase shift into an era of human+AI art collab"
 2. Choose from various models to run
-3. "a cyberpunk puppy"
 
 == Changelog ==
 

@@ -3,7 +3,7 @@
     "apiVersion": 2,
     "name": "kevinbatdorf/stable-diffusion",
     "version": "0.1.0",
-    "title": "AI Prompts",
+    "title": "Image Prompt",
     "category": "media",
     "description": "Run text prompts through various AI models using the Replicate cloud API.",
     "attributes": {},
