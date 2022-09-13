@@ -37,76 +37,61 @@ export const Login = ({ initialFocus }: LoginProps) => {
     }
 
     return (
-        <div className="p-8 flex flex-col flex-grow bg-white">
-            <form
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    token && login(token);
-                }}>
-                <label
-                    htmlFor="replicate-api-key"
-                    className="text-lg font-medium block mb-2">
-                    {__('API token', 'stable-diffusion')}
-                </label>
-                <div className="flex gap-x-2">
-                    <div>
-                        <input
-                            ref={initialFocus}
-                            id="replicate-api-key"
-                            type="text"
-                            value={token}
-                            onChange={(e) => setToken(e.target.value)}
-                            className="lg:w-96 h-10 rounded-none border border-gray-900 focus:outline-none focus:ring-1 ring-offset-1 ring-wp-theme-500 focus:shadow-none"
-                        />
-                        {errorMsg && (
-                            <p className="text-red-500 m-0">{errorMsg}</p>
-                        )}
+        <div className="p-8 flex flex-col justify-between flex-grow bg-white">
+            <div className="flex flex-col flex-grow">
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        token && login(token);
+                    }}>
+                    <label
+                        htmlFor="replicate-api-key"
+                        className="text-lg font-medium block mb-2">
+                        {__('API token', 'stable-diffusion')}
+                    </label>
+                    <div className="flex gap-x-2">
+                        <div className="w-full">
+                            <input
+                                ref={initialFocus}
+                                id="replicate-api-key"
+                                type="text"
+                                value={token}
+                                onChange={(e) => setToken(e.target.value)}
+                                className="w-full h-10 rounded-none border border-gray-900 focus:outline-none focus:ring-1 ring-offset-1 ring-wp-theme-500 focus:shadow-none"
+                            />
+                            {errorMsg && (
+                                <p className="text-red-500 m-0">{errorMsg}</p>
+                            )}
+                        </div>
+                        <button
+                            type="button"
+                            className="h-10 px-4 bg-gray-900 text-white rounded-none border border-gray-900 focus:outline-none focus:ring-1 ring-offset-1 ring-wp-theme-500 cursor-pointer focus:shadow-none"
+                            disabled={loading}
+                            onClick={() => {
+                                token && login(token);
+                            }}>
+                            {loading
+                                ? __('...', 'stable-diffusion')
+                                : __('Login', 'stable-diffusion')}
+                        </button>
                     </div>
-                    <button
-                        type="button"
-                        className="h-10 px-4 bg-gray-900 text-white rounded-none border border-gray-900 focus:outline-none focus:ring-1 ring-offset-1 ring-wp-theme-500 cursor-pointer focus:shadow-none"
-                        disabled={loading}
-                        onClick={() => {
-                            token && login(token);
-                        }}>
-                        {loading
-                            ? __('...', 'stable-diffusion')
-                            : __('Login', 'stable-diffusion')}
-                    </button>
+                </form>
+                <p>
+                    {__(
+                        'This plugin connects to the Replicate API and requires an active API token.',
+                        'stable-diffusion',
+                    )}
+                </p>
+                <div>
+                    <a
+                        href="https://replicate.com"
+                        target="_blank"
+                        rel="noreferrer">
+                        replicate.com
+                    </a>
                 </div>
-            </form>
-            <p>
-                {__(
-                    'This plugin connects to the Replicate API and requires an active API token.',
-                    'stable-diffusion',
-                )}
-            </p>
-            <div>
-                <a
-                    href="https://replicate.com"
-                    target="_blank"
-                    rel="noreferrer">
-                    replicate.com
-                </a>
             </div>
-        </div>
-    );
-};
-
-export const LoginWrapper = ({ children }: { children: React.ReactNode }) => (
-    <div className="flex max-w-screen-md2">
-        <a
-            href="https://replicate.com/stability-ai/stable-diffusion?prediction=qffyxjvmbvfdbao7vvv2oss2gq"
-            target="_blank"
-            rel="noreferrer"
-            title="multicolor hyperspace"
-            className="w-96 h-96 bg-cover flex-shrink-0"
-            style={{ backgroundImage: `url(${image})` }}>
-            <span className="sr-only">multicolor hyperspace</span>
-        </a>
-        <div className="flex flex-col overflow-hidden">
-            {children}
-            <div className="px-8 mb-2 flex gap-x-2">
+            <div className="mt-8 flex gap-x-2">
                 <a
                     href="https://replicate.com/terms"
                     target="_blank"
@@ -121,5 +106,20 @@ export const LoginWrapper = ({ children }: { children: React.ReactNode }) => (
                 </a>
             </div>
         </div>
+    );
+};
+
+export const LoginWrapper = ({ children }: { children: React.ReactNode }) => (
+    <div className="flex flex-col md:flex-row max-w-screen-md2">
+        <a
+            href="https://replicate.com/stability-ai/stable-diffusion?prediction=qffyxjvmbvfdbao7vvv2oss2gq"
+            target="_blank"
+            rel="noreferrer"
+            title="multicolor hyperspace"
+            className="bg-center mt-16 md:mt-0 w-full md:w-60 lg:w-96 h-44 md:h-96 bg-cover flex-shrink-0"
+            style={{ backgroundImage: `url(${image})` }}>
+            <span className="sr-only">multicolor hyperspace</span>
+        </a>
+        <div className="flex flex-col overflow-hidden">{children}</div>
     </div>
 );
