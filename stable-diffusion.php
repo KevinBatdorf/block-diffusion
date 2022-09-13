@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name:       Block Diffusion - Image AI Generation
- * Description:       AI Image Generation from text prompts using the Replicate API.
+ * Plugin Name:       Block Diffusion
+ * Description:       Generate unique images from text prompts using machine learning, all in the cloud.
  * Requires at least: 5.8
  * Requires PHP:      7.0
  * Version:           0.1.1
