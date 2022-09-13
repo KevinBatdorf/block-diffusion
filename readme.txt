@@ -52,6 +52,9 @@ This plugin provides an interface to the Replicate API and requires you have an 
 
 == Changelog ==
 
+- Update scrolling style for md widths
+- Update login mobile view layout
+
 = 0.1.3 =
 - Update block label in editor
 

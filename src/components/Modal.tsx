@@ -55,7 +55,7 @@ export const Modal = ({ setImage, onClose }: ModalProps) => {
                                     ?.name
                             }
                         </Dialog.Title>
-                        <div className="md:flex flex-col w-full relative">
+                        <div className="md:flex flex-col w-full relative h-screen md:h-auto">
                             <ModalContent
                                 setImage={setImage}
                                 modelName={currentInterface}
@@ -136,17 +136,25 @@ const ContentWrapper = ({
     title,
     onClose,
     onGoBack,
-}: ContentWrapperProps) => (
-    <>
-        <div className="flex items-center justify-between w-full border-b p-4 gap-x-4 fixed md:static top-0 bg-white">
-            <div className="flex gap-x-4 items-center">
-                <Button icon={arrowLeft} onClick={onGoBack} />
-                <div className="text-lg font-medium">{title}</div>
+}: ContentWrapperProps) => {
+    const { apiToken } = useAuthStore();
+    return (
+        <>
+            <div className="flex items-center justify-between w-full border-b p-4 gap-x-4 fixed md:static top-0 bg-white">
+                <div className="flex gap-x-4 items-center">
+                    <Button icon={arrowLeft} onClick={onGoBack} />
+                    <div className="text-lg font-medium">{title}</div>
+                </div>
+                <ModalCloseButton onClose={onClose} />
             </div>
-            <ModalCloseButton onClose={onClose} />
-        </div>
-        <div className="overflow-y-scroll md:flex flex-grow w-screen max-w-full h-screen md:h-auto pt-20 md:pt-0 bg-gray-50 divide-x">
-            {children}
-        </div>
-    </>
-);
+            <div
+                className={classNames(
+                    'overflow-y-scroll md:flex flex-grow w-screen max-w-full md:pt-0 bg-gray-50 divide-x',
+                    // Full height on model interfaces (kind of a hack to keep the login screen constrained)
+                    { 'h-screen lg:h-auto pt-20': apiToken },
+                )}>
+                {children}
+            </div>
+        </>
+    );
+};
