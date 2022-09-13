@@ -1,4 +1,4 @@
-### Stable Diffusion - a block editor plugin to interface with the Replicate API
+### Block Diffusion - a block editor plugin to interface with the Replicate API
 
 Download the plugin from [wordpress.org](https://wordpress.org/plugins/stable-diffusion/)
 
