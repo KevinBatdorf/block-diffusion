@@ -2,7 +2,7 @@
 Contributors:      kbat82
 Tags:              block, stable diffusion, ai, prompt, artificial intelligence
 Tested up to:      6.0
-Stable tag:        0.1.3
+Stable tag:        0.1.4
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,19 +52,20 @@ This plugin provides an interface to the Replicate API and requires you have an 
 
 == Changelog ==
 
+= 0.1.4 - 2022-09-13 =
 - Update scrolling style for md widths
 - Update login mobile view layout
 
-= 0.1.3 =
+= 0.1.3 - 2022-09-13 =
 - Update block label in editor
 
-= 0.1.2 =
+= 0.1.2 - 2022-09-13 =
 - Update plugin name and description text
 - Fix bug where the image block isn't mounted by the time the opener event fires
 - Fix mobile scrolling bug
 
-= 0.1.1 =
+= 0.1.1 - 2022-09-12 =
 - Update block.json information
 
-= 0.1.0 =
+= 0.1.0 - 2022-09-12 =
 - Initial release
