@@ -12,7 +12,7 @@ Generate unique images from text prompts using machine learning, all in the clou
 
 A new era of content creation is here. With machine learning and advanced models, we are now capable of creating unique images based on text prompts alone. We are only lmiited by our imagination. Block Diffusion lets you use artifical intelligence to unlock your creativity and give unique experiences to your visitors.
 
-This plugin interfaces with the Replicate API and allows you to run open-source models via their cloud API.
+This plugin interfaces with the Replicate API and allows you to run open-source models via their cloud API. Add the block to a page and select a model to enter your API token.
 
 = Features =
 - Stable Diffusion
