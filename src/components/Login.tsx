@@ -26,8 +26,8 @@ export const Login = ({ initialFocus }: LoginProps) => {
         }
     }, [success, storeApiToken, token]);
 
-    console.log('error', error);
     if (error) {
+        console.error(error);
         setErrorMsg(() => {
             // Replicate error
             if (error?.detail) return error.detail;
