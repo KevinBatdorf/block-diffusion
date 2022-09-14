@@ -26,13 +26,20 @@ export const Login = ({ initialFocus }: LoginProps) => {
         }
     }, [success, storeApiToken, token]);
 
+    console.log('error', error);
     if (error) {
         setErrorMsg(() => {
-            if (error.status === 401)
-                return __('Invalid token', 'stable-diffusion');
-            if (error.message) return error.message;
-            if (error.statusText) return error.statusText;
-            return '';
+            // Replicate error
+            if (error?.detail) return error.detail;
+            if (error?.message) {
+                // WP rest api error
+                return error?.code
+                    ? `${error.code}: ${error.message}`
+                    : error.message;
+            }
+            // Maybe server error or similar
+            if (error?.statusText) return error.statusText;
+            return __('Unknown error', 'stable-diffusion');
         });
     }
 
