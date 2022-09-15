@@ -30,7 +30,7 @@ add_action('admin_enqueue_scripts', function () {
 });
 
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), function ($links) {
-    $links[] = '<a href="' . esc_url(admin_url('post-new.php?post_type=page&block-diffusion-open')) . '">' . __('Enter API Token', 'stable-diffusion') . '</a>';
+    $links[] = '<a href="' . esc_url(admin_url('post-new.php?post_type=page&block-diffusion-open')) . '" title="' . __('Loads a new page and opens the application', 'stable-diffusion') . '">' . __('Enter API Token', 'stable-diffusion') . '</a>';
     return $links;
 });
 
