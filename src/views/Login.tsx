@@ -109,7 +109,7 @@ export const Login = ({ onClose }: LoginProps) => {
                         <a
                             href="https://replicate.com"
                             target="_blank"
-                            className="text-wp-theme-500 underline text-base"
+                            className="text-wp-theme-500 underline text-sm"
                             rel="noreferrer">
                             replicate.com
                         </a>
@@ -119,13 +119,13 @@ export const Login = ({ onClose }: LoginProps) => {
                     <a
                         href="https://replicate.com/terms"
                         target="_blank"
-                        className="text-wp-theme-500 underline text-base"
+                        className="text-wp-theme-500 underline text-sm"
                         rel="noreferrer">
                         {__('Replicate terms')}
                     </a>
                     <a
                         href="https://replicate.com/privacy"
-                        className="text-wp-theme-500 underline text-base"
+                        className="text-wp-theme-500 underline text-sm"
                         target="_blank"
                         rel="noreferrer">
                         {__('Replicate privacy policy')}
