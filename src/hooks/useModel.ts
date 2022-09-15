@@ -14,10 +14,15 @@ const fetcher = (
     });
 
 export const useModel = (model: AvailableModels) => {
-    const { apiToken } = useAuthStore();
+    const { apiToken, storeApiToken } = useAuthStore();
     const { data, error } = useSWRImmutable<ModelData>(
         [model, apiToken],
         fetcher,
     );
+    // check if error is 401
+    if (error?.detail === 'Invalid token.') {
+        console.error(error);
+        storeApiToken('');
+    }
     return { data, error, loading: !error && !data };
 };

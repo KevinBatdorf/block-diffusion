@@ -3,10 +3,12 @@ import { useDispatch, useSelect } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { setImage } from '../lib/wp';
+import { useAuthStore, useAuthStoreReady } from '../state/auth';
 import { useGlobalState } from '../state/global';
 import { ImageLike } from '../types';
+import { Login } from '../views/Login';
+import { ModalSelect } from '../views/ModelSelect';
 import { Modal } from './Modal';
-import { ModalSelect } from './ModelSelect';
 
 type LoaderProps = {
     attributes: ImageLike;
@@ -19,6 +21,7 @@ export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
         setImportingMessage,
         setCurrentInterface,
         setShowSelectScreen,
+        showSelectScreen,
         setImageBlockId,
         imageBlockId,
     } = useGlobalState();
@@ -29,6 +32,8 @@ export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore-next-line - types seem outdated
     const { getBlock } = useSelect((s) => s(blockEditorStore), []);
+    const ready = useAuthStoreReady();
+    const { apiToken: loggedIn } = useAuthStore();
 
     const onClose = () => {
         const b = getBlock(imageBlockId);
@@ -75,11 +80,16 @@ export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
         };
     }, [clientId, setShowSelectScreen, setImageBlockId]);
 
-    if (!open) return null;
+    if (!open || !ready) return null;
 
     return (
         <>
-            <ModalSelect onClose={onClose} />
+            {/* Be sure to re-render this when they logout/in */}
+            {!loggedIn && <Login onClose={onClose} />}
+            <ModalSelect
+                onClose={onClose}
+                open={Boolean(loggedIn) && showSelectScreen}
+            />
             <Modal onClose={onClose} setImage={handleImageImport} />
         </>
     );
