@@ -12,8 +12,7 @@ if (!class_exists('KBSDRouter')) {
                 }
                 if (!$request->get_header('authorization')) {
                     // Users have reported the headers being stripped out of the request
-                    $token = $this->findAuthToken($request);
-                    $request->set_header('authorization', $token);
+                    $request->set_header('authorization', $this->findAuthToken($request));
                 }
                 // If the api token is in the body, remove it
                 $body = json_decode($request->get_body(), true);
