@@ -60,6 +60,7 @@ export const Login = ({ onClose }: LoginProps) => {
             <div className="flex flex-col justify-between flex-grow bg-white h-auto lg:h-72">
                 <div className="flex flex-col flex-grow p-4">
                     <form
+                        className="mb-2"
                         onSubmit={(e) => {
                             e.preventDefault();
                             token && login(token);
@@ -98,7 +99,7 @@ export const Login = ({ onClose }: LoginProps) => {
                             </button>
                         </div>
                     </form>
-                    <p>
+                    <p className="m-0 mb-6">
                         {__(
                             'This plugin connects to the Replicate API and requires an active API token.',
                             'stable-diffusion',
@@ -108,6 +109,7 @@ export const Login = ({ onClose }: LoginProps) => {
                         <a
                             href="https://replicate.com"
                             target="_blank"
+                            className="text-wp-theme-500 underline text-base"
                             rel="noreferrer">
                             replicate.com
                         </a>
@@ -117,11 +119,13 @@ export const Login = ({ onClose }: LoginProps) => {
                     <a
                         href="https://replicate.com/terms"
                         target="_blank"
+                        className="text-wp-theme-500 underline text-base"
                         rel="noreferrer">
                         {__('Replicate terms')}
                     </a>
                     <a
                         href="https://replicate.com/privacy"
+                        className="text-wp-theme-500 underline text-base"
                         target="_blank"
                         rel="noreferrer">
                         {__('Replicate privacy policy')}
