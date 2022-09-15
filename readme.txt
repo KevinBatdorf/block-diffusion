@@ -52,6 +52,8 @@ This plugin provides an interface to the Replicate API and requires you have an 
 
 == Changelog ==
 
+- Update auto inject to be more reliable
+
 = 0.1.6 - 2022-09-14 =
 - Refactor out login from middleware into a basic gate pattern
 - Add "API Token" link on the plugins page that will open the app
