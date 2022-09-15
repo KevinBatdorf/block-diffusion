@@ -34,8 +34,7 @@ const q = new URLSearchParams(window.location.search);
 if (q.has('block-diffusion-open')) {
     q.delete('block-diffusion-open');
     const blockDiffusion = Object.assign(document.createElement('div'), {
-        id: 'stable-diffusion-root',
-        className: 'stable-diffusion',
+        id: 'stable-diffusion-auto-inject',
     });
     domReady(() => {
         window.history.replaceState({}, '', `${window.location.pathname}?${q}`);
