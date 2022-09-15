@@ -52,6 +52,8 @@ This plugin provides an interface to the Replicate API and requires you have an 
 
 == Changelog ==
 
+- Tweak: Add middleware to grab token from the db (or body)
+
 = 0.1.7 - 2022-09-15 =
 - Update auto inject to be more reliable
 - Tweak styling to avoid some theme conflicts
