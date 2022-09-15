@@ -2,7 +2,7 @@
 Contributors:      kbat82
 Tags:              block, stable diffusion, ai, prompt, artificial intelligence
 Tested up to:      6.0
-Stable tag:        0.1.5
+Stable tag:        0.1.6
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,6 +51,11 @@ This plugin provides an interface to the Replicate API and requires you have an 
 2. Choose from various models to run
 
 == Changelog ==
+
+= 0.1.6 - 2022-09-14 =
+- Refactor out login from middleware into a basic gate pattern
+- Add "API Token" link on the plugins page that will open the app
+- Make the login view the first view
 
 = 0.1.5 - 2022-09-13 =
 - Add better error handling when logging in
