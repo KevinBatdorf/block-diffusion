@@ -29,6 +29,14 @@ add_action('admin_enqueue_scripts', function () {
     );
 });
 
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), function ($links) {
+    $links[] = sprintf('<a href="%s" title="%s">%s</a>',
+    esc_url(admin_url('post-new.php?post_type=page&block-diffusion-open')),
+    __('Loads a new page and opens the application', 'stable-diffusion'),
+    __('Enter API Token', 'stable-diffusion'));
+    return $links;
+});
+
 include_once(__DIR__ . '/php/settings.php');
 include_once(__DIR__ . '/php/router.php');
 include_once(__DIR__ . '/php/routes.php');
