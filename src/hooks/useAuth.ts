@@ -37,5 +37,8 @@ export const useAuth = () => {
         login(token: string) {
             setApiToken(token);
         },
+        logout() {
+            deleteApiToken();
+        },
     };
 };
