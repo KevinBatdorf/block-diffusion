@@ -4,11 +4,15 @@ import { useEffect, useRef, useState } from '@wordpress/element';
 import { sprintf, __ } from '@wordpress/i18n';
 import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
+import { ModelCard } from '../components/ModelCard';
+import { GoButton } from '../components/inputs/GoButton';
+import { NumberSelect } from '../components/inputs/NumberSelect';
+import { PromptInput } from '../components/inputs/PromptInput';
 import { useModel } from '../hooks/useModel';
 import { usePrediction } from '../hooks/usePrediction';
 import { useAuthStore } from '../state/auth';
 import { useGlobalState } from '../state/global';
-import { ImageLike, ModelData } from '../types';
+import { ImageLike } from '../types';
 
 type StableDiffusionProps = {
     setImage: (image: ImageLike) => void;
@@ -22,15 +26,15 @@ export const StableDiffusion = ({
     initialFocus,
 }: StableDiffusionProps) => {
     const { data: modelInfo } = useModel('stability-ai/stable-diffusion');
-    const { importingMessage, setMaybeImporting } = useGlobalState();
+    const { importingMessage, setMaybeImporting, maybeImporting } =
+        useGlobalState();
     const { apiToken } = useAuthStore();
     const [errorMsg, setErrorMsg] = useState('');
     const [statusMessage, setStatusMessage] = useState('');
     const [prompt, setPrompt] = useState('');
-    const [width, setWidth] = useState('768');
-    const [height, setHeight] = useState('512');
+    const [width, setWidth] = useState(768);
+    const [height, setHeight] = useState(512);
     const importButtonRef = useRef<HTMLButtonElement>(null);
-    const hwvalues = [128, 256, 512, 768, 1024];
     const [generateId, setGenerateId] = useState<string>('');
     const { data: generateData } = usePrediction(generateId);
 
@@ -38,10 +42,6 @@ export const StableDiffusion = ({
         generateData?.status ?? '',
     );
     const canImport = generateData?.status === 'succeeded' && !importingMessage;
-    const formItemClass = classNames('w-full text-lg ringed border', {
-        'bg-gray-200 border-gray-200': processing,
-        'border-gray-900': !processing,
-    });
 
     const imageOutput = {
         maxWidth: `${width}px`,
@@ -155,66 +155,37 @@ export const StableDiffusion = ({
                         e.preventDefault();
                         handleSubmit();
                     }}>
-                    <div>
-                        <label
-                            htmlFor="replicate-prompt"
-                            className="text-lg font-medium block mb-1">
-                            {__('Prompt', 'stable-diffusion')}
-                        </label>
-                        <textarea
-                            ref={initialFocus}
-                            className={formItemClass}
-                            id="replicate-prompt"
-                            value={prompt}
-                            rows={4}
+                    <PromptInput
+                        initialFocus={initialFocus}
+                        value={prompt}
+                        onChange={setPrompt}
+                        disabled={processing}
+                        label={__('Prompt', 'stable-diffusion')}
+                    />
+                    <div className="flex gap-x-4">
+                        <NumberSelect
+                            label={__('Width', 'stable-diffusion')}
+                            value={width}
                             disabled={processing}
-                            onChange={(e) => setPrompt(e.target.value)}
+                            onChange={setWidth}
+                            options={[128, 256, 512, 768, 1024]}
                         />
-                    </div>
-                    <div>
-                        <label
-                            htmlFor="replicate-width"
-                            className="text-lg font-medium block mb-1">
-                            {__('Width', 'stable-diffusion')}
-                        </label>
-                        <select
-                            id="replicate-width"
-                            className={formItemClass}
+                        <NumberSelect
+                            label={__('Height', 'stable-diffusion')}
+                            value={height}
                             disabled={processing}
-                            onChange={(e) => setWidth(e.target.value)}
-                            value={width}>
-                            {hwvalues.map((value) => (
-                                <option key={value} value={value}>
-                                    {value}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div>
-                        <label
-                            htmlFor="replicate-height"
-                            className="text-lg font-medium block mb-1">
-                            {__('Height', 'stable-diffusion')}
-                        </label>
-                        <select
-                            id="replicate-height"
-                            className={formItemClass}
-                            disabled={processing}
-                            onChange={(e) => setHeight(e.target.value)}
-                            value={height}>
-                            {hwvalues.map((value) => (
-                                <option key={value} value={value}>
-                                    {value}
-                                </option>
-                            ))}
-                        </select>
+                            onChange={setHeight}
+                            options={[128, 256, 512, 768, 1024]}
+                        />
                     </div>
                     <div className="flex justify-end mt-4 gap-x-2">
                         <AnimatePresence>
                             <GoButton
+                                disabled={maybeImporting}
+                                importing={importingMessage.length > 0}
+                                processing={processing}
                                 onSubmit={handleSubmit}
                                 onCancel={handleCancel}
-                                processing={processing}
                             />
                         </AnimatePresence>
                     </div>
@@ -225,18 +196,7 @@ export const StableDiffusion = ({
                     </p>
                 </form>
                 <AnimatePresence>
-                    <div
-                        className="flex items-end"
-                        style={{ minHeight: '250px' }}>
-                        {modelInfo && (
-                            <motion.div
-                                className="p-8 pt-0 pb-4"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}>
-                                <ModelMetadata {...modelInfo} />
-                            </motion.div>
-                        )}
-                    </div>
+                    <ModelCard modelInfo={modelInfo} />
                 </AnimatePresence>
             </div>
             <div className="w-full h-full overflow-hidden p-8 bg-gray-50">
@@ -289,109 +249,3 @@ export const StableDiffusion = ({
         </>
     );
 };
-
-const GoButton = ({
-    processing,
-    onSubmit,
-    onCancel,
-}: {
-    processing: boolean;
-    onSubmit: () => void;
-    onCancel: () => void;
-}) => {
-    const { importingMessage, maybeImporting } = useGlobalState();
-    if (importingMessage)
-        return (
-            <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}>
-                <Button onClick={() => undefined} disabled variant="primary">
-                    {__('Importing...', 'stable-diffusion')}
-                </Button>
-            </motion.span>
-        );
-    if (processing) {
-        return (
-            <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}>
-                <Button onClick={onCancel} variant="primary" isDestructive>
-                    {__('Cancel run', 'stable-diffusion')}
-                </Button>
-            </motion.span>
-        );
-    }
-    return (
-        <motion.span
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}>
-            <Button
-                onClick={onSubmit}
-                variant="primary"
-                disabled={maybeImporting}>
-                {__('Submit', 'stable-diffusion')}
-            </Button>
-        </motion.span>
-    );
-};
-
-const ModelMetadata = ({
-    url,
-    description,
-    name,
-    owner,
-    paper_url,
-    license_url,
-    github_url,
-}: ModelData) => (
-    <div className="bg-gray-100 p-4">
-        {(owner || name) && (
-            <div className="font-medium font-mono mb-2">
-                {owner} / {name}
-            </div>
-        )}
-        {description && <p className="m-0 mb-6 leading-tight">{description}</p>}
-
-        {(url || paper_url || license_url || github_url) && (
-            <div>
-                <div className="flex gap-x-2">
-                    {url && (
-                        <a href={url} target="_blank" rel="noopener noreferrer">
-                            {__('Model', 'stable-diffusion')}
-                        </a>
-                    )}
-                    {paper_url && (
-                        <a
-                            href={paper_url}
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            {__('Paper', 'stable-diffusion')}
-                        </a>
-                    )}
-                    {license_url && (
-                        <a
-                            href={license_url}
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            {__('License', 'stable-diffusion')}
-                        </a>
-                    )}
-                    {github_url && (
-                        <a
-                            href={github_url}
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            {__('GitHub', 'stable-diffusion')}
-                        </a>
-                    )}
-                </div>
-                <p className="text-xs italic m-0 mt-2">
-                    {__('Links open in a new tab', 'stable-diffusion')}
-                </p>
-            </div>
-        )}
-    </div>
-);
