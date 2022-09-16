@@ -12,4 +12,3 @@ If using the repo here, you need to first build it. Run `npm ci && npm run build
 ## Example Screenshots
 ![alt text](.wordpress-org/screenshot-1.gif "Example")
 ![alt text](.wordpress-org/screenshot-2.png "Example 2")
-![alt text](.wordpress-org/screenshot-3.png "Example 3")
