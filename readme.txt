@@ -2,7 +2,7 @@
 Contributors:      kbat82
 Tags:              block, stable diffusion, ai, prompt, artificial intelligence
 Tested up to:      6.0
-Stable tag:        0.1.7
+Stable tag:        0.1.8
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,7 +52,10 @@ This plugin provides an interface to the Replicate API and requires you have an 
 
 == Changelog ==
 
+= 0.1.8 - 2022-09-15 =
+- Tweak: Update height and width positioning
 - Tweak: Add middleware to grab token from the db (or body)
+- Testing: Adds login e2e tests
 
 = 0.1.7 - 2022-09-15 =
 - Update auto inject to be more reliable
