@@ -8,6 +8,7 @@ const fetcher = async (apiToken: string) => {
         method: 'POST',
         path: `kevinbatdorf/stable-diffusion/login?cache=${Date.now()}`,
         headers: { Authorization: `Token ${apiToken}` },
+        data: { apiToken },
     });
     // If it doesn't throw, it's good
     return true;
