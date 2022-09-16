@@ -23,6 +23,7 @@ export const ModalSelect = ({ onClose, open }: ModalProps) => {
     return (
         <DialogWithImageModal
             open={open}
+            testingId="model-select"
             initialFocus={initialFocus}
             onClose={onClose}
             title={__('Select Model', 'stable-diffusion')}
@@ -44,6 +45,7 @@ export const ModalSelect = ({ onClose, open }: ModalProps) => {
                 {/* Temporary logout button */}
                 {Boolean(apiToken) && (
                     <button
+                        data-cy="logout"
                         className="relative z-30 text-white bg-transparent focus:outline-none focus:ring-1 ring-offset-1 ring-wp-theme-500 focus:shadow-none opacity-80 hover:opacity-100"
                         onClick={logout}>
                         {__('Logout', 'stable-diffusion')}

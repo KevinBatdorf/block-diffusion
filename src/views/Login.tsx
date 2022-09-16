@@ -49,6 +49,7 @@ export const Login = ({ onClose }: LoginProps) => {
     return (
         <DialogWithImageModal
             open={true}
+            testingId="login-screen"
             onClose={onClose}
             title={__('Login', 'stable-diffusion')}
             image={{
@@ -81,13 +82,16 @@ export const Login = ({ onClose }: LoginProps) => {
                                     className="w-full h-10 rounded-none border border-gray-900 focus:outline-none focus:ring-1 ring-offset-1 ring-wp-theme-500 focus:shadow-none"
                                 />
                                 {errorMsg && (
-                                    <p className="text-red-500 m-0">
+                                    <p
+                                        data-cy="login-error"
+                                        className="text-red-500 m-0">
                                         {errorMsg}
                                     </p>
                                 )}
                             </div>
                             <button
                                 type="button"
+                                data-cy="login-button"
                                 className="h-10 px-4 bg-gray-900 text-white rounded-none border border-gray-900 focus:outline-none focus:ring-1 ring-offset-1 ring-wp-theme-500 cursor-pointer focus:shadow-none"
                                 disabled={loading}
                                 onClick={() => {
