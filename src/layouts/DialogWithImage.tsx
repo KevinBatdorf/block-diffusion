@@ -6,6 +6,7 @@ type ModalProps = {
     onClose: () => void;
     title: string;
     open: boolean;
+    testingId?: string;
     children: React.ReactNode;
     initialFocus: React.RefObject<HTMLElement>;
     image: {
@@ -18,6 +19,7 @@ export const DialogWithImageModal = ({
     title,
     onClose,
     open,
+    testingId,
     initialFocus,
     image,
     children,
@@ -26,6 +28,7 @@ export const DialogWithImageModal = ({
         <Dialog
             className="stable-diffusion-editor stable-diffusion-modal"
             initialFocus={initialFocus}
+            data-cy={testingId}
             open={open}
             onClose={onClose}>
             <div className="absolute mx-auto w-full h-full overflow-hidden md:p-8 md:flex justify-center items-center z-high">

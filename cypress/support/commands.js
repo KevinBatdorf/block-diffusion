@@ -1,4 +1,5 @@
 import { BLOCK_CONTAINER } from '../constants';
+import { closeOurModal, maybeLogin, maybeLogout } from './block';
 import {
     addBlock,
     closeWelcomeGuide,
@@ -8,7 +9,7 @@ import {
     setPostContent,
     wpDataSelect,
 } from './gutenberg';
-import { login, logout } from './login-logout';
+import { wplogin, wplogout } from './login-logout';
 import {
     visitPageEditor,
     visitAdminPage,
@@ -30,9 +31,9 @@ Cypress.Commands.add('visitNewPageEditor', (query, skipWelcomeGuide) =>
 
 // Login logout
 Cypress.Commands.add('loginUser', (username, password) =>
-    login(username, password),
+    wplogin(username, password),
 );
-Cypress.Commands.add('logoutUser', () => logout());
+Cypress.Commands.add('logoutUser', () => wplogout());
 
 // Gutenberg
 Cypress.Commands.add('closeWelcomeGuide', () => closeWelcomeGuide());
@@ -54,3 +55,14 @@ Cypress.Commands.add('wpDataSelect', (store, selector, ...parameters) =>
 // Manage plugins
 Cypress.Commands.add('installPlugin', (slug) => installPlugin(slug));
 Cypress.Commands.add('uninstallPlugin', (slug) => uninstallPlugin(slug));
+
+// Our stuff
+Cypress.Commands.add('addOurBlock', () => {
+    cy.addBlock('stable-diffusion');
+    // Check the core image block is there
+    cy.getPostContent('.wp-block[class$="wp-block-image"]').should('exist');
+    cy.maybeLogout();
+});
+Cypress.Commands.add('closeModal', () => closeOurModal());
+Cypress.Commands.add('maybeLogin', () => maybeLogin());
+Cypress.Commands.add('maybeLogout', () => maybeLogout());

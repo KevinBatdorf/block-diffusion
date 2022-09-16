@@ -1,4 +1,4 @@
-export const login = (username = 'admin', password = 'password') => {
+export const wplogin = (username = 'admin', password = 'password') => {
     cy.log('Login with username: ' + username + ' and password: ' + password);
     cy.visitLoginPage()
         .get('#user_login')
@@ -9,7 +9,7 @@ export const login = (username = 'admin', password = 'password') => {
         .click();
 };
 
-export const logout = () => {
+export const wplogout = () => {
     cy.visitAdminPage();
     cy.get('#wp-admin-bar-logout a').click({ force: true });
 };
