@@ -14,11 +14,10 @@ A new era of content creation is here. With machine learning and advanced models
 
 This plugin interfaces with the Replicate API and allows you to run open-source models via their cloud API. Add the block to a page and select a model to enter your API token.
 
+Semi interactive demo at [https://www.block-diffusion.com/](https://www.block-diffusion.com/)
+
 = Features =
 - Stable Diffusion
-- Reverse Image To Prompt (planned)
-- AI Prompt Animation (planned)
-- Face Restoration (planned)
 
 = Pro version =
 There are no plans to lock any features behind a pro or premium plugin. All features will be added to this version on wordpress.org. Over time I plan to add all features supported by Replicate, as well as additional features for the WordPress community specifically. If you are interested in helping support the development of this plugin, in the spirit of open source, you may [sponsor the project on GitHub](https://github.com/sponsors/KevinBatdorf) (there are monthly and one-time payment options). Thank you.
@@ -40,6 +39,10 @@ There are no plans to lock any features behind a pro or premium plugin. All feat
 This plugin provides an interface to the Replicate API and requires you have an active account at replicate.com with an active API token. This plugin is not affiliated with Replicate and only uses their public Http API. Your servers speak directly with replicate.com.
 - [Replicate terms](https://replicate.com/terms)
 - [Replicate privacy policy](https://replicate.com/privacy)
+
+We also offer additional features on top of the Replicate API, such as prompt/output sharing (opt in) and prompt inspiration.
+- [Block Diffusion terms](https://www.block-diffusion.com/terms)
+- [Block Diffusion privacy policy](https://www.block-diffusion.com/privacy)
 
 == Installation ==
 
