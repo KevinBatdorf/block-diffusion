@@ -153,9 +153,6 @@
 .stable-diffusion-editor.stable-diffusion-modal {
     @apply fixed z-high inset-0 overflow-y-auto;
 }
-.stable-diffusion-editor .ringed {
-    @apply rounded-none focus:outline-none focus:ring-1 ring-offset-1 ring-wp-theme-500 focus:shadow-none;
-}
 .stable-diffusion-editor .components-button.is-destructive:focus:not(:disabled) {
     @apply text-white;
 }

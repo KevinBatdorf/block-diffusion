@@ -30,16 +30,18 @@ const ModelMetadata = ({
     license_url,
     github_url,
 }: ModelData) => (
-    <div className="bg-gray-100 p-4">
-        {(owner || name) && (
-            <div className="font-medium font-mono mb-2">
-                {owner} / {name}
-            </div>
-        )}
-        {description && <p className="m-0 mb-6 leading-tight">{description}</p>}
+    <div className="bg-gray-100 p-4 group flex flex-col gap-2 transform-gpu">
+        <div>
+            {(owner || name) && (
+                <div className="font-medium font-mono mb-2">
+                    {owner} / {name}
+                </div>
+            )}
+            {description && <p className="m-0 leading-tight">{description}</p>}
+        </div>
 
         {(url || paper_url || license_url || github_url) && (
-            <div>
+            <div className="h-0 group-hover:h-10 transition-all duration-500 overflow-hidden">
                 <div className="flex gap-x-2">
                     {url && (
                         <a href={url} target="_blank" rel="noopener noreferrer">
