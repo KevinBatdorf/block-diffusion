@@ -12,7 +12,7 @@ export const ModelCard = ({ modelInfo }: ModelCardProps) => {
     return (
         <div className="flex items-end" style={{ minHeight: '250px' }}>
             <motion.div
-                className="p-8 pt-0 pb-4"
+                className="p-6 pt-0 pb-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}>
                 <ModelMetadata {...modelInfo} />

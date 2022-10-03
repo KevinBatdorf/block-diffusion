@@ -19,7 +19,7 @@ context('Login checks', () => {
         cy.closeModal();
     });
 
-    it('Successful login will show the select screen', () => {
+    it('Successful login will show the stable diffusion screen', () => {
         // Adds our block
         cy.addOurBlock();
 
@@ -31,7 +31,7 @@ context('Login checks', () => {
         cy.get('[data-cy="login-button"]').should('exist').click();
 
         // See model select screen
-        cy.get('[data-cy="model-select"]').should('exist');
+        cy.get('[data-cy="model-screen"]').should('exist');
 
         cy.closeModal();
     });
