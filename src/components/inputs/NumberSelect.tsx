@@ -16,14 +16,17 @@ export const NumberSelect = ({
     value,
     onChange,
 }: NumberSelectProps) => {
-    const formItemClass = classNames('w-full text-lg ringed border', {
-        'bg-gray-200 border-gray-200': disabled,
-        'border-gray-900': !disabled,
-    });
+    const formItemClass = classNames(
+        'w-full text-base rounded-none focus:outline-none focus:ring-wp ring-offset-1 ring-wp-theme-500 focus:shadow-none border',
+        {
+            'bg-gray-200 border-gray-200': disabled,
+            'border-gray-900': !disabled,
+        },
+    );
     const id = `replicate-input-${makeUrlFriendly(label)}`;
     return (
         <div className="w-full">
-            <label htmlFor={id} className="text-lg font-medium block mb-1">
+            <label htmlFor={id} className="text-base font-medium block mb-1">
                 {label}
             </label>
             <select

@@ -15,25 +15,32 @@ export const PromptInput = ({
     initialFocus,
     onChange,
 }: PromptSelectProps) => {
-    const formItemClass = classNames('w-full text-lg ringed border', {
-        'bg-gray-200 border-gray-200': disabled,
-        'border-gray-900': !disabled,
-    });
+    const formItemClass = classNames(
+        'w-full text-lg rounded-none focus:outline-none focus:ring-wp ring-wp-theme-500 focus:shadow-none border',
+        {
+            'bg-gray-200 border-gray-200': disabled,
+            'border-gray-900': !disabled,
+        },
+    );
     const id = `replicate-prompt-${makeUrlFriendly(label)}`;
     return (
         <div>
-            <label htmlFor={id} className="text-lg font-medium block mb-1">
+            <label
+                htmlFor={id}
+                className="text-base font-medium block mb-1 rin">
                 {label}
             </label>
-            <textarea
-                ref={initialFocus}
-                className={formItemClass}
-                id={id}
-                value={value}
-                rows={4}
-                disabled={disabled}
-                onChange={(e) => onChange(e.target.value)}
-            />
+            <div>
+                <textarea
+                    ref={initialFocus}
+                    className={formItemClass}
+                    id={id}
+                    value={value}
+                    rows={4}
+                    disabled={disabled}
+                    onChange={(e) => onChange(e.target.value)}
+                />
+            </div>
         </div>
     );
 };
