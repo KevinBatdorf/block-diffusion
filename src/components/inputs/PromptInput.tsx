@@ -1,5 +1,6 @@
 import classNames from 'classnames';
-import { makeUrlFriendly } from '../../lib/utils';
+import { makeUrlFriendly } from '../../utils';
+import { PromptGenerator } from '../features/PromptGenerator';
 
 type PromptSelectProps = {
     value: string;
@@ -16,7 +17,7 @@ export const PromptInput = ({
     onChange,
 }: PromptSelectProps) => {
     const formItemClass = classNames(
-        'w-full text-lg rounded-none focus:outline-none focus:ring-wp ring-wp-theme-500 focus:shadow-none border',
+        'w-full text-lg rounded-none focus:outline-none focus:ring-wp ring-wp-theme-500 focus:shadow-none border pr-8',
         {
             'bg-gray-200 border-gray-200': disabled,
             'border-gray-900': !disabled,
@@ -30,7 +31,7 @@ export const PromptInput = ({
                 className="text-base font-medium block mb-1 rin">
                 {label}
             </label>
-            <div>
+            <div className="relative">
                 <textarea
                     ref={initialFocus}
                     className={formItemClass}
@@ -40,6 +41,7 @@ export const PromptInput = ({
                     disabled={disabled}
                     onChange={(e) => onChange(e.target.value)}
                 />
+                <PromptGenerator update={onChange} />
             </div>
         </div>
     );

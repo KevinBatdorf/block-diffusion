@@ -2,34 +2,30 @@ import apiFetch from '@wordpress/api-fetch';
 import { useEffect, useState } from '@wordpress/element';
 import create from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
+import { getSettings } from '../lib/wp';
 
 type AuthTypes = {
     apiToken: string;
     storeApiToken: (apiToken: string) => void;
     deleteApiToken: () => void;
 };
-const path = '/wp/v2/settings';
-const getSettings = async (name: string) => {
-    const allSettings = await apiFetch({ path });
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore-next-line
-    return allSettings?.[name] || { apiToken: '', version: 0 };
-};
+const inotialState = { apiToken: '' };
+
 export const useAuthStore = create<AuthTypes>()(
     persist(
         devtools(
             (set) => ({
-                apiToken: '',
+                ...inotialState,
                 storeApiToken: (apiToken) => set({ apiToken }),
                 deleteApiToken: () => set({ apiToken: '' }),
             }),
-            { name: 'Stable Diffusion Data' },
+            { name: 'Block Diffusion Auth' },
         ),
         {
             name: 'stable_diffusion_settings',
             getStorage: () => ({
                 getItem: async (name: string) => {
-                    const settings = await getSettings(name);
+                    const settings = await getSettings(name, inotialState);
                     return JSON.stringify({
                         version: settings.version,
                         state: settings,
@@ -39,12 +35,17 @@ export const useAuthStore = create<AuthTypes>()(
                     const { state, version } = JSON.parse(value);
                     const data = {
                         [name]: Object.assign(
-                            (await getSettings(name)) ?? { apiToken: '' },
+                            await getSettings(name, inotialState),
+                            // filter out items not in the initial state
                             state,
                             { version },
                         ),
                     };
-                    await apiFetch({ path, method: 'POST', data });
+                    await apiFetch({
+                        path: '/wp/v2/settings',
+                        method: 'POST',
+                        data,
+                    });
                 },
                 removeItem: () => undefined,
             }),

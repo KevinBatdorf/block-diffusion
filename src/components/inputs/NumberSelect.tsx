@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { makeUrlFriendly } from '../../lib/utils';
+import { makeUrlFriendly } from '../../utils';
 
 type NumberSelectProps = {
     options: number[];

@@ -13,7 +13,7 @@ export const ModalControls = ({ onClose, title }: ModalControlsProps) => {
             <div className="text-lg font-medium">{title}</div>
             <div className="flex gap-x-10 h-full items-center">
                 <div className="flex gap-x-2">
-                    {/* <SettingsButton /> */}
+                    <SettingsButton />
                     <LogoutButton />
                 </div>
                 <ModalCloseButton onClose={onClose} />
@@ -29,7 +29,6 @@ export const SettingsButton = () => {
                 className="block w-6 h-6 text-gray-900 p-px bg-transparent cursor-pointer outline-none focus:shadow-none focus:ring-wp focus:ring-wp-theme-500"
                 type="button"
                 onClick={() => console.log('ok')}
-                title={__('Settings', 'stable-diffusion')}
                 aria-label={__('settings', 'stable-diffusion')}>
                 <Icon icon={settingsIcon} size={24} />
             </button>
