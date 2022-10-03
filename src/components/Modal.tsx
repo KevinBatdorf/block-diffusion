@@ -1,10 +1,8 @@
-import { Button } from '@wordpress/components';
 import { useEffect, useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { arrowLeft } from '@wordpress/icons';
 import { Dialog } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ModalCloseButton } from '../layouts/ModalCloseButton';
+import { ModalDefault } from '../layouts/ModalDefault';
 import { models } from '../models';
 import { StableDiffusion } from '../models/StableDiffusion';
 import { useAuthStore } from '../state/auth';
@@ -18,8 +16,7 @@ type ModalProps = {
 
 export const Modal = ({ setImage, onClose }: ModalProps) => {
     const initialFocus = useRef(null);
-    const { currentInterface, setCurrentInterface, setShowSelectScreen } =
-        useGlobalState();
+    const { currentInterface, setShowSelectScreen } = useGlobalState();
     const { apiToken } = useAuthStore();
 
     useEffect(() => {
@@ -30,6 +27,7 @@ export const Modal = ({ setImage, onClose }: ModalProps) => {
         <Dialog
             className="stable-diffusion-editor stable-diffusion-modal"
             initialFocus={initialFocus}
+            data-cy="model-screen"
             key="main-modal"
             open={Boolean(currentInterface) && Boolean(apiToken)}
             onClose={onClose}>
@@ -57,10 +55,6 @@ export const Modal = ({ setImage, onClose }: ModalProps) => {
                                 setImage={setImage}
                                 modelName={currentInterface}
                                 onClose={onClose}
-                                onGoBack={() => {
-                                    setCurrentInterface(undefined);
-                                    setShowSelectScreen(true);
-                                }}
                                 initialFocus={initialFocus}
                             />
                         </div>
@@ -77,55 +71,24 @@ type ModalContent = {
     onClose: () => void;
     // eslint-disable-next-line
     initialFocus: any;
-    onGoBack: () => void;
 };
 const ModalContent = ({
     setImage,
     modelName,
     onClose,
     initialFocus,
-    onGoBack,
 }: ModalContent) => {
     if (modelName === 'stability-ai/stable-diffusion') {
         return (
-            <ContentWrapper
+            <ModalDefault
                 onClose={onClose}
-                onGoBack={onGoBack}
                 title={__('Stable Diffusion', 'stable-diffusion')}>
                 <StableDiffusion
                     initialFocus={initialFocus}
                     setImage={setImage}
                 />
-            </ContentWrapper>
+            </ModalDefault>
         );
     }
     return null;
-};
-
-type ContentWrapperProps = {
-    children: React.ReactNode;
-    title: string;
-    onClose: () => void;
-    onGoBack: () => void;
-};
-const ContentWrapper = ({
-    children,
-    title,
-    onClose,
-    onGoBack,
-}: ContentWrapperProps) => {
-    return (
-        <>
-            <div className="flex items-center justify-between w-full border-b p-4 gap-x-4 fixed md:static top-0 bg-white">
-                <div className="flex gap-x-4 items-center">
-                    <Button icon={arrowLeft} onClick={onGoBack} />
-                    <div className="text-lg font-medium">{title}</div>
-                </div>
-                <ModalCloseButton onClose={onClose} />
-            </div>
-            <div className="overflow-y-scroll md:flex flex-grow w-screen max-w-full md:pt-0 bg-gray-50 divide-x h-screen lg:h-auto pt-16">
-                {children}
-            </div>
-        </>
-    );
 };

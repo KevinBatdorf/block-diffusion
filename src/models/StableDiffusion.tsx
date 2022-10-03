@@ -150,7 +150,7 @@ export const StableDiffusion = ({
         <>
             <div className="flex flex-col justify-between md:w-96 flex-shrink-0 overflow-y-scroll bg-white">
                 <form
-                    className="flex flex-col gap-y-4 flex-shrink-0 p-8 flex-grow"
+                    className="flex flex-col gap-y-4 flex-shrink-0 p-6 flex-grow"
                     onSubmit={(e) => {
                         e.preventDefault();
                         handleSubmit();

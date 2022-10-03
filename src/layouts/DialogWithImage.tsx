@@ -1,6 +1,8 @@
+import { Icon } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 import { Dialog } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ModalCloseButton } from './ModalCloseButton';
+import { closeXIcon } from '../icons';
 
 type ModalProps = {
     onClose: () => void;
@@ -62,7 +64,16 @@ export const DialogWithImageModal = ({
                                     <div className="text-lg font-medium">
                                         {title}
                                     </div>
-                                    <ModalCloseButton onClose={onClose} />
+                                    <button
+                                        className="block w-6 h-6 text-gray-900 p-px bg-transparent cursor-pointer outline-none focus:shadow-none focus:ring-wp focus:ring-wp-theme-500"
+                                        type="button"
+                                        onClick={onClose}
+                                        aria-label={__(
+                                            'Close',
+                                            'stable-diffusion',
+                                        )}>
+                                        <Icon icon={closeXIcon} size={24} />
+                                    </button>
                                 </div>
                                 <div className="md:overflow-y-scroll flex flex-grow w-screen max-w-full flex-col space-y-4 p-4 bg-gray-50">
                                     {children}

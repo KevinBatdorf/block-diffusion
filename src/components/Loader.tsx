@@ -6,8 +6,7 @@ import { setImage } from '../lib/wp';
 import { useAuthStore, useAuthStoreReady } from '../state/auth';
 import { useGlobalState } from '../state/global';
 import { ImageLike } from '../types';
-import { Login } from '../views/Login';
-import { ModalSelect } from '../views/ModelSelect';
+import { Login } from './Login';
 import { Modal } from './Modal';
 
 type LoaderProps = {
@@ -21,7 +20,6 @@ export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
         setImportingMessage,
         setCurrentInterface,
         setShowSelectScreen,
-        showSelectScreen,
         setImageBlockId,
         imageBlockId,
     } = useGlobalState();
@@ -41,7 +39,7 @@ export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
             removeBlock(imageBlockId);
         }
         setShowSelectScreen(false);
-        setCurrentInterface(undefined);
+        setCurrentInterface('stability-ai/stable-diffusion');
         setOpen(false);
         setImportingMessage('');
     };
@@ -86,10 +84,6 @@ export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
         <>
             {/* Be sure to re-render this when they logout/in */}
             {!loggedIn && <Login onClose={onClose} />}
-            <ModalSelect
-                onClose={onClose}
-                open={Boolean(loggedIn) && showSelectScreen}
-            />
             <Modal onClose={onClose} setImage={handleImageImport} />
         </>
     );

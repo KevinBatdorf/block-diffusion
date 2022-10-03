@@ -4,21 +4,21 @@ import { AvailableModels } from '../types';
 
 type GlobalState = {
     importingMessage: string;
-    currentInterface?: AvailableModels;
+    currentInterface: AvailableModels;
     showSelectScreen: boolean;
     imageBlockId: string;
     maybeImporting: boolean;
     setMaybeImporting: (maybeImporting: boolean) => void;
     setShowSelectScreen: (show: boolean) => void;
     setImportingMessage: (loading: string) => void;
-    setCurrentInterface: (currentInterface?: AvailableModels) => void;
+    setCurrentInterface: (currentInterface: AvailableModels) => void;
     setImageBlockId: (imageBlockId: string) => void;
 };
 
 export const useGlobalState = create<GlobalState>()(
     devtools((set, get) => ({
         importingMessage: '',
-        currentInterface: undefined,
+        currentInterface: 'stability-ai/stable-diffusion',
         showSelectScreen: false,
         imageBlockId: '',
         maybeImporting: false,
@@ -27,7 +27,7 @@ export const useGlobalState = create<GlobalState>()(
         setImportingMessage: (importingMessage: string) => {
             set({ importingMessage });
         },
-        setCurrentInterface: (currentInterface?: AvailableModels) => {
+        setCurrentInterface: (currentInterface: AvailableModels) => {
             set({ currentInterface });
             if (currentInterface) return;
             get().setShowSelectScreen(false);

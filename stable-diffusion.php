@@ -24,6 +24,7 @@ add_action('admin_enqueue_scripts', function () {
         'window.stableDiffusionConfig = ' . wp_json_encode([
             // Convert to mb
             'maxUploadSize' => number_format(wp_max_upload_size() / 1048576),
+            'devMode' => is_readable(__DIR__ . '/node_modules'),
         ]),
         'before'
     );
