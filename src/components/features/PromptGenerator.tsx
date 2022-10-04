@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { previewImageIcon, refreshIcon } from '../../icons';
 import { useSettingsStore, useSettingsStoreReady } from '../../state/settings';
 import { PromptResponse } from '../../types';
+import { ModalCloseButton } from '../ModalControls';
 
 export const PromptGenerator = ({
     updateText,
@@ -111,10 +112,7 @@ const PreviewPopover = ({ url }: { url?: string }) => {
 const OptInPrompt = ({ onClose }: { onClose: () => void }) => {
     return (
         <div className="absolute mx-auto w-full h-full overflow-hidden md:p-8 md:flex justify-center items-center z-high">
-            <div
-                className="fixed inset-0 bg-black/60 backdrop-blur-sm"
-                aria-hidden="true"
-            />
+            <div className="fixed inset-0 bg-black/60" aria-hidden="true" />
             <AnimatePresence>
                 <motion.div
                     key="modal"
@@ -122,12 +120,20 @@ const OptInPrompt = ({ onClose }: { onClose: () => void }) => {
                     initial={{ y: 5 }}
                     animate={{ y: 0 }}
                     exit={{ y: 0, opacity: 0 }}
-                    className="sm:flex relative shadow-2xl sm:overflow-hidden max-w-screen-2xl mx-auto bg-white">
+                    className="sm:flex relative w-full shadow-2xl sm:overflow-hidden mx-auto bg-white max-w-screen-xs">
                     <Dialog.Title className="sr-only">
                         {__('Opt-in to prompt generator', 'stable-diffusion')}
                     </Dialog.Title>
-                    <div className="md:flex flex-col w-full relative h-screen md:h-auto">
-                        ok
+                    <div className="md:flex flex-col w-full relative">
+                        <div className="flex items-center justify-between w-full border-b gap-x-4 bg-white px-6 h-10">
+                            <div className="text-lg font-medium">
+                                Prompt feature
+                            </div>
+                            <ModalCloseButton onClose={onClose} />
+                        </div>
+                        <div className="flex flex-col justify-center items-center p-6">
+                            join now!
+                        </div>
                     </div>
                 </motion.div>
             </AnimatePresence>

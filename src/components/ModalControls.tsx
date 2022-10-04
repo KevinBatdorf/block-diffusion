@@ -52,7 +52,7 @@ export const LogoutButton = () => {
     );
 };
 
-const ModalCloseButton = ({ onClose }: { onClose: () => void }) => (
+export const ModalCloseButton = ({ onClose }: { onClose: () => void }) => (
     <Tooltip text={__('Close', 'stable-diffusion')}>
         <button
             className="w-10 h-10 text-white bg-gray-900 cursor-pointer outline-none focus:shadow-none border border-gray-900 focus:border-wp-theme-500 -mx-6 flex items-center justify-center"
