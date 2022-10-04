@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import create from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { AvailableModels } from '../types';

@@ -26,23 +26,26 @@ export const PromptInput = ({
     const id = `replicate-prompt-${makeUrlFriendly(label)}`;
     return (
         <div>
-            <label
-                htmlFor={id}
-                className="text-base font-medium block mb-1 rin">
-                {label}
-            </label>
-            <div className="relative">
-                <textarea
-                    ref={initialFocus}
-                    className={formItemClass}
-                    id={id}
-                    value={value}
-                    rows={4}
-                    disabled={disabled}
-                    onChange={(e) => onChange(e.target.value)}
+            <div className="mb-1 flex gap-x-2">
+                <label htmlFor={id} className="text-base font-medium">
+                    {label}
+                </label>
+                <PromptGenerator
+                    updateText={(v) => {
+                        onChange(v);
+                        if (v) initialFocus?.current?.focus();
+                    }}
                 />
-                <PromptGenerator update={onChange} />
             </div>
+            <textarea
+                ref={initialFocus}
+                className={formItemClass}
+                id={id}
+                value={value}
+                rows={4}
+                disabled={disabled}
+                onChange={(e) => onChange(e.target.value)}
+            />
         </div>
     );
 };

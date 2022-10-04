@@ -4,19 +4,17 @@ import create from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { getSettings } from '../lib/wp';
 
-type SettingsTypes = {
-    seenNotices: string[];
-    optIns: string[];
-    disabledFeatures: string[];
-    add: (type: keyof typeof initialState, value: string) => void;
-    remove: (type: keyof typeof initialState, value: string) => void;
-    toggle: (type: keyof typeof initialState, value: string) => void;
-    has: (type: keyof typeof initialState, value: string) => boolean;
-};
+const optInsOptions = [
+    'prompt-accept', // user has accepted to request prompts
+    'prompt-share', // user has accepted to share their prompts
+] as const;
+const disabledFeatures = [
+    'prompt-generator', // User disabled the prompt generator UI
+] as const;
 const initialState = {
-    seenNotices: [],
-    optIns: [],
-    disabledFeatures: [],
+    seenNotices: [] as string[],
+    optIns: [] as OptIns[],
+    disabledFeatures: [] as DisabledFeatures[],
 };
 
 export const useSettingsStore = create<SettingsTypes>()(
@@ -36,13 +34,13 @@ export const useSettingsStore = create<SettingsTypes>()(
                 },
                 toggle: (type, value) => {
                     set((state) => ({
-                        [type]: state[type].includes(value)
+                        [type]: state[type].includes(value as never)
                             ? state[type].filter((v) => v !== value)
                             : [...state[type], value],
                     }));
                 },
                 has: (type, value) => {
-                    return get()[type].includes(value);
+                    return get()[type].includes(value as never);
                 },
             }),
             { name: 'Block Diffusion Options' },
@@ -92,4 +90,21 @@ export const useSettingsStoreReady = () => {
         };
     }, []);
     return hydrated;
+};
+
+type OptIns = typeof optInsOptions[number];
+type DisabledFeatures = typeof disabledFeatures[number];
+type SettingsFn = <T extends keyof typeof initialState>(
+    type: T,
+    value: typeof initialState[T][number],
+) => void | boolean;
+type SettingsTypes = {
+    seenNotices: string[];
+    optIns: OptIns[];
+    disabledFeatures: DisabledFeatures[];
+
+    add: SettingsFn;
+    remove: SettingsFn;
+    toggle: SettingsFn;
+    has: SettingsFn;
 };
