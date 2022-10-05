@@ -9,13 +9,13 @@ type AuthTypes = {
     storeApiToken: (apiToken: string) => void;
     deleteApiToken: () => void;
 };
-const inotialState = { apiToken: '' };
+const initialState = { apiToken: '' };
 
 export const useAuthStore = create<AuthTypes>()(
     persist(
         devtools(
             (set) => ({
-                ...inotialState,
+                ...initialState,
                 storeApiToken: (apiToken) => set({ apiToken }),
                 deleteApiToken: () => set({ apiToken: '' }),
             }),
@@ -25,7 +25,7 @@ export const useAuthStore = create<AuthTypes>()(
             name: 'stable_diffusion_settings',
             getStorage: () => ({
                 getItem: async (name: string) => {
-                    const settings = await getSettings(name, inotialState);
+                    const settings = await getSettings(name, initialState);
                     return JSON.stringify({
                         version: settings.version,
                         state: settings,
@@ -35,7 +35,7 @@ export const useAuthStore = create<AuthTypes>()(
                     const { state, version } = JSON.parse(value);
                     const data = {
                         [name]: Object.assign(
-                            await getSettings(name, inotialState),
+                            await getSettings(name, initialState),
                             // filter out items not in the initial state
                             state,
                             { version },
