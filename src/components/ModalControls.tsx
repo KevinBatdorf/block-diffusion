@@ -2,6 +2,7 @@ import { Icon, Tooltip } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useAuth } from '../hooks/useAuth';
 import { closeXIcon, logOutIcon, settingsIcon } from '../icons';
+import { useGlobalState } from '../state/global';
 
 type ModalControlsProps = {
     onClose: () => void;
@@ -23,12 +24,13 @@ export const ModalControls = ({ onClose, title }: ModalControlsProps) => {
 };
 
 export const SettingsButton = () => {
+    const { setShowSettingsModal } = useGlobalState();
     return (
         <Tooltip text={__('Settings', 'stable-diffusion')}>
             <button
                 className="block w-6 h-6 text-gray-900 p-px bg-transparent cursor-pointer outline-none focus:shadow-none focus:ring-wp focus:ring-wp-theme-500"
                 type="button"
-                onClick={() => console.log('ok')}
+                onClick={() => setShowSettingsModal(true)}
                 aria-label={__('settings', 'stable-diffusion')}>
                 <Icon icon={settingsIcon} size={24} />
             </button>

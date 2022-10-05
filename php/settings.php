@@ -27,6 +27,7 @@ if (!function_exists('stable_diffusion_register_settings')) {
                     'properties' => [
                         "version" => [ 'type' => ['string', 'number'], 'default' => 0 ],
                         'optIns' => [ 'type' => ['array', 'null'], 'default' => [] ],
+                        'disabledFeatures' => [ 'type' => ['array', 'null'], 'default' => [] ],
                         'seenNotices' => [ 'type' => ['array', 'null'], 'default' => [] ],
                     ],
                 ],

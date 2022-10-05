@@ -97,7 +97,7 @@ type DisabledFeatures = typeof disabledFeatures[number];
 type SettingsFn = <T extends keyof typeof initialState>(
     type: T,
     value: typeof initialState[T][number],
-) => void | boolean;
+) => void;
 type SettingsTypes = {
     seenNotices: string[];
     optIns: OptIns[];
@@ -106,5 +106,8 @@ type SettingsTypes = {
     add: SettingsFn;
     remove: SettingsFn;
     toggle: SettingsFn;
-    has: SettingsFn;
+    has: <T extends keyof typeof initialState>(
+        type: T,
+        value: typeof initialState[T][number],
+    ) => boolean;
 };
