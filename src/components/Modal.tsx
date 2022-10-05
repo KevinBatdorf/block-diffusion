@@ -38,8 +38,7 @@ export const Modal = ({ setImage, onClose }: ModalProps) => {
                 />
                 <AnimatePresence>
                     <motion.div
-                        key="modal"
-                        id="stable-diffusion-modal-inner"
+                        key="main-modal"
                         initial={{ y: 5 }}
                         animate={{ y: 0 }}
                         exit={{ y: 0, opacity: 0 }}

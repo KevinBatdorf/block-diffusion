@@ -41,7 +41,6 @@ export const DialogWithImageModal = ({
                 <AnimatePresence>
                     <motion.div
                         key={`modal-${title}`}
-                        id="stable-diffusion-modal-inner"
                         initial={{ y: 5 }}
                         animate={{ y: 0 }}
                         exit={{ y: 0, opacity: 0 }}

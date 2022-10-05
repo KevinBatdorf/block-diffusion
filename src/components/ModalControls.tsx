@@ -24,13 +24,13 @@ export const ModalControls = ({ onClose, title }: ModalControlsProps) => {
 };
 
 export const SettingsButton = () => {
-    const { setShowSettingsModal } = useGlobalState();
+    const { setSettingsTab } = useGlobalState();
     return (
         <Tooltip text={__('Settings', 'stable-diffusion')}>
             <button
                 className="block w-6 h-6 text-gray-900 p-px bg-transparent cursor-pointer outline-none focus:shadow-none focus:ring-wp focus:ring-wp-theme-500"
                 type="button"
-                onClick={() => setShowSettingsModal(true)}
+                onClick={() => setSettingsTab('optins')}
                 aria-label={__('settings', 'stable-diffusion')}>
                 <Icon icon={settingsIcon} size={24} />
             </button>

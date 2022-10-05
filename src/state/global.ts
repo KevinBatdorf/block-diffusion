@@ -2,19 +2,21 @@ import create from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { AvailableModels } from '../types';
 
+export type SettingsTabs = 'optins' | 'disables' | 'account';
+
 type GlobalState = {
     importingMessage: string;
     currentInterface: AvailableModels;
     showSelectScreen: boolean;
     imageBlockId: string;
     maybeImporting: boolean;
-    showSettingsModal: boolean;
+    settingsTab?: SettingsTabs;
     setImportingMessage: (loading: string) => void;
     setCurrentInterface: (currentInterface: AvailableModels) => void;
     setShowSelectScreen: (show: boolean) => void;
     setImageBlockId: (imageBlockId: string) => void;
     setMaybeImporting: (maybeImporting: boolean) => void;
-    setShowSettingsModal: (show: boolean) => void;
+    setSettingsTab: (tab?: SettingsTabs) => void;
 };
 
 export const useGlobalState = create<GlobalState>()(
@@ -24,7 +26,7 @@ export const useGlobalState = create<GlobalState>()(
         showSelectScreen: false,
         imageBlockId: '',
         maybeImporting: false,
-        showSettingsModal: false,
+        settingsTab: undefined,
         setImportingMessage: (importingMessage: string) => {
             set({ importingMessage });
         },
@@ -38,6 +40,6 @@ export const useGlobalState = create<GlobalState>()(
             set({ imageBlockId });
         },
         setMaybeImporting: (maybeImporting) => set({ maybeImporting }),
-        setShowSettingsModal: (show) => set({ showSettingsModal: show }),
+        setSettingsTab: (tab) => set({ settingsTab: tab }),
     })),
 );

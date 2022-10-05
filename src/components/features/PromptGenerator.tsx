@@ -129,8 +129,7 @@ const OptInPrompt = ({ onClose }: { onClose: () => void }) => {
             <div className="fixed inset-0 bg-black/60" aria-hidden="true" />
             <AnimatePresence>
                 <motion.div
-                    key="modal"
-                    id="stable-diffusion-modal-inner"
+                    key="prompt-modal"
                     initial={{ y: 5 }}
                     animate={{ y: 0 }}
                     exit={{ y: 0, opacity: 0 }}
