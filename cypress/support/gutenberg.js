@@ -32,6 +32,7 @@ export const openBlockInserter = () => {
             button.click();
         }
     });
+    cy.get('.block-editor-inserter__main-area').should('exist');
 };
 export const closeBlockInserter = () => {
     cy.get('button[aria-label="Toggle block inserter"]').then((button) => {
