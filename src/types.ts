@@ -70,3 +70,8 @@ export type StableDiffusionInputs = {
     width: number;
     height: number;
 };
+
+export type PromptResponse = {
+    prompt?: string;
+    imageUrls?: string[];
+};

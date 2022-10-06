@@ -53,3 +53,11 @@ export const setImage = async (
         caption: image.caption,
     });
 };
+
+// eslint-disable-next-line
+export const getSettings = async (name: string, defaultSettings: any) => {
+    const allSettings = await apiFetch({ path: '/wp/v2/settings' });
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
+    return allSettings?.[name] || { ...defaultSettings, version: 0 };
+};

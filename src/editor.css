@@ -156,3 +156,11 @@
 .stable-diffusion-editor .components-button.is-destructive:focus:not(:disabled) {
     @apply text-white;
 }
+
+.stable-diffusion-editor .spin {
+    animation: stable-diffusion-spin 1s linear infinite
+}
+@keyframes stable-diffusion-spin {
+  from { transform: rotate(0deg) }
+  to { transform: rotate(360deg) }
+}

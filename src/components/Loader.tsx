@@ -8,6 +8,7 @@ import { useGlobalState } from '../state/global';
 import { ImageLike } from '../types';
 import { Login } from './Login';
 import { Modal } from './Modal';
+import { SettingsModal } from './SetingsModal';
 
 type LoaderProps = {
     attributes: ImageLike;
@@ -85,6 +86,7 @@ export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
             {/* Be sure to re-render this when they logout/in */}
             {!loggedIn && <Login onClose={onClose} />}
             <Modal onClose={onClose} setImage={handleImageImport} />
+            <SettingsModal />
         </>
     );
 };

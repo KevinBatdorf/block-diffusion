@@ -2,6 +2,7 @@ import { Icon, Tooltip } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useAuth } from '../hooks/useAuth';
 import { closeXIcon, logOutIcon, settingsIcon } from '../icons';
+import { useGlobalState } from '../state/global';
 
 type ModalControlsProps = {
     onClose: () => void;
@@ -13,7 +14,7 @@ export const ModalControls = ({ onClose, title }: ModalControlsProps) => {
             <div className="text-lg font-medium">{title}</div>
             <div className="flex gap-x-10 h-full items-center">
                 <div className="flex gap-x-2">
-                    {/* <SettingsButton /> */}
+                    <SettingsButton />
                     <LogoutButton />
                 </div>
                 <ModalCloseButton onClose={onClose} />
@@ -23,13 +24,13 @@ export const ModalControls = ({ onClose, title }: ModalControlsProps) => {
 };
 
 export const SettingsButton = () => {
+    const { setSettingsTab } = useGlobalState();
     return (
         <Tooltip text={__('Settings', 'stable-diffusion')}>
             <button
                 className="block w-6 h-6 text-gray-900 p-px bg-transparent cursor-pointer outline-none focus:shadow-none focus:ring-wp focus:ring-wp-theme-500"
                 type="button"
-                onClick={() => console.log('ok')}
-                title={__('Settings', 'stable-diffusion')}
+                onClick={() => setSettingsTab('optins')}
                 aria-label={__('settings', 'stable-diffusion')}>
                 <Icon icon={settingsIcon} size={24} />
             </button>
@@ -53,7 +54,7 @@ export const LogoutButton = () => {
     );
 };
 
-const ModalCloseButton = ({ onClose }: { onClose: () => void }) => (
+export const ModalCloseButton = ({ onClose }: { onClose: () => void }) => (
     <Tooltip text={__('Close', 'stable-diffusion')}>
         <button
             className="w-10 h-10 text-white bg-gray-900 cursor-pointer outline-none focus:shadow-none border border-gray-900 focus:border-wp-theme-500 -mx-6 flex items-center justify-center"
