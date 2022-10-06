@@ -1,8 +1,8 @@
 === Block Diffusion - Generate images from text prompts  ===
 Contributors:      kbat82
 Tags:              block, stable diffusion, ai, prompt, artificial intelligence
-Tested up to:      6.0
-Stable tag:        0.1.8
+Tested up to:      6.1
+Stable tag:        0.2.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,6 +18,7 @@ Semi interactive demo at [https://www.block-diffusion.com/](https://www.block-di
 
 = Features =
 - Stable Diffusion
+- Prompt suggestion + preview
 
 = Pro version =
 There are no plans to lock any features behind a pro or premium plugin. All features will be added to this version on wordpress.org. Over time I plan to add all features supported by Replicate, as well as additional features for the WordPress community specifically. If you are interested in helping support the development of this plugin, in the spirit of open source, you may [sponsor the project on GitHub](https://github.com/sponsors/KevinBatdorf) (there are monthly and one-time payment options). Thank you.
@@ -25,7 +26,6 @@ There are no plans to lock any features behind a pro or premium plugin. All feat
 = Upcoming Features =
 - Use an existing image as starting point
 - Add an image mask to only generate specific areas
-- Help with prompt ideas and inspiration
 - Run multiple image predictions at once
 - Have more control over the image generation steps
 - View your prediction history
@@ -54,6 +54,13 @@ We also offer additional features on top of the Replicate API, such as prompt/ou
 2. Choose from various models to run
 
 == Changelog ==
+
+= 0.2.0 - 2022-10-05 =
+- Feature: Help with prompt ideas and inspiration (opt in)
+- Feature: Prompt sharing with the community (opt in)
+- Feature: Added settigns modal to manage preferences
+- Tweak: Removed intermdiary modal
+- Tweak: UI improvements
 
 = 0.1.8 - 2022-09-15 =
 - Tweak: Update height and width positioning
