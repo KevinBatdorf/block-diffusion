@@ -12,6 +12,7 @@ import { useModel } from '../hooks/useModel';
 import { usePrediction } from '../hooks/usePrediction';
 import { useAuthStore } from '../state/auth';
 import { useGlobalState } from '../state/global';
+import { useSettingsStore } from '../state/settings';
 import { ImageLike } from '../types';
 
 type StableDiffusionProps = {
@@ -28,6 +29,7 @@ export const StableDiffusion = ({
     const { data: modelInfo } = useModel('stability-ai/stable-diffusion');
     const { importingMessage, setMaybeImporting, maybeImporting } =
         useGlobalState();
+    const { has } = useSettingsStore();
     const { apiToken } = useAuthStore();
     const [errorMsg, setErrorMsg] = useState('');
     const [statusMessage, setStatusMessage] = useState('');
@@ -76,6 +78,9 @@ export const StableDiffusion = ({
             data: {
                 input: { width, height, prompt },
                 version: modelInfo.latest_version.id,
+                webhook_completed: has('optIns', 'prompt-share')
+                    ? 'https://www.block-diffusion.com/api/v1/replicate'
+                    : undefined,
             },
         }).catch((error) => {
             if (error.detail) {
