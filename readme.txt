@@ -58,8 +58,8 @@ We also offer additional features on top of the Replicate API, such as prompt/ou
 = 0.2.0 - 2022-10-05 =
 - Feature: Help with prompt ideas and inspiration (opt in)
 - Feature: Prompt sharing with the community (opt in)
-- Feature: Added settigns modal to manage preferences
-- Tweak: Removed intermdiary modal
+- Feature: Added settings modal to manage preferences
+- Tweak: Removed intermediary modal
 - Tweak: UI improvements
 
 = 0.1.8 - 2022-09-15 =
