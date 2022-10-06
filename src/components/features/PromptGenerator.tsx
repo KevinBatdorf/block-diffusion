@@ -33,9 +33,9 @@ export const PromptGenerator = ({
         const { prompt, imageUrls } = await apiFetch<PromptResponse>({
             method: 'GET',
             path: `kevinbatdorf/stable-diffusion/prompt-suggestion?cache=${Date.now()}`,
-        }).catch(() => {
+        }).catch((e) => {
             setFetching(false);
-            return { prompt: '', imageUrls: [] };
+            return { prompt: `Error: ${e.message}`, imageUrls: [] };
         });
         setFetching(false);
         if (!prompt) return;
