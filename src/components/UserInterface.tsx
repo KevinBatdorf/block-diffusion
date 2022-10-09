@@ -103,9 +103,11 @@ export const UserInferface = ({
             },
         }).catch((error) => {
             if (error.detail) {
+                setMaybeImporting(false);
                 setErrorMsg(error.detail);
             }
         });
+
         if (response?.error) {
             setMaybeImporting(false);
             setErrorMsg(response.error);
@@ -141,8 +143,10 @@ export const UserInferface = ({
     }, [generateData?.error]);
 
     useEffect(() => {
-        if (!processing) setMaybeImporting(false);
-    }, [processing, setMaybeImporting]);
+        if (!processing || generateData?.status === 'failed') {
+            setMaybeImporting(false);
+        }
+    }, [processing, setMaybeImporting, generateData?.status]);
 
     useEffect(() => {
         if (generateData?.status === 'succeeded') {
