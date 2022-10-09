@@ -8,6 +8,7 @@ import { useGlobalState } from '../state/global';
 import { ImageLike } from '../types';
 import { Login } from './Login';
 import { Modal } from './Modal';
+import { ModelSwitch } from './ModelSwitch';
 import { SettingsModal } from './SetingsModal';
 
 type LoaderProps = {
@@ -17,13 +18,8 @@ type LoaderProps = {
 };
 
 export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
-    const {
-        setImportingMessage,
-        setCurrentInterface,
-        setShowSelectScreen,
-        setImageBlockId,
-        imageBlockId,
-    } = useGlobalState();
+    const { setImportingMessage, setImageBlockId, imageBlockId } =
+        useGlobalState();
     const [open, setOpen] = useState(false);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore-next-line - types seem outdated
@@ -39,8 +35,7 @@ export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
         if (!b?.attributes?.caption) {
             removeBlock(imageBlockId);
         }
-        setShowSelectScreen(false);
-        setCurrentInterface('stability-ai/stable-diffusion');
+        // goToModel('stability-ai/stable-diffusion');
         setOpen(false);
         setImportingMessage('');
     };
@@ -70,14 +65,13 @@ export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
         const open = (event: CustomEvent<{ clientId: string }>) => {
             if (event?.detail?.clientId !== clientId) return;
             setOpen(true);
-            setShowSelectScreen(true);
             setImageBlockId(clientId);
         };
         window.addEventListener(namespace, open as (e: Event) => void);
         return () => {
             window.removeEventListener(namespace, open as (e: Event) => void);
         };
-    }, [clientId, setShowSelectScreen, setImageBlockId]);
+    }, [clientId, setImageBlockId]);
 
     if (!open || !ready) return null;
 
@@ -87,6 +81,7 @@ export const Loader = ({ setAttributes, clientId }: LoaderProps) => {
             {!loggedIn && <Login onClose={onClose} />}
             <Modal onClose={onClose} setImage={handleImageImport} />
             <SettingsModal />
+            <ModelSwitch />
         </>
     );
 };

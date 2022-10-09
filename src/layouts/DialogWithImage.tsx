@@ -1,8 +1,7 @@
-import { Icon } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { Dialog } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { closeXIcon } from '../icons';
+import { ModalCloseButton } from '../components/ModalControls';
 
 type ModalProps = {
     onClose: () => void;
@@ -59,22 +58,13 @@ export const DialogWithImageModal = ({
                                 <span className="sr-only">{image.title}</span>
                             </a>
                             <div className="flex flex-col md:overflow-x-hidden flex-grow">
-                                <div className="flex items-center justify-between w-full border-b p-4 gap-x-4 fixed md:static top-0 bg-white">
-                                    <div className="text-lg font-medium">
+                                <div className="flex items-center justify-between w-full border-b gap-x-4 bg-white h-10">
+                                    <div className="font-mono font-semibold text-sm px-6">
                                         {title}
                                     </div>
-                                    <button
-                                        className="block w-6 h-6 text-gray-900 p-px bg-transparent cursor-pointer outline-none focus:shadow-none focus:ring-wp focus:ring-wp-theme-500"
-                                        type="button"
-                                        onClick={onClose}
-                                        aria-label={__(
-                                            'Close',
-                                            'stable-diffusion',
-                                        )}>
-                                        <Icon icon={closeXIcon} size={24} />
-                                    </button>
+                                    <ModalCloseButton onClose={onClose} />
                                 </div>
-                                <div className="md:overflow-y-scroll flex flex-grow w-screen max-w-full flex-col space-y-4 p-4 bg-gray-50">
+                                <div className="md:overflow-y-scroll flex flex-grow w-screen max-w-full flex-col space-y-4 p-6 bg-gray-50">
                                     {children}
                                 </div>
                             </div>
