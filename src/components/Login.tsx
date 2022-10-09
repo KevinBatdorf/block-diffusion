@@ -59,7 +59,7 @@ export const Login = ({ onClose }: LoginProps) => {
             }}
             initialFocus={initialFocus}>
             <div className="flex flex-col justify-between flex-grow bg-white h-auto lg:h-72">
-                <div className="flex flex-col flex-grow p-4">
+                <div className="flex flex-col flex-grow">
                     <form
                         className="mb-2"
                         onSubmit={(e) => {
@@ -79,7 +79,7 @@ export const Login = ({ onClose }: LoginProps) => {
                                     type="text"
                                     value={token}
                                     onChange={(e) => setToken(e.target.value)}
-                                    className="w-full h-10 rounded-none border border-gray-900 focus:outline-none focus:ring-1 ring-offset-1 ring-wp-theme-500 focus:shadow-none"
+                                    className="w-full h-10 rounded-none border border-gray-900 outline-none focus:shadow-none focus:ring-wp focus:ring-wp-theme-500"
                                 />
                                 {errorMsg && (
                                     <p

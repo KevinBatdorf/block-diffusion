@@ -1,3 +1,4 @@
+import { __ } from '@wordpress/i18n';
 import classNames from 'classnames';
 import { makeUrlFriendly } from '../../utils';
 import { PromptGenerator } from '../features/PromptGenerator';
@@ -37,6 +38,12 @@ export const PromptInput = ({
                     }}
                 />
             </div>
+            <p className="m-0 mb-1 text-sm">
+                {__(
+                    'Enter a text prompt to generate an image',
+                    'stable-diffusion',
+                )}
+            </p>
             <textarea
                 ref={initialFocus}
                 className={formItemClass}

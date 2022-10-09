@@ -1,42 +1,57 @@
 import apiFetch from '@wordpress/api-fetch';
 import { Button } from '@wordpress/components';
-import { useEffect, useRef, useState } from '@wordpress/element';
+import { Spinner } from '@wordpress/components';
+import {
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from '@wordpress/element';
 import { sprintf, __ } from '@wordpress/i18n';
 import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ModelCard } from '../components/ModelCard';
-import { GoButton } from '../components/inputs/GoButton';
-import { NumberSelect } from '../components/inputs/NumberSelect';
-import { PromptInput } from '../components/inputs/PromptInput';
 import { useModel } from '../hooks/useModel';
 import { usePrediction } from '../hooks/usePrediction';
 import { useAuthStore } from '../state/auth';
 import { useGlobalState } from '../state/global';
+import { useInputsState } from '../state/inputs';
 import { useSettingsStore } from '../state/settings';
-import { ImageLike } from '../types';
+import {
+    AvailableModels,
+    HeightInput,
+    ImageLike,
+    PromptInputs,
+    WidthInput,
+} from '../types';
+import { InputGenerator } from './InputGenerator';
+import { ModelCard } from './ModelCard';
+import { GoButton } from './inputs/GoButton';
+import { FocusHelperButton } from './misc/FocusHelperButton';
 
 type StableDiffusionProps = {
     setImage: (image: ImageLike) => void;
-    initialFocus: React.RefObject<HTMLTextAreaElement>;
+    modelName: AvailableModels;
+    initialFocus?: React.RefObject<HTMLButtonElement>;
 };
 
 type GenerateResponse = { id: string; error: string };
 
-export const StableDiffusion = ({
+export const UserInferface = ({
     setImage,
+    modelName,
     initialFocus,
 }: StableDiffusionProps) => {
-    const { data: modelInfo } = useModel('stability-ai/stable-diffusion');
+    const { data: modelInfo } = useModel(modelName);
     const { importingMessage, setMaybeImporting, maybeImporting } =
         useGlobalState();
+    const { width, height, prompt } = useInputsState();
     const { has } = useSettingsStore();
     const { apiToken } = useAuthStore();
     const [errorMsg, setErrorMsg] = useState('');
     const [statusMessage, setStatusMessage] = useState('');
-    const [prompt, setPrompt] = useState('');
-    const [width, setWidth] = useState(768);
-    const [height, setHeight] = useState(512);
+    const [promptInputData, setPromptInputData] = useState<PromptInputs>({});
     const importButtonRef = useRef<HTMLButtonElement>(null);
+    const focusArea = useRef<HTMLFormElement>(null);
     const [generateId, setGenerateId] = useState<string>('');
     const { data: generateData } = usePrediction(generateId);
 
@@ -45,13 +60,17 @@ export const StableDiffusion = ({
     );
     const canImport = generateData?.status === 'succeeded' && !importingMessage;
 
+    const focusFirstItem = () => {
+        const selector = focusArea?.current?.querySelector(
+            'input, textarea, select',
+        ) as HTMLElement;
+        selector?.focus();
+    };
+
     const imageOutput = {
         maxWidth: `${width}px`,
         maxHeight: 'calc(100% - 2.5rem)',
         aspectRatio: `${width}/${height}`,
-        backgroundImage: generateData?.output?.length
-            ? `url(${generateData?.output?.[0]})`
-            : undefined,
     };
 
     const handleSubmit = async () => {
@@ -84,15 +103,22 @@ export const StableDiffusion = ({
             },
         }).catch((error) => {
             if (error.detail) {
+                setMaybeImporting(false);
                 setErrorMsg(error.detail);
             }
         });
+
         if (response?.error) {
             setMaybeImporting(false);
             setErrorMsg(response.error);
             return;
         }
         if (response?.id) setGenerateId(response.id);
+    };
+
+    const resetState = () => {
+        setErrorMsg('');
+        setGenerateId('');
     };
 
     const handleCancel = () =>
@@ -117,12 +143,10 @@ export const StableDiffusion = ({
     }, [generateData?.error]);
 
     useEffect(() => {
-        if (!processing) setMaybeImporting(false);
-    }, [processing, setMaybeImporting]);
-
-    useEffect(() => {
-        setGenerateId('');
-    }, [width, height]);
+        if (!processing || generateData?.status === 'failed') {
+            setMaybeImporting(false);
+        }
+    }, [processing, setMaybeImporting, generateData?.status]);
 
     useEffect(() => {
         if (generateData?.status === 'succeeded') {
@@ -141,9 +165,7 @@ export const StableDiffusion = ({
             return;
         }
         setStatusMessage(
-            generateData?.status
-                ? `${generateData?.status}...`
-                : __('Enter a prompt to begin', 'stable-diffusion'),
+            generateData?.status ? `${generateData?.status}...` : '',
         );
     }, [generateData, importingMessage]);
 
@@ -151,39 +173,80 @@ export const StableDiffusion = ({
         if (importingMessage) setStatusMessage(importingMessage);
     }, [importingMessage]);
 
+    useEffect(() => {
+        const schema = modelInfo?.latest_version?.openapi_schema;
+        if (!schema) return;
+        const inputs = schema.components.schemas.Input.properties;
+        // TODO: These could probably be more dynamic but lets do that when
+        // the time comes to add support from a model
+        const maybeWidth = inputs?.width
+            ? schema.components.schemas.width
+            : undefined;
+        const maybeHeight = inputs?.height
+            ? schema.components.schemas.height
+            : undefined;
+        setPromptInputData({
+            prompt: inputs?.prompt,
+            width: maybeWidth
+                ? {
+                      ...(maybeWidth as WidthInput),
+                      default: inputs?.width?.default,
+                  }
+                : undefined,
+            height: maybeHeight
+                ? {
+                      ...(maybeHeight as HeightInput),
+                      default: inputs?.height?.default,
+                  }
+                : undefined,
+        });
+    }, [modelInfo]);
+
+    useLayoutEffect(() => {
+        resetState();
+    }, [promptInputData, width, height]);
+
+    useEffect(() => {
+        focusFirstItem();
+    }, [promptInputData]);
+
+    if (!modelInfo) {
+        return (
+            <div className="flex items-center justify-center w-full">
+                <FocusHelperButton initialFocus={initialFocus} />
+                <Spinner />
+            </div>
+        );
+    }
+
+    if (!Object.keys(promptInputData).length) {
+        return (
+            <div className="flex items-center justify-center w-full">
+                {__(
+                    'Model version not found. Please open a support ticket.',
+                    'stable-diffusion',
+                )}
+            </div>
+        );
+    }
+
     return (
         <>
             <div className="flex flex-col justify-between md:w-96 flex-shrink-0 overflow-y-scroll bg-white">
                 <form
-                    className="flex flex-col gap-y-4 flex-shrink-0 p-8 flex-grow"
+                    ref={focusArea}
+                    className="flex flex-col justify-between gap-y-4 flex-shrink-0 p-6 pb-0 flex-grow"
                     onSubmit={(e) => {
                         e.preventDefault();
                         handleSubmit();
                     }}>
-                    <PromptInput
-                        initialFocus={initialFocus}
-                        value={prompt}
-                        onChange={setPrompt}
-                        disabled={processing}
-                        label={__('Prompt', 'stable-diffusion')}
-                    />
-                    <div className="flex gap-x-4">
-                        <NumberSelect
-                            label={__('Width', 'stable-diffusion')}
-                            value={width}
+                    {promptInputData && (
+                        <InputGenerator
+                            promptInputData={promptInputData}
                             disabled={processing}
-                            onChange={setWidth}
-                            options={[128, 256, 512, 768, 1024]}
                         />
-                        <NumberSelect
-                            label={__('Height', 'stable-diffusion')}
-                            value={height}
-                            disabled={processing}
-                            onChange={setHeight}
-                            options={[128, 256, 512, 768, 1024]}
-                        />
-                    </div>
-                    <div className="flex justify-end mt-4 gap-x-2">
+                    )}
+                    <div>
                         <AnimatePresence>
                             <GoButton
                                 disabled={maybeImporting}
@@ -193,12 +256,12 @@ export const StableDiffusion = ({
                                 onCancel={handleCancel}
                             />
                         </AnimatePresence>
+                        <p
+                            className="text-red-500 m-0 my-2"
+                            style={{ minHeight: '20px' }}>
+                            {errorMsg}
+                        </p>
                     </div>
-                    <p
-                        className="text-red-500 m-0"
-                        style={{ minHeight: '20px' }}>
-                        {errorMsg}
-                    </p>
                 </form>
                 <AnimatePresence>
                     <ModelCard modelInfo={modelInfo} />
@@ -242,11 +305,14 @@ export const StableDiffusion = ({
                 </AnimatePresence>
                 <motion.div
                     role="button"
-                    onClick={() => {
-                        initialFocus?.current?.focus();
-                    }}
+                    onClick={focusFirstItem}
                     transition={{ type: 'Tween' }}
                     className="border border-gray-500 flex items-center justify-center bg-cover mx-auto"
+                    style={{
+                        backgroundImage: generateData?.output?.length
+                            ? `url(${generateData?.output?.[0]})`
+                            : undefined,
+                    }}
                     animate={imageOutput}
                     initial={imageOutput}
                 />

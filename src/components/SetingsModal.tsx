@@ -93,8 +93,8 @@ const SettingsModalContainer = ({
                         {__('Settings', 'stable-diffusion')}
                     </Dialog.Title>
                     <div className="md:flex flex-col w-full relative">
-                        <div className="flex items-center justify-between w-full border-b gap-x-4 bg-white px-6 h-10">
-                            <div className="text-lg font-medium">
+                        <div className="flex items-center justify-between w-full border-b gap-x-4 bg-white h-10">
+                            <div className="font-mono font-semibold text-sm px-6">
                                 {__('Settings', 'stable-diffusion')}
                             </div>
                             <ModalCloseButton onClose={onClose} />

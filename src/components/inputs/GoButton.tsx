@@ -1,5 +1,5 @@
-import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import classNames from 'classnames';
 import { motion } from 'framer-motion';
 
 type GoButtonProps = {
@@ -16,15 +16,27 @@ export const GoButton = ({
     importing,
     disabled,
 }: GoButtonProps) => {
+    const clx = classNames(
+        'w-full p-4 cursor-pointer outline-none focus:shadow-none focus:ring-wp focus:ring-wp-theme-500 transition-all duration-200',
+        {
+            'bg-gray-900 text-white hover:bg-wp-theme-500': !disabled,
+            'bg-gray-200 text-gray-900': disabled && !processing,
+            'bg-wp-alert-red text-white': processing,
+        },
+    );
     if (importing)
         return (
             <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}>
-                <Button onClick={() => undefined} disabled variant="primary">
+                <button
+                    className={clx}
+                    type="submit"
+                    onClick={() => undefined}
+                    disabled>
                     {__('Importing...', 'stable-diffusion')}
-                </Button>
+                </button>
             </motion.span>
         );
     if (processing) {
@@ -33,9 +45,9 @@ export const GoButton = ({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}>
-                <Button onClick={onCancel} variant="primary" isDestructive>
+                <button className={clx} type="submit" onClick={onCancel}>
                     {__('Cancel run', 'stable-diffusion')}
-                </Button>
+                </button>
             </motion.span>
         );
     }
@@ -44,9 +56,13 @@ export const GoButton = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}>
-            <Button onClick={onSubmit} variant="primary" disabled={disabled}>
+            <button
+                className={clx}
+                type="submit"
+                onClick={onSubmit}
+                disabled={disabled}>
                 {__('Submit', 'stable-diffusion')}
-            </Button>
+            </button>
         </motion.span>
     );
 };

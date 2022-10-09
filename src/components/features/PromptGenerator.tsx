@@ -6,6 +6,7 @@ import { Dialog } from '@headlessui/react';
 import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
 import { previewImageIcon, refreshIcon } from '../../icons';
+import { useGlobalState } from '../../state/global';
 import { useSettingsStore, useSettingsStoreReady } from '../../state/settings';
 import { PromptResponse } from '../../types';
 import { ModalCloseButton } from '../ModalControls';
@@ -16,10 +17,14 @@ export const PromptGenerator = ({
     updateText: (text: string) => void;
 }) => {
     const { has } = useSettingsStore();
+    const { currentModel } = useGlobalState();
     const ready = useSettingsStoreReady();
     const [fetching, setFetching] = useState(false);
     const [preview, setPreview] = useState<string>();
     const [showOptin, setShowOptin] = useState(false);
+
+    // For now only show on this model
+    if (currentModel !== 'stability-ai/stable-diffusion') return null;
 
     const handlePress = async () => {
         if (!has('optIns', 'prompt-accept')) {
@@ -50,7 +55,7 @@ export const PromptGenerator = ({
         <div className="flex gap-x-1 items-center">
             {/* // todo: I like the idea of opening a new modal and showing maybe 50 images and let the user pick an image they like */}
             <Tooltip
-                text={__('Load prompt example', 'stable-diffusion')}
+                text={__('Load sample prompt', 'stable-diffusion')}
                 position="top center">
                 <button
                     className={classNames(
@@ -97,7 +102,7 @@ const PreviewPopover = ({ url }: { url?: string }) => {
     if (!url) return null;
     return (
         <Tooltip
-            text={__('View prompt image', 'stable-diffusion')}
+            text={__('View example output', 'stable-diffusion')}
             position="top center">
             <motion.button
                 initial={{ opacity: 0 }}
@@ -141,9 +146,12 @@ const OptInPrompt = ({ onClose }: { onClose: () => void }) => {
                         {__('Opt-in to prompt generator', 'stable-diffusion')}
                     </Dialog.Title>
                     <div className="md:flex flex-col w-full relative">
-                        <div className="flex items-center justify-between w-full border-b gap-x-4 bg-white px-6 h-10">
-                            <div className="text-lg font-medium">
-                                {__('Prompt Suggestions', 'stable-diffusion')}
+                        <div className="flex items-center justify-between w-full border-b gap-x-4 bg-white h-10">
+                            <div className="font-mono font-semibold text-sm px-6">
+                                {__(
+                                    'Text prompt Suggestions',
+                                    'stable-diffusion',
+                                )}
                             </div>
                             <ModalCloseButton onClose={onClose} />
                         </div>
@@ -185,7 +193,7 @@ const OptInPrompt = ({ onClose }: { onClose: () => void }) => {
                                     }
                                 />
                             </div>
-                            <p className="m-0 text-xs italic">
+                            <p className="m-0 mb-6 text-xs italic">
                                 {__(
                                     'This feature is opt-in and can be disabled at any time from the settings area accessed from the toolbar.',
                                     'stable-diffusion',

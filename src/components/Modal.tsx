@@ -1,13 +1,13 @@
-import { useEffect, useRef } from '@wordpress/element';
+import { useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Dialog } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ModalDefault } from '../layouts/ModalDefault';
 import { models } from '../models';
-import { StableDiffusion } from '../models/StableDiffusion';
 import { useAuthStore } from '../state/auth';
 import { useGlobalState } from '../state/global';
-import { AvailableModels, ImageLike } from '../types';
+import { ImageLike } from '../types';
+import { UserInferface } from './UserInterface';
 
 type ModalProps = {
     setImage: (image: ImageLike) => void;
@@ -15,21 +15,18 @@ type ModalProps = {
 };
 
 export const Modal = ({ setImage, onClose }: ModalProps) => {
-    const initialFocus = useRef(null);
-    const { currentInterface, setShowSelectScreen } = useGlobalState();
+    const { currentModel } = useGlobalState();
     const { apiToken } = useAuthStore();
-
-    useEffect(() => {
-        if (currentInterface) setShowSelectScreen(false);
-    }, [currentInterface, setShowSelectScreen]);
+    const name = models.find((m) => m.id === currentModel)?.name;
+    const initialFocus = useRef(null);
 
     return (
         <Dialog
             className="stable-diffusion-editor stable-diffusion-modal"
-            initialFocus={initialFocus}
             data-cy="model-screen"
+            initialFocus={initialFocus}
             key="main-modal"
-            open={Boolean(currentInterface) && Boolean(apiToken)}
+            open={Boolean(currentModel) && Boolean(apiToken)}
             onClose={onClose}>
             <div className="absolute mx-auto w-full h-full overflow-hidden md:p-8 md:flex justify-center items-center z-high">
                 <div
@@ -43,51 +40,24 @@ export const Modal = ({ setImage, onClose }: ModalProps) => {
                         animate={{ y: 0 }}
                         exit={{ y: 0, opacity: 0 }}
                         className="sm:flex relative shadow-2xl sm:overflow-hidden max-w-screen-2xl mx-auto bg-white h-full">
-                        <Dialog.Title className="sr-only">
-                            {
-                                models.find((m) => m.id === currentInterface)
-                                    ?.name
-                            }
-                        </Dialog.Title>
+                        <Dialog.Title className="sr-only">{name}</Dialog.Title>
                         <div className="md:flex flex-col w-full relative h-screen md:h-auto">
-                            <ModalContent
-                                setImage={setImage}
-                                modelName={currentInterface}
+                            <ModalDefault
                                 onClose={onClose}
-                                initialFocus={initialFocus}
-                            />
+                                title={
+                                    name ??
+                                    __('Stable Diffusion', 'stable-diffusion')
+                                }>
+                                <UserInferface
+                                    initialFocus={initialFocus}
+                                    modelName={currentModel}
+                                    setImage={setImage}
+                                />
+                            </ModalDefault>
                         </div>
                     </motion.div>
                 </AnimatePresence>
             </div>
         </Dialog>
     );
-};
-
-type ModalContent = {
-    setImage: (image: ImageLike) => void;
-    modelName?: AvailableModels;
-    onClose: () => void;
-    // eslint-disable-next-line
-    initialFocus: any;
-};
-const ModalContent = ({
-    setImage,
-    modelName,
-    onClose,
-    initialFocus,
-}: ModalContent) => {
-    if (modelName === 'stability-ai/stable-diffusion') {
-        return (
-            <ModalDefault
-                onClose={onClose}
-                title={__('Stable Diffusion', 'stable-diffusion')}>
-                <StableDiffusion
-                    initialFocus={initialFocus}
-                    setImage={setImage}
-                />
-            </ModalDefault>
-        );
-    }
-    return null;
 };

@@ -1,5 +1,6 @@
 export type AvailableModels =
     | 'stability-ai/stable-diffusion'
+    | 'lambdal/text-to-pokemon'
     | 'methexis-inc/img2prompt'
     | 'tencentarc/gfpgan'
     | 'deforum/deforum_stable_diffusion';
@@ -8,8 +9,7 @@ export type ModelAttributes = {
     id: AvailableModels;
     name: string;
     description: string;
-    active: boolean;
-    hideFromList: boolean;
+    image: string;
 };
 
 export type ImageLike = {
@@ -51,7 +51,10 @@ export type ModelData = {
     paper_url?: string;
     license_url?: string;
     github_url?: string;
-    latest_version?: { id?: string };
+    latest_version?: {
+        id?: string;
+        openapi_schema?: OpenApiSchema;
+    };
 };
 
 export type PredictionData = {
@@ -74,4 +77,63 @@ export type StableDiffusionInputs = {
 export type PromptResponse = {
     prompt?: string;
     imageUrls?: string[];
+};
+
+export type PromptInputs = {
+    prompt?: PromptInput;
+    width?: WidthInput;
+    height?: HeightInput;
+};
+export type PromptInput = {
+    type: string;
+    default: string;
+    description: string;
+    title: string;
+};
+export type WidthInput = {
+    default?: number;
+    description: string;
+    enum: number[];
+    title: string;
+    type: string;
+};
+export type HeightInput = {
+    default?: number;
+    description: string;
+    enum: number[];
+    title: string;
+    type: string;
+};
+export type OpenApiSchema = {
+    openapi: string;
+    info: {
+        title: string;
+        version: string;
+    };
+    components: {
+        schemas: {
+            Input: {
+                properties: {
+                    prompt?: PromptInput;
+                    width?: {
+                        default: number;
+                        description: string;
+                        allOf: {
+                            $ref: string;
+                        }[];
+                    };
+                    height?: {
+                        default: number;
+                        description: string;
+                        allOf: {
+                            $ref: string;
+                        }[];
+                    };
+                };
+            };
+            // TODO: update this type to depends on the input being present
+            width?: WidthInput;
+            height?: HeightInput;
+        };
+    };
 };
