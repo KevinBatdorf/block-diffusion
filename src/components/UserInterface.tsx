@@ -71,9 +71,6 @@ export const UserInferface = ({
         maxWidth: `${width}px`,
         maxHeight: 'calc(100% - 2.5rem)',
         aspectRatio: `${width}/${height}`,
-        backgroundImage: generateData?.output?.length
-            ? `url(${generateData?.output?.[0]})`
-            : undefined,
     };
 
     const handleSubmit = async () => {
@@ -146,10 +143,6 @@ export const UserInferface = ({
     useEffect(() => {
         if (!processing) setMaybeImporting(false);
     }, [processing, setMaybeImporting]);
-
-    useEffect(() => {
-        setGenerateId('');
-    }, [width, height]);
 
     useEffect(() => {
         if (generateData?.status === 'succeeded') {
@@ -311,6 +304,11 @@ export const UserInferface = ({
                     onClick={focusFirstItem}
                     transition={{ type: 'Tween' }}
                     className="border border-gray-500 flex items-center justify-center bg-cover mx-auto"
+                    style={{
+                        backgroundImage: generateData?.output?.length
+                            ? `url(${generateData?.output?.[0]})`
+                            : undefined,
+                    }}
                     animate={imageOutput}
                     initial={imageOutput}
                 />
