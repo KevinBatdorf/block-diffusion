@@ -61,7 +61,7 @@ export const GoButton = ({
                 type="submit"
                 onClick={onSubmit}
                 disabled={disabled}>
-                {__('Submit', 'stable-diffusion')}
+                {__('Run model', 'stable-diffusion')}
             </button>
         </motion.span>
     );

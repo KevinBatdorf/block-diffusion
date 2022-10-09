@@ -235,7 +235,7 @@ export const UserInferface = ({
             <div className="flex flex-col justify-between md:w-96 flex-shrink-0 overflow-y-scroll bg-white">
                 <form
                     ref={focusArea}
-                    className="flex flex-col justify-between gap-y-4 flex-shrink-0 p-6 pb-0 flex-grow"
+                    className="flex flex-col gap-y-6 flex-shrink-0 p-6 pb-0 flex-grow"
                     onSubmit={(e) => {
                         e.preventDefault();
                         handleSubmit();

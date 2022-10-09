@@ -2,7 +2,7 @@
 Contributors:      kbat82
 Tags:              block, stable diffusion, ai, prompt, artificial intelligence
 Tested up to:      6.1
-Stable tag:        0.2.0
+Stable tag:        0.3.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,7 +17,8 @@ This plugin interfaces with the Replicate API and allows you to run open-source 
 Semi interactive demo at [https://www.block-diffusion.com/](https://www.block-diffusion.com/)
 
 = Features =
-- Stable Diffusion
+- Stable Diffusion model
+- Text to Pokémon model
 - Prompt suggestion + preview
 
 = Pro version =
@@ -29,7 +30,6 @@ There are no plans to lock any features behind a pro or premium plugin. All feat
 - Run multiple image predictions at once
 - Have more control over the image generation steps
 - View your prediction history
-- Model selection from collections
 
 = More Info =
 - Follow [@kevinbatdorf](https://twitter.com/kevinbatdorf) on Twitter
@@ -50,10 +50,14 @@ We also offer additional features on top of the Replicate API, such as prompt/ou
 
 == Screenshots ==
 
-1. "phase shift into an era of human+AI art collab"
+1. A view of the interface
 2. Choose from various models to run
 
 == Changelog ==
+
+= 0.3.0 - 2022-10-09 =
+- Feature: Add support for image to Pokémon generation
+- Tweak: Various UI changes
 
 = 0.2.0 - 2022-10-05 =
 - Feature: Help with prompt ideas and inspiration (opt in)

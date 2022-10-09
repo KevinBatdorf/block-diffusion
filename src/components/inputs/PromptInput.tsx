@@ -18,7 +18,7 @@ export const PromptInput = ({
     onChange,
 }: PromptSelectProps) => {
     const formItemClass = classNames(
-        'w-full text-lg rounded-none focus:outline-none focus:ring-wp ring-wp-theme-500 focus:shadow-none border pr-8',
+        'block w-full text-lg rounded-none focus:outline-none focus:ring-wp ring-wp-theme-500 focus:shadow-none border pr-8',
         {
             'bg-gray-200 border-gray-200': disabled,
             'border-gray-900': !disabled,
