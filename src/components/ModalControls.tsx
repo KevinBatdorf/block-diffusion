@@ -10,7 +10,9 @@ type ModalControlsProps = {
 };
 export const ModalControls = ({ onClose, title }: ModalControlsProps) => {
     return (
-        <div className="flex items-center w-full border-b fixed md:static top-0 bg-white h-10">
+        <div
+            data-cy="modal-controls"
+            className="flex items-center w-full border-b fixed md:static top-0 bg-white h-10">
             <div className="flex-shrink-0 font-mono font-semibold text-sm px-6">
                 {title}
             </div>
