@@ -30,10 +30,10 @@ export const ModelSwitch = () => {
                             }}
                         />
                         <div>
-                            <h2 className="font-mono text-lg m-0 mb-1 text-left">
+                            <h2 className="font-mono text-base m-0 mb-1 text-left">
                                 {model.id}
                             </h2>
-                            <p className="m-0 text-left text-base">
+                            <p className="m-0 text-left text-sm">
                                 {model.description}
                             </p>
                         </div>
