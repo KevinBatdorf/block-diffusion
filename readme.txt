@@ -55,6 +55,8 @@ We also offer additional features on top of the Replicate API, such as prompt/ou
 
 == Changelog ==
 
+- Tweak: Adjust spacing on model switch ui
+
 = 0.3.0 - 2022-10-09 =
 - Feature: Add support for image to Pokémon generation
 - Tweak: Various UI changes
