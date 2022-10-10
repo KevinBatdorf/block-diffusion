@@ -21,7 +21,7 @@ export const imageUrlToBlob = async (imageUrl: string): Promise<Blob> => {
     return await new Promise((resolve) => {
         canvas.toBlob((blob) => {
             blob && resolve(blob);
-        }, 'image/jpeg');
+        }, 'image/png');
     });
 };
 
@@ -33,4 +33,13 @@ export const downloadImage = async (url: string, filename: string) => {
     link.download = filename;
     link.click();
     URL.revokeObjectURL(dataUrl);
+};
+
+export const copyImage = async (url: string) => {
+    const blob = await imageUrlToBlob(url);
+    navigator.clipboard.write([
+        new ClipboardItem({
+            [blob.type]: blob,
+        }),
+    ]);
 };

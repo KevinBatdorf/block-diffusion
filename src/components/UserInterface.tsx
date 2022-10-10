@@ -11,7 +11,7 @@ import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useModel } from '../hooks/useModel';
 import { usePrediction } from '../hooks/usePrediction';
-import { downloadImage } from '../lib/image';
+import { downloadImage, copyImage } from '../lib/image';
 import { useAuthStore } from '../state/auth';
 import { useGlobalState } from '../state/global';
 import { useInputsState } from '../state/inputs';
@@ -242,8 +242,14 @@ export const UserInferface = ({
                     <div>
                         <AnimatePresence>
                             <GoButton
-                                disabled={maybeImporting}
-                                importing={importingMessage.length > 0}
+                                disabled={
+                                    maybeImporting ||
+                                    importingMessage?.length > 0
+                                }
+                                importing={
+                                    importingMessage ===
+                                    __('Importing...', 'stable-diffusion')
+                                }
                                 processing={processing}
                                 onSubmit={handleSubmit}
                                 onCancel={handleCancel}
@@ -375,12 +381,18 @@ const ImageActions = ({
 }: ActionProps) => {
     const btnClass =
         'bg-gray-900 text-white p-2 px-4 text-left outline-none focus:shadow-none focus:ring-wp focus:ring-wp-theme-500 cursor-pointer hover:bg-wp-theme-500 transition-all duration-200';
+    const { setImportingMessage } = useGlobalState();
     const handleImport = () => {
         if (!id) return;
         setImage({ id, url, caption });
     };
     const handleDownload = async () => {
         await downloadImage(url, `block-diffusion-${id}`);
+    };
+    const handleCopy = async () => {
+        setImportingMessage(__('Copying...', 'stable-diffusion'));
+        await copyImage(url);
+        setImportingMessage('');
     };
     return (
         <div
@@ -399,6 +411,9 @@ const ImageActions = ({
             </button>
             <button className={btnClass} onClick={handleDownload} type="button">
                 {__('Download', 'stable-diffusion')}
+            </button>
+            <button className={btnClass} onClick={handleCopy} type="button">
+                {__('Copy', 'stable-diffusion')}
             </button>
         </div>
     );
