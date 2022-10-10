@@ -83,6 +83,7 @@ export type PromptInputs = {
     prompt?: PromptInput;
     width?: WidthInput;
     height?: HeightInput;
+    numOutputs?: NumOutputsInput;
 };
 export type PromptInput = {
     type: string;
@@ -98,6 +99,13 @@ export type WidthInput = {
     type: string;
 };
 export type HeightInput = {
+    default?: number;
+    description: string;
+    enum: number[];
+    title: string;
+    type: string;
+};
+export type NumOutputsInput = {
     default?: number;
     description: string;
     enum: number[];
@@ -129,11 +137,19 @@ export type OpenApiSchema = {
                             $ref: string;
                         }[];
                     };
+                    num_outputs?: {
+                        default: number;
+                        description: string;
+                        allOf: {
+                            $ref: string;
+                        }[];
+                    };
                 };
             };
             // TODO: update this type to depends on the input being present
             width?: WidthInput;
             height?: HeightInput;
+            num_outputs?: NumOutputsInput;
         };
     };
 };

@@ -1,5 +1,4 @@
 import apiFetch from '@wordpress/api-fetch';
-import { Button } from '@wordpress/components';
 import { Spinner } from '@wordpress/components';
 import {
     useEffect,
@@ -12,6 +11,7 @@ import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useModel } from '../hooks/useModel';
 import { usePrediction } from '../hooks/usePrediction';
+import { downloadImage } from '../lib/image';
 import { useAuthStore } from '../state/auth';
 import { useGlobalState } from '../state/global';
 import { useInputsState } from '../state/inputs';
@@ -20,6 +20,7 @@ import {
     AvailableModels,
     HeightInput,
     ImageLike,
+    NumOutputsInput,
     PredictionData,
     PromptInputs,
     WidthInput,
@@ -45,7 +46,7 @@ export const UserInferface = ({
     const { data: modelInfo } = useModel(modelName);
     const { importingMessage, setMaybeImporting, maybeImporting } =
         useGlobalState();
-    const { width, height, prompt } = useInputsState();
+    const { width, height, prompt, numOutputs: num_outputs } = useInputsState();
     const { has } = useSettingsStore();
     const { apiToken } = useAuthStore();
     const [errorMsg, setErrorMsg] = useState('');
@@ -54,10 +55,10 @@ export const UserInferface = ({
     const importButtonRef = useRef<HTMLButtonElement>(null);
     const focusArea = useRef<HTMLFormElement>(null);
     const [generateId, setGenerateId] = useState<string>('');
-    const { data: generateData } = usePrediction(generateId);
+    const { data: prediction } = usePrediction(generateId);
 
     const processing = ['starting', 'processing'].includes(
-        generateData?.status ?? '',
+        prediction?.status ?? '',
     );
 
     const focusFirstItem = () => {
@@ -89,7 +90,7 @@ export const UserInferface = ({
             method: 'POST',
             headers: { Authorization: `Token ${apiToken}` },
             data: {
-                input: { width, height, prompt, num_outputs: 4 },
+                input: { width, height, prompt, num_outputs },
                 version: modelInfo.latest_version.id,
                 webhook_completed: has('optIns', 'prompt-share')
                     ? 'https://www.block-diffusion.com/api/v1/replicate'
@@ -124,35 +125,33 @@ export const UserInferface = ({
         });
 
     useEffect(() => {
-        if (generateData?.error) setErrorMsg(generateData.error);
-    }, [generateData?.error]);
+        if (prediction?.error) setErrorMsg(prediction.error);
+    }, [prediction?.error]);
 
     useEffect(() => {
-        if (!processing || generateData?.status === 'failed') {
+        if (!processing || prediction?.status === 'failed') {
             setMaybeImporting(false);
         }
-    }, [processing, setMaybeImporting, generateData?.status]);
+    }, [processing, setMaybeImporting, prediction?.status]);
 
     useEffect(() => {
-        if (generateData?.status === 'succeeded') {
+        if (prediction?.status === 'succeeded') {
             importButtonRef.current?.focus();
         }
-    }, [generateData?.status]);
+    }, [prediction?.status]);
 
     useEffect(() => {
         if (importingMessage) return;
-        if (generateData?.metrics?.predict_time) {
+        if (prediction?.metrics?.predict_time) {
             const time = sprintf(
                 __('Billed time: %s', 'stable-diffusion'),
-                generateData.metrics.predict_time,
+                prediction.metrics.predict_time,
             );
             setStatusMessage(time);
             return;
         }
-        setStatusMessage(
-            generateData?.status ? `${generateData?.status}...` : '',
-        );
-    }, [generateData, importingMessage]);
+        setStatusMessage(prediction?.status ? `${prediction?.status}...` : '');
+    }, [prediction, importingMessage]);
 
     useEffect(() => {
         if (importingMessage) setStatusMessage(importingMessage);
@@ -170,6 +169,9 @@ export const UserInferface = ({
         const maybeHeight = inputs?.height
             ? schema.components.schemas.height
             : undefined;
+        const maybeNumOutputs = inputs?.num_outputs
+            ? schema.components.schemas.num_outputs
+            : undefined;
         setPromptInputData({
             prompt: inputs?.prompt,
             width: maybeWidth
@@ -184,12 +186,18 @@ export const UserInferface = ({
                       default: inputs?.height?.default,
                   }
                 : undefined,
+            numOutputs: maybeNumOutputs
+                ? {
+                      ...(maybeNumOutputs as NumOutputsInput),
+                      default: inputs?.num_outputs?.default,
+                  }
+                : undefined,
         });
     }, [modelInfo]);
 
     useLayoutEffect(() => {
         resetState();
-    }, [promptInputData, width, height]);
+    }, [promptInputData, width, height, num_outputs]);
 
     useEffect(() => {
         focusFirstItem();
@@ -255,12 +263,9 @@ export const UserInferface = ({
                     <ModelCard modelInfo={modelInfo} />
                 </AnimatePresence>
             </div>
-            <div className="bg-gray-50 flex h-full items-center justify-center overflow-y-scroll p-8 w-full">
+            <div className="bg-gray-50 flex flex-col h-full items-center overflow-y-scroll p-6 w-full relative">
                 <AnimatePresence>
-                    <MainPanel
-                        setImage={setImage}
-                        generateData={generateData}
-                    />
+                    <MainPanel setImage={setImage} prediction={prediction} />
                 </AnimatePresence>
             </div>
         </>
@@ -268,56 +273,72 @@ export const UserInferface = ({
 };
 
 type MainPanelProps = {
-    generateData?: PredictionData;
+    prediction?: PredictionData;
     setImage: (image: ImageLike) => void;
 };
-const MainPanel = ({ generateData, setImage }: MainPanelProps) => {
+const MainPanel = ({ prediction, setImage }: MainPanelProps) => {
     const { width, height, prompt } = useInputsState();
+    const { id, output, input } = prediction || {};
     const { importingMessage } = useGlobalState();
-    const canImport = generateData?.status === 'succeeded' && !importingMessage;
 
-    const handleImport = () => {
-        if (!generateData?.output?.length) return;
-        setImage({
-            url: generateData.output[0],
-            id: generateData?.id,
-            caption: generateData?.input?.prompt || prompt,
-        });
-    };
-
-    if (canImport && generateData?.output?.length) {
+    if (prediction?.status === 'succeeded' && output?.length) {
         return (
-            <motion.div
-                key={generateData.id}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className={classNames('gap-6 grid w-full self-start', {
-                    'lg:grid-cols-2': generateData?.output?.length >= 2,
-                })}>
-                {generateData?.output?.map((url) => (
-                    <div
-                        key={url}
-                        className="flex items-center justify-center bg-gray-100">
-                        {/* todo: number UI */}
-                        {/* todo: import button */}
-                        {/* left slide out, copy to clipboard, import to wp, download,  */}
-                        {/* <Button
-                            onClick={handleImport}
-                            type="button"
-                            variant="primary">
-                            {__('Import into editor', 'stable-diffusion')}
-                        </Button> */}
+            <div
+                className={classNames(
+                    'flex flex-col h-full w-full items-center',
+                    {
+                        'pointer-events-none': importingMessage.length > 0,
+                    },
+                )}>
+                {output?.length > 1 && (
+                    <p className="font-mono m-0 mb-4 text-center">
+                        {__(
+                            'Hover over an image for options',
+                            'stable-diffusion',
+                        )}
+                    </p>
+                )}
+                <motion.div
+                    key={prediction.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className={classNames('gap-6 grid w-full self-start', {
+                        'lg:grid-cols-2': output?.length >= 2,
+                    })}>
+                    {prediction?.output?.map((url, i) => (
                         <div
-                            className="w-full bg-no-repeat bg-contain"
-                            style={{
-                                maxWidth: `${width}px`,
-                                aspectRatio: `${width}/${height}`,
-                                backgroundImage: `url(${url})`,
-                            }}
-                        />
-                    </div>
-                ))}
-            </motion.div>
+                            key={url}
+                            className={classNames(
+                                'flex items-center justify-center group',
+                                {
+                                    'relative bg-gray-100':
+                                        output?.length !== 1,
+                                },
+                            )}>
+                            <div
+                                className={classNames(
+                                    'w-full bg-no-repeat bg-contain',
+                                    {
+                                        '': output?.length === 1,
+                                    },
+                                )}
+                                style={{
+                                    maxWidth: `${width}px`,
+                                    aspectRatio: `${width}/${height}`,
+                                    backgroundImage: `url(${url})`,
+                                }}>
+                                <ImageActions
+                                    id={`${id}-image-${i}`}
+                                    url={url}
+                                    caption={input?.prompt || prompt}
+                                    setImage={setImage}
+                                    forceShowHud={output?.length === 1}
+                                />
+                            </div>
+                        </div>
+                    ))}
+                </motion.div>
+            </div>
         );
     }
     const imageOutput = {
@@ -335,6 +356,51 @@ const MainPanel = ({ generateData, setImage }: MainPanelProps) => {
             initial={imageOutput}>
             <div className="w-screen" />
         </motion.div>
+    );
+};
+
+type ActionProps = {
+    id: string;
+    url: string;
+    caption: string;
+    forceShowHud?: boolean;
+    setImage: (image: ImageLike) => void;
+};
+const ImageActions = ({
+    setImage,
+    id,
+    url,
+    caption,
+    forceShowHud,
+}: ActionProps) => {
+    const btnClass =
+        'bg-gray-900 text-white p-2 px-4 text-left outline-none focus:shadow-none focus:ring-wp focus:ring-wp-theme-500 cursor-pointer hover:bg-wp-theme-500 transition-all duration-200';
+    const handleImport = () => {
+        if (!id) return;
+        setImage({ id, url, caption });
+    };
+    const handleDownload = async () => {
+        await downloadImage(url, `block-diffusion-${id}`);
+    };
+    return (
+        <div
+            className={classNames(
+                'absolute top-0 left-0 flex flex-col items-start gap-1 pt-1 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300',
+                {
+                    'lg:opacity-0': !forceShowHud,
+                },
+            )}
+            style={{
+                background:
+                    'radial-gradient(100% 65px at left top, rgb(255 255 255 / 65%) 0px, rgb(0 0 0 / 0%))',
+            }}>
+            <button className={btnClass} onClick={handleImport} type="button">
+                {__('Import into editor', 'stable-diffusion')}
+            </button>
+            <button className={btnClass} onClick={handleDownload} type="button">
+                {__('Download', 'stable-diffusion')}
+            </button>
+        </div>
     );
 };
 

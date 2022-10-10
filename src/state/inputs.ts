@@ -5,6 +5,7 @@ type InputsState = {
     prompt: string;
     width: number;
     height: number;
+    numOutputs: number;
     setInput: (key: string, value: string | number) => void;
 };
 
@@ -14,6 +15,7 @@ export const useInputsState = create<InputsState>()(
             prompt: '',
             width: 512,
             height: 512,
+            numOutputs: 1,
             setInput(key: string, value: string | number) {
                 set({ [key]: value });
             },
