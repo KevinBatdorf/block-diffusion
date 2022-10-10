@@ -2,7 +2,7 @@
 Contributors:      kbat82
 Tags:              block, stable diffusion, ai, prompt, artificial intelligence
 Tested up to:      6.1
-Stable tag:        0.3.0
+Stable tag:        0.4.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,6 +19,8 @@ Semi interactive demo at [https://www.block-diffusion.com/](https://www.block-di
 = Features =
 - Stable Diffusion model
 - Text to Pokémon model
+- Multiple outputs
+- Download, Copy, or import into the editor
 - Prompt suggestion + preview
 
 = Pro version =
@@ -27,7 +29,6 @@ There are no plans to lock any features behind a pro or premium plugin. All feat
 = Upcoming Features =
 - Use an existing image as starting point
 - Add an image mask to only generate specific areas
-- Run multiple image predictions at once
 - Have more control over the image generation steps
 - View your prediction history
 
@@ -54,6 +55,12 @@ We also offer additional features on top of the Replicate API, such as prompt/ou
 2. Choose from various models to run
 
 == Changelog ==
+
+= 0.4.0 - 2022-10-10 =
+- Feature: Support multiple outputs
+- Feature: Add download and copy buttons
+- Tweak: The output UI is separate now from the input UI
+- Fix: Fixed a bug where the focus state wouldn't expand the model card
 
 = 0.3.0 - 2022-10-09 =
 - Feature: Add support for image to Pokémon generation
