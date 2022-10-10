@@ -20,7 +20,7 @@ Semi interactive demo at [https://www.block-diffusion.com/](https://www.block-di
 - Stable Diffusion model
 - Text to Pokémon model
 - Multiple outputs
-- Download, Copy, or import into the editor
+- Download, copy, or import into the editor
 - Prompt suggestion + preview
 
 = Pro version =
