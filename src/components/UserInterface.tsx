@@ -20,6 +20,7 @@ import {
     AvailableModels,
     HeightInput,
     ImageLike,
+    PredictionData,
     PromptInputs,
     WidthInput,
 } from '../types';
@@ -58,19 +59,12 @@ export const UserInferface = ({
     const processing = ['starting', 'processing'].includes(
         generateData?.status ?? '',
     );
-    const canImport = generateData?.status === 'succeeded' && !importingMessage;
 
     const focusFirstItem = () => {
         const selector = focusArea?.current?.querySelector(
             'input, textarea, select',
         ) as HTMLElement;
         selector?.focus();
-    };
-
-    const imageOutput = {
-        maxWidth: `${width}px`,
-        maxHeight: 'calc(100% - 2.5rem)',
-        aspectRatio: `${width}/${height}`,
     };
 
     const handleSubmit = async () => {
@@ -95,7 +89,7 @@ export const UserInferface = ({
             method: 'POST',
             headers: { Authorization: `Token ${apiToken}` },
             data: {
-                input: { width, height, prompt },
+                input: { width, height, prompt, num_outputs: 4 },
                 version: modelInfo.latest_version.id,
                 webhook_completed: has('optIns', 'prompt-share')
                     ? 'https://www.block-diffusion.com/api/v1/replicate'
@@ -128,15 +122,6 @@ export const UserInferface = ({
             headers: { Authorization: `Token ${apiToken}` },
             data: { id: generateId },
         });
-
-    const handleImport = () => {
-        if (!generateData?.output?.length) return;
-        setImage({
-            url: generateData.output[0],
-            id: generateData?.id || generateId,
-            caption: generateData?.input?.prompt || prompt,
-        });
-    };
 
     useEffect(() => {
         if (generateData?.error) setErrorMsg(generateData.error);
@@ -256,67 +241,119 @@ export const UserInferface = ({
                                 onCancel={handleCancel}
                             />
                         </AnimatePresence>
-                        <p
-                            className="text-red-500 m-0 my-2"
-                            style={{ minHeight: '20px' }}>
-                            {errorMsg}
-                        </p>
+                        <div className="m-0 my-2" style={{ minHeight: '20px' }}>
+                            <AnimatePresence>
+                                <StatusMessage
+                                    errorMessage={errorMsg}
+                                    message={statusMessage}
+                                />
+                            </AnimatePresence>
+                        </div>
                     </div>
                 </form>
                 <AnimatePresence>
                     <ModelCard modelInfo={modelInfo} />
                 </AnimatePresence>
             </div>
-            <div className="w-full h-full overflow-hidden p-8 bg-gray-50">
+            <div className="bg-gray-50 flex h-full items-center justify-center overflow-y-scroll p-8 w-full">
                 <AnimatePresence>
-                    <div className="mb-2 -mt-4 h-10 w-full">
-                        {statusMessage && (
-                            <motion.div
-                                className={classNames(
-                                    'h-full flex items-center',
-                                    {
-                                        'justify-between': canImport,
-                                        'justify-center': !canImport,
-                                    },
-                                )}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}>
-                                <motion.span
-                                    className="font-mono"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}>
-                                    {statusMessage}
-                                </motion.span>
-                                {canImport && (
-                                    <Button
-                                        ref={importButtonRef}
-                                        onClick={handleImport}
-                                        type="button"
-                                        variant="primary">
-                                        {__(
-                                            'Import into editor',
-                                            'stable-diffusion',
-                                        )}
-                                    </Button>
-                                )}
-                            </motion.div>
-                        )}
-                    </div>
+                    <MainPanel
+                        setImage={setImage}
+                        generateData={generateData}
+                    />
                 </AnimatePresence>
-                <motion.div
-                    role="button"
-                    onClick={focusFirstItem}
-                    transition={{ type: 'Tween' }}
-                    className="border border-gray-500 flex items-center justify-center bg-cover mx-auto"
-                    style={{
-                        backgroundImage: generateData?.output?.length
-                            ? `url(${generateData?.output?.[0]})`
-                            : undefined,
-                    }}
-                    animate={imageOutput}
-                    initial={imageOutput}
-                />
             </div>
         </>
+    );
+};
+
+type MainPanelProps = {
+    generateData?: PredictionData;
+    setImage: (image: ImageLike) => void;
+};
+const MainPanel = ({ generateData, setImage }: MainPanelProps) => {
+    const { width, height, prompt } = useInputsState();
+    const { importingMessage } = useGlobalState();
+    const canImport = generateData?.status === 'succeeded' && !importingMessage;
+
+    const handleImport = () => {
+        if (!generateData?.output?.length) return;
+        setImage({
+            url: generateData.output[0],
+            id: generateData?.id,
+            caption: generateData?.input?.prompt || prompt,
+        });
+    };
+
+    if (canImport && generateData?.output?.length) {
+        return (
+            <motion.div
+                key={generateData.id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className={classNames('gap-6 grid w-full self-start', {
+                    'lg:grid-cols-2': generateData?.output?.length >= 2,
+                })}>
+                {generateData?.output?.map((url) => (
+                    <div
+                        key={url}
+                        className="flex items-center justify-center bg-gray-100">
+                        {/* todo: number UI */}
+                        {/* todo: import button */}
+                        {/* left slide out, copy to clipboard, import to wp, download,  */}
+                        {/* <Button
+                            onClick={handleImport}
+                            type="button"
+                            variant="primary">
+                            {__('Import into editor', 'stable-diffusion')}
+                        </Button> */}
+                        <div
+                            className="w-full bg-no-repeat bg-contain"
+                            style={{
+                                maxWidth: `${width}px`,
+                                aspectRatio: `${width}/${height}`,
+                                backgroundImage: `url(${url})`,
+                            }}
+                        />
+                    </div>
+                ))}
+            </motion.div>
+        );
+    }
+    const imageOutput = {
+        maxWidth: `${width}px`,
+        maxHeight: 'calc(100% - 2.5rem)',
+        aspectRatio: `${width}/${height}`,
+    };
+    return (
+        <motion.div
+            key="canvas-placeholder"
+            role="button"
+            transition={{ type: 'Tween' }}
+            className="border border-gray-500 flex items-center justify-center bg-cover m-auto"
+            animate={imageOutput}
+            initial={imageOutput}>
+            <div className="w-screen" />
+        </motion.div>
+    );
+};
+
+type StatusMessageProps = {
+    message: string;
+    errorMessage: string;
+};
+const StatusMessage = ({ message, errorMessage }: StatusMessageProps) => {
+    if (!errorMessage && !message) return null;
+    return (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <motion.span
+                className={classNames('font-mono', {
+                    'text-red-500': errorMessage,
+                })}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}>
+                {errorMessage || message}
+            </motion.span>
+        </motion.div>
     );
 };
