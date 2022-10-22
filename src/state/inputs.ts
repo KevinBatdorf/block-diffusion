@@ -13,6 +13,7 @@ export const useInputsState = create<InputsState>()(
     devtools(
         (set) => ({
             prompt: '',
+            initImage: '',
             width: 512,
             height: 512,
             numOutputs: 1,

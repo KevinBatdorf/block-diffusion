@@ -43,7 +43,7 @@ export const DialogWithImageModal = ({
                         initial={{ y: 5 }}
                         animate={{ y: 0 }}
                         exit={{ y: 0, opacity: 0 }}
-                        className="sm:flex relative shadow-2xl max-w-screen-md2 mx-auto bg-white overflow-y-scroll md:overflow-hidden h-screen md:h-auto flex-grow">
+                        className="sm:flex relative shadow-2xl max-w-screen-md2 mx-auto bg-white overflow-y-auto md:overflow-hidden h-screen md:h-auto flex-grow">
                         <Dialog.Title className="sr-only">{title}</Dialog.Title>
                         <div className="flex flex-col md:flex-row flex-grow w-full relative h-screen md:h-auto">
                             <a

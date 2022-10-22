@@ -2,6 +2,7 @@ import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useInputsState } from '../state/inputs';
 import { PromptInputs } from '../types';
+import { ImageInput } from './inputs/ImageInput';
 import { NumberSelect } from './inputs/NumberSelect';
 import { PromptInput } from './inputs/PromptInput';
 
@@ -27,6 +28,19 @@ export const InputGenerator = ({ promptInputData, disabled }: Props) => {
                     disabled={disabled}
                     label={__('Text prompt', 'stable-diffusion')}
                 />
+            )}
+            {promptInputData?.initImage && (
+                <div>
+                    <p className="m-0 mb-2 text-base font-medium">
+                        {__('Starting image', 'stable-diffusion')}
+                    </p>
+                    <div className="flex gap-2">
+                        <ImageInput
+                            onChange={(v) => setInput('initImage', v)}
+                            disabled={disabled}
+                        />
+                    </div>
+                </div>
             )}
             <div className="grid md:grid-cols-2 gap-4">
                 {promptInputData?.width && (
