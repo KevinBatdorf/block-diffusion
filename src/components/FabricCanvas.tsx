@@ -20,8 +20,8 @@ export const FabricCanvas = ({ className, onReady }: Props) => {
     useLayoutEffect(() => {
         const setCurrentDimensions = () => {
             if (!canvas) return;
-            canvas.setHeight(canvasElParent.current?.clientHeight || 0);
-            canvas.setWidth(canvasElParent.current?.clientWidth || 0);
+            canvas.setHeight(canvasElParent.current?.clientHeight ?? 0);
+            canvas.setWidth(canvasElParent.current?.clientWidth ?? 0);
             canvas.renderAll();
         };
         setCurrentDimensions();
@@ -47,7 +47,7 @@ export const FabricCanvas = ({ className, onReady }: Props) => {
 
     return (
         <div ref={canvasElParent} className={className}>
-            <canvas className="bg-red-500" ref={canvasEl} />
+            <canvas ref={canvasEl} />
         </div>
     );
 };

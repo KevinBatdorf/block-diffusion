@@ -269,7 +269,9 @@ export const UserInferface = ({
                     <ModelCard modelInfo={modelInfo} />
                 </AnimatePresence>
             </div>
-            <MainPanel setImage={setImage} prediction={prediction} />
+            <div className="bg-gray-50 overflow-hidden w-full h-full p-6 relative">
+                <MainPanel setImage={setImage} prediction={prediction} />
+            </div>
         </>
     );
 };

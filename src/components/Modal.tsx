@@ -40,7 +40,7 @@ export const Modal = ({ setImage, onClose }: ModalProps) => {
                         initial={{ y: 5 }}
                         animate={{ y: 0 }}
                         exit={{ y: 0, opacity: 0 }}
-                        className="sm:flex relative shadow-2xl sm:overflow-hidden max-w-screen-2xl mx-auto bg-white h-full">
+                        className="sm:flex relative shadow-2xl sm:overflow-hidden max-w-screen-3xl mx-auto bg-white h-full">
                         <Dialog.Title className="sr-only">{name}</Dialog.Title>
                         <div className="md:flex flex-col w-full relative h-screen md:h-auto">
                             <ModalDefault onClose={onClose} title={name}>
