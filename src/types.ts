@@ -79,7 +79,7 @@ export type PromptResponse = {
     imageUrls?: string[];
 };
 
-export type PromptInputs = {
+export type InputsData = {
     prompt?: PromptInput;
     initImage?: InitImageInput;
     width?: WidthInput;

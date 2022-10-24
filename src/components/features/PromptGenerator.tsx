@@ -10,6 +10,7 @@ import { useGlobalState } from '../../state/global';
 import { useSettingsStore, useSettingsStoreReady } from '../../state/settings';
 import { PromptResponse } from '../../types';
 import { ModalCloseButton } from '../ModalControls';
+import { ImageActions } from '../outputs/ImageActions';
 
 export const PromptGenerator = ({
     updateText,
@@ -22,6 +23,7 @@ export const PromptGenerator = ({
     const [fetching, setFetching] = useState(false);
     const [preview, setPreview] = useState<string>();
     const [showOptin, setShowOptin] = useState(false);
+    const [prompt, setPrompt] = useState<string>();
 
     // For now only show on this model
     if (currentModel !== 'stability-ai/stable-diffusion') return null;
@@ -45,6 +47,7 @@ export const PromptGenerator = ({
         setFetching(false);
         if (!prompt) return;
         updateText(prompt);
+        setPrompt(prompt);
         imageUrls?.length && setPreview(imageUrls[0]);
     };
 
@@ -73,7 +76,7 @@ export const PromptGenerator = ({
                 </button>
             </Tooltip>
             <AnimatePresence>
-                <PreviewPopover url={preview} />
+                <PreviewPopover url={preview} prompt={prompt} />
             </AnimatePresence>
             <Dialog
                 className="stable-diffusion-editor stable-diffusion-modal"
@@ -94,35 +97,80 @@ export const PromptGenerator = ({
     );
 };
 
-const PreviewPopover = ({ url }: { url?: string }) => {
+const PreviewPopover = ({ url, prompt }: { url?: string; prompt?: string }) => {
     const [pressed, setPressed] = useState(false);
     useEffect(() => {
         setPressed(false);
     }, [url]);
     if (!url) return null;
     return (
-        <Tooltip
-            text={__('View example output', 'stable-diffusion')}
-            position="top center">
-            <motion.button
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="block p-0 h-5 w-5 text-gray-900 bg-transparent cursor-pointer outline-none"
-                type="button"
-                onClick={() => setPressed((v) => !v)}
-                aria-label={__('View example image', 'stable-diffusion')}>
-                <Icon icon={previewImageIcon} size={18} />
-                {pressed && (
-                    <Popover onFocusOutside={() => setPressed(false)}>
-                        <img
-                            src={url}
-                            alt={__('Prompt image', 'stable-diffusion')}
-                            style={{ minWidth: 300, maxWidth: 400 }}
-                        />
-                    </Popover>
-                )}
-            </motion.button>
-        </Tooltip>
+        <>
+            <Tooltip
+                text={__('View example output', 'stable-diffusion')}
+                position="top center">
+                <motion.button
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="block p-0 h-5 w-5 text-gray-900 bg-transparent cursor-pointer outline-none"
+                    type="button"
+                    onClick={() => setPressed(true)}
+                    aria-label={__('View example image', 'stable-diffusion')}>
+                    <Icon icon={previewImageIcon} size={18} />
+                </motion.button>
+            </Tooltip>
+            <Dialog
+                className="stable-diffusion-editor stable-diffusion-modal"
+                data-cy="modal-switch"
+                key="modal-switch"
+                open={pressed}
+                onClose={() => setPressed(false)}>
+                <div className="flex fixed inset-0 items-center justify-center w-full z-high">
+                    <div
+                        onClick={() => setPressed(false)}
+                        className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+                        aria-hidden="true"
+                    />
+                    <AnimatePresence>
+                        <motion.div
+                            key="prompt-input-modal"
+                            className="relative"
+                            initial={{ y: 5 }}
+                            animate={{ y: 0 }}
+                            exit={{ y: 0, opacity: 0 }}>
+                            <Dialog.Title className="sr-only">
+                                {__('Prompt preview image', 'stable-diffusion')}
+                            </Dialog.Title>
+                            <div className="flex justify-end absolute top-0 right-0 transform translate-x-full">
+                                <ModalCloseButton
+                                    onClose={() => setPressed(false)}
+                                />
+                            </div>
+                            <div className="relative group">
+                                <img
+                                    className="object-contain w-full h-full"
+                                    style={{ maxHeight: 'calc(100vh - 100px)' }}
+                                    src={url}
+                                    alt={__('Prompt image', 'stable-diffusion')}
+                                />
+                                {prompt && url && (
+                                    <ImageActions
+                                        id={`image-${prompt
+                                            ?.replace(/[^a-z0-9]/gi, '-')
+                                            ?.split('-')
+                                            ?.slice(0, 3)
+                                            ?.join('-')}`}
+                                        url={url}
+                                        caption={prompt}
+                                        forceShowHud={false}
+                                        callback={() => setPressed(false)}
+                                    />
+                                )}
+                            </div>
+                        </motion.div>
+                    </AnimatePresence>
+                </div>
+            </Dialog>
+        </>
     );
 };
 

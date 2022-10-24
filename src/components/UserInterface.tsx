@@ -1,4 +1,5 @@
 import apiFetch from '@wordpress/api-fetch';
+import { Icon, Tooltip } from '@wordpress/components';
 import { Spinner } from '@wordpress/components';
 import {
     useEffect,
@@ -20,14 +21,17 @@ import {
     HeightInput,
     ImageLike,
     NumOutputsInput,
-    PromptInputs,
+    InputsData,
     WidthInput,
+    PredictionData,
 } from '../types';
 import { InputGenerator } from './InputGenerator';
-import { MainPanel } from './MainPanel';
 import { ModelCard } from './ModelCard';
 import { GoButton } from './inputs/GoButton';
 import { FocusHelperButton } from './misc/FocusHelperButton';
+import { ImagesOutput } from './outputs/ImagesOutput';
+import { CanvasPanel } from './panels/CanvasPanel';
+import { SimplePanel } from './panels/SimplePanel';
 
 type StableDiffusionProps = {
     setImage: (image: ImageLike) => void;
@@ -45,12 +49,19 @@ export const UserInferface = ({
     const { data: modelInfo } = useModel(modelName);
     const { importingMessage, setMaybeImporting, maybeImporting } =
         useGlobalState();
-    const { width, height, prompt, numOutputs: num_outputs } = useInputsState();
+    const {
+        width,
+        height,
+        prompt,
+        numOutputs: num_outputs,
+        initImage: init_image,
+        resetInputs,
+    } = useInputsState();
     const { has } = useSettingsStore();
     const { apiToken } = useAuthStore();
     const [errorMsg, setErrorMsg] = useState('');
     const [statusMessage, setStatusMessage] = useState('');
-    const [promptInputData, setPromptInputData] = useState<PromptInputs>({});
+    const [inputsData, setPromptInputData] = useState<InputsData>({});
     const importButtonRef = useRef<HTMLButtonElement>(null);
     const focusArea = useRef<HTMLFormElement>(null);
     const [generateId, setGenerateId] = useState<string>('');
@@ -70,10 +81,6 @@ export const UserInferface = ({
     const handleSubmit = async () => {
         setErrorMsg('');
         setGenerateId('');
-        if (!prompt) {
-            setErrorMsg(__('Please enter a prompt', 'stable-diffusion'));
-            return;
-        }
         if (!modelInfo?.latest_version?.id) {
             setErrorMsg(
                 __(
@@ -83,13 +90,20 @@ export const UserInferface = ({
             );
             return;
         }
+        if (maybeImporting) return;
         setMaybeImporting(true);
         const response = await apiFetch<GenerateResponse>({
             path: `kevinbatdorf/stable-diffusion/generate?cache=${Date.now()}`,
             method: 'POST',
             headers: { Authorization: `Token ${apiToken}` },
             data: {
-                input: { width, height, prompt, num_outputs },
+                input: {
+                    width: width || undefined,
+                    height: height || undefined,
+                    prompt: prompt || undefined,
+                    num_outputs: num_outputs || undefined,
+                    init_image: init_image || undefined,
+                },
                 version: modelInfo.latest_version.id,
                 webhook_completed: has('optIns', 'prompt-share')
                     ? 'https://www.block-diffusion.com/api/v1/replicate'
@@ -193,15 +207,17 @@ export const UserInferface = ({
                   }
                 : undefined,
         });
-    }, [modelInfo]);
+        // Also reset input state
+        resetInputs();
+    }, [modelInfo, resetInputs]);
 
     useLayoutEffect(() => {
         resetState();
-    }, [promptInputData, width, height, num_outputs]);
+    }, [inputsData, width, height, num_outputs]);
 
     useEffect(() => {
         focusFirstItem();
-    }, [promptInputData]);
+    }, [inputsData]);
 
     if (!modelInfo) {
         return (
@@ -212,7 +228,7 @@ export const UserInferface = ({
         );
     }
 
-    if (!Object.keys(promptInputData).length) {
+    if (!Object.keys(inputsData).length) {
         return (
             <div className="flex items-center justify-center w-full">
                 {__(
@@ -233,9 +249,9 @@ export const UserInferface = ({
                         e.preventDefault();
                         handleSubmit();
                     }}>
-                    {promptInputData && (
+                    {inputsData && (
                         <InputGenerator
-                            promptInputData={promptInputData}
+                            inputsData={inputsData}
                             disabled={processing}
                         />
                     )}
@@ -269,11 +285,59 @@ export const UserInferface = ({
                     <ModelCard modelInfo={modelInfo} />
                 </AnimatePresence>
             </div>
-            <div className="bg-gray-50 overflow-hidden w-full h-full p-6 relative">
-                <MainPanel setImage={setImage} prediction={prediction} />
+            <div className="bg-gray-50 overflow-hidden w-full h-full relative flex items-center justify-center">
+                {/* // TODO: This section could add support for additional outputs */}
+                <AnimatePresence>
+                    {prediction?.status === 'succeeded' &&
+                        prediction?.output?.length && (
+                            <div className="absolute bg-white z-high inset-0 w-full h-full flex items-center justify-center">
+                                <button
+                                    className="p-2 px-4 z-high absolute top-1 text-white bg-gray-900 hover:bg-wp-theme-500 cursor-pointer outline-none focus:shadow-none focus:border-wp-theme-500 flex items-center justify-center"
+                                    type="button"
+                                    onClick={() => {
+                                        resetState();
+                                    }}>
+                                    {__('Go back', 'stable-diffusion')}
+                                </button>
+                                <ImagesOutput
+                                    setImage={setImage}
+                                    prediction={prediction}
+                                    resetState={resetState}
+                                />
+                            </div>
+                        )}
+                </AnimatePresence>
+                <div className="relative w-full h-full">
+                    {processing && (
+                        <div
+                            className="absolute inset-0 z-high"
+                            aria-hidden="true"
+                        />
+                    )}
+                    <MainPanel
+                        inputsData={inputsData}
+                        prediction={prediction}
+                    />
+                </div>
             </div>
         </>
     );
+};
+
+// Import to media library (dont close view)
+// check input resiliancy
+// can i mask transparent pixels? - maybe next version
+
+type MainPanelProps = {
+    inputsData: InputsData;
+    prediction: PredictionData | undefined;
+};
+
+const MainPanel = ({ inputsData, prediction }: MainPanelProps) => {
+    if (inputsData?.initImage) {
+        return <CanvasPanel prediction={prediction} />;
+    }
+    return <SimplePanel />;
 };
 
 type StatusMessageProps = {

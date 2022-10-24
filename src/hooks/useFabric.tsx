@@ -1,8 +1,8 @@
-import { useEffect, useState } from '@wordpress/element';
+import { useEffect, useLayoutEffect, useState } from '@wordpress/element';
 import { fabric } from 'fabric';
+import { useCanvasState } from '../state/canvas';
 
 const addRectangle = (fc: fabric.Canvas, options: fabric.IRectOptions) => {
-    console.log({ options, fc });
     const rect = new fabric.Rect(options);
     fc?.add(rect);
     return rect;
@@ -37,6 +37,7 @@ const deleteSelected = (fc: fabric.Canvas) => {
 
 export const useFabric = (fc: fabric.Canvas | undefined): useFabricReturn => {
     const [selectedObjects, setSelectedObject] = useState<fabric.Object[]>([]);
+    const { images } = useCanvasState();
 
     useEffect(() => {
         fc?.on('selection:cleared', () => {
@@ -51,6 +52,33 @@ export const useFabric = (fc: fabric.Canvas | undefined): useFabricReturn => {
             setSelectedObject(e.selected);
         });
     }, [fc]);
+
+    useLayoutEffect(() => {
+        if (!fc) return;
+        // Get all images from canvas
+        const canvasImages = fc?.getObjects().filter((object) => {
+            return object.type === 'image';
+        }) as fabric.Image[];
+
+        // Remove images from canvas that are not in state
+        canvasImages.forEach((image) => {
+            if (!images.find((i) => i.cacheKey === image.cacheKey)) {
+                fc?.remove(image);
+            }
+        });
+
+        // Add images is needed
+        images.forEach((image) => {
+            if (!canvasImages.includes(image)) {
+                image.set({
+                    borderColor: '#1e1e1e',
+                    cornerColor: '#1e1e1e',
+                });
+                fc?.add(image);
+                fc.centerObject(image);
+            }
+        });
+    }, [images, fc]);
 
     if (!fc) return { fc: undefined };
 

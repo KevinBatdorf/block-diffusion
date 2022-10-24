@@ -1,27 +1,28 @@
 import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useInputsState } from '../state/inputs';
-import { PromptInputs } from '../types';
-import { ImageInput } from './inputs/ImageInput';
+import { InputsData } from '../types';
+import { ImageUploader } from './inputs/ImageUploader';
+import { MediaUploader } from './inputs/MediaUploader';
 import { NumberSelect } from './inputs/NumberSelect';
 import { PromptInput } from './inputs/PromptInput';
 
 type Props = {
-    promptInputData: PromptInputs;
+    inputsData: InputsData;
     disabled: boolean;
 };
-export const InputGenerator = ({ promptInputData, disabled }: Props) => {
+export const InputGenerator = ({ inputsData, disabled }: Props) => {
     const { width, height, prompt, numOutputs, setInput } = useInputsState();
 
     useEffect(() => {
-        setInput('width', promptInputData?.width?.default ?? 512);
-        setInput('height', promptInputData?.height?.default ?? 512);
-        setInput('prompt', promptInputData?.prompt?.default ?? '');
-    }, [promptInputData, setInput]);
+        setInput('width', inputsData?.width?.default ?? 512);
+        setInput('height', inputsData?.height?.default ?? 512);
+        setInput('prompt', inputsData?.prompt?.default ?? '');
+    }, [inputsData, setInput]);
 
     return (
         <div className="flex flex-col gap-y-4">
-            {promptInputData?.prompt && (
+            {inputsData?.prompt && (
                 <PromptInput
                     value={prompt}
                     onChange={(v) => setInput('prompt', v)}
@@ -29,53 +30,51 @@ export const InputGenerator = ({ promptInputData, disabled }: Props) => {
                     label={__('Text prompt', 'stable-diffusion')}
                 />
             )}
-            {promptInputData?.initImage && (
+            {inputsData?.initImage && (
                 <div>
                     <p className="m-0 mb-2 text-base font-medium">
                         {__('Starting image', 'stable-diffusion')}
                     </p>
                     <div className="flex gap-2">
-                        <ImageInput
-                            onChange={(v) => setInput('initImage', v)}
-                            disabled={disabled}
-                        />
+                        <ImageUploader disabled={disabled} />
+                        <MediaUploader disabled={disabled} />
                     </div>
                 </div>
             )}
             <div className="grid md:grid-cols-2 gap-4">
-                {promptInputData?.width && (
+                {inputsData?.width && (
                     <NumberSelect
                         label={__('Width', 'stable-diffusion')}
                         value={width}
                         disabled={disabled}
                         onChange={(v) => setInput('width', v)}
                         options={
-                            promptInputData?.width?.enum ?? [
+                            inputsData?.width?.enum ?? [
                                 128, 256, 512, 768, 1024,
                             ]
                         }
                     />
                 )}
-                {promptInputData?.height && (
+                {inputsData?.height && (
                     <NumberSelect
                         label={__('Height', 'stable-diffusion')}
                         value={height}
                         disabled={disabled}
                         onChange={(v) => setInput('height', v)}
                         options={
-                            promptInputData?.height?.enum ?? [
+                            inputsData?.height?.enum ?? [
                                 128, 256, 512, 768, 1024,
                             ]
                         }
                     />
                 )}
-                {promptInputData?.numOutputs && (
+                {inputsData?.numOutputs && (
                     <NumberSelect
                         label={__('Number of outputs', 'stable-diffusion')}
                         value={numOutputs}
                         disabled={disabled}
                         onChange={(v) => setInput('numOutputs', v)}
-                        options={promptInputData?.numOutputs?.enum ?? [1]}
+                        options={inputsData?.numOutputs?.enum ?? [1]}
                     />
                 )}
             </div>
