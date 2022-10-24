@@ -130,6 +130,9 @@ const PreviewPopover = ({ url, prompt }: { url?: string; prompt?: string }) => {
                         className="fixed inset-0 bg-black/60 backdrop-blur-sm"
                         aria-hidden="true"
                     />
+                    <div className="flex justify-end fixed top-0 right-0">
+                        <ModalCloseButton onClose={() => setPressed(false)} />
+                    </div>
                     <AnimatePresence>
                         <motion.div
                             key="prompt-input-modal"
@@ -140,15 +143,13 @@ const PreviewPopover = ({ url, prompt }: { url?: string; prompt?: string }) => {
                             <Dialog.Title className="sr-only">
                                 {__('Prompt preview image', 'stable-diffusion')}
                             </Dialog.Title>
-                            <div className="flex justify-end absolute top-0 right-0 transform translate-x-full">
-                                <ModalCloseButton
-                                    onClose={() => setPressed(false)}
-                                />
-                            </div>
-                            <div className="relative group">
+                            <div className="relative group shadow-2xl">
                                 <img
                                     className="object-contain w-full h-full"
-                                    style={{ maxHeight: 'calc(100vh - 100px)' }}
+                                    style={{
+                                        maxHeight: 'calc(100vh - 100px)',
+                                        maxWidth: 'calc(100vw - 100px)',
+                                    }}
                                     src={url}
                                     alt={__('Prompt image', 'stable-diffusion')}
                                 />
