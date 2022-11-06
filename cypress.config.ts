@@ -5,7 +5,7 @@ dotenv.config();
 
 export default defineConfig({
     e2e: {
-        // defaultCommandTimeout: 60000,
+        defaultCommandTimeout: 10000,
     },
     env: {
         API_TOKEN: process.env.API_TOKEN,
