@@ -16,7 +16,7 @@ export const ModelSwitch = () => {
             <FocusHelperButton initialFocus={initialFocus} />
             <div
                 data-cy="model-switch-grid"
-                className="grid md:grid-cols-2 lg:grid-cols-3 h-screen md:h-auto overflow-y-auto pb-10 md:pb-0 w-full">
+                className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 h-screen md:h-auto overflow-y-auto p-6 pb-10 md:pb-6 w-full">
                 {models.map((model) => (
                     <button
                         key={model.id}
@@ -49,7 +49,7 @@ export const ModelSwitch = () => {
                         className="bg-gray-200 w-full h-60"
                     />
                     <div>
-                        <h2 className="font-mono text-lg m-0 mb-1 text-left">
+                        <h2 className="font-mono text-base m-0 mb-1 text-left">
                             {__('More models coming soon', 'stable-diffusion')}
                         </h2>
                         <p className="m-0 text-left text-base">
