@@ -55,7 +55,7 @@ We also offer additional features on top of the Replicate API, such as prompt/ou
 
 == Changelog ==
 
-= 0.4.0 - 2022-11-06 =
+= 0.5.0 - 2022-11-06 =
 - Feature: Add interactive image input 🚀
 - Tweak: Update types to support new num_output format
 - Tweak: Adjust spacing on model switch ui
