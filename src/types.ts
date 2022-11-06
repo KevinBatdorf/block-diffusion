@@ -116,7 +116,8 @@ export type HeightInput = {
 export type NumOutputsInput = {
     default?: number;
     description: string;
-    enum: number[];
+    minimum: number;
+    maximum: number;
     title: string;
     type: string;
 };
@@ -131,7 +132,8 @@ export type OpenApiSchema = {
             Input: {
                 properties: {
                     prompt?: PromptInput;
-                    init_image?: InitImagePrompt;
+                    init_image?: InitImageInput;
+                    num_outputs?: NumOutputsInput;
                     width?: {
                         default: number;
                         description: string;
@@ -140,13 +142,6 @@ export type OpenApiSchema = {
                         }[];
                     };
                     height?: {
-                        default: number;
-                        description: string;
-                        allOf: {
-                            $ref: string;
-                        }[];
-                    };
-                    num_outputs?: {
                         default: number;
                         description: string;
                         allOf: {

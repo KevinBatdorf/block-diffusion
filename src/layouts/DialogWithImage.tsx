@@ -1,4 +1,3 @@
-import { __ } from '@wordpress/i18n';
 import { Dialog } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ModalCloseButton } from '../components/ModalControls';
