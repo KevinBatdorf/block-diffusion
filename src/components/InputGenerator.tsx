@@ -68,7 +68,7 @@ export const InputGenerator = ({ inputsData, disabled }: Props) => {
                         }
                     />
                 )}
-                {inputsData?.numOutputs && (
+                {inputsData?.numOutputs?.maximum && (
                     <NumberSelect
                         label={__('Number of outputs', 'stable-diffusion')}
                         value={numOutputs}
