@@ -1,5 +1,5 @@
 import { Icon } from '@wordpress/components';
-import { Button, Spinner } from '@wordpress/components';
+import { Button } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { MediaUpload as MeidiaLibrary } from '@wordpress/media-utils';
@@ -28,6 +28,8 @@ export const MediaUploader = ({ disabled }: MediaUploaderProps) => {
         <MediaUploadCheck>
             <MeidiaLibrary
                 title={__('Select Image', 'stable-diffusion')}
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore-next-line
                 onSelect={onUpdateImage}
                 allowedTypes={['image']}
                 modalClass=""

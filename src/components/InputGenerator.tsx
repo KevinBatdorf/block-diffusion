@@ -13,7 +13,7 @@ type Props = {
 };
 export const InputGenerator = ({ inputsData, disabled }: Props) => {
     const { width, height, prompt, numOutputs, setInput } = useInputsState();
-
+    console.log({ inputsData });
     useEffect(() => {
         setInput('width', inputsData?.width?.default ?? 512);
         setInput('height', inputsData?.height?.default ?? 512);
@@ -74,7 +74,16 @@ export const InputGenerator = ({ inputsData, disabled }: Props) => {
                         value={numOutputs}
                         disabled={disabled}
                         onChange={(v) => setInput('numOutputs', v)}
-                        options={inputsData?.numOutputs?.enum ?? [1]}
+                        // get range from minimum to maximum
+                        options={Array.from(
+                            {
+                                length:
+                                    inputsData?.numOutputs?.maximum -
+                                    inputsData?.numOutputs?.minimum +
+                                    1,
+                            },
+                            (_, i) => i + 1,
+                        )}
                     />
                 )}
             </div>

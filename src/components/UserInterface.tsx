@@ -1,5 +1,4 @@
 import apiFetch from '@wordpress/api-fetch';
-import { Icon, Tooltip } from '@wordpress/components';
 import { Spinner } from '@wordpress/components';
 import {
     useEffect,
@@ -20,7 +19,6 @@ import {
     AvailableModels,
     HeightInput,
     ImageLike,
-    NumOutputsInput,
     InputsData,
     WidthInput,
     PredictionData,
@@ -182,12 +180,10 @@ export const UserInferface = ({
         const maybeHeight = inputs?.height
             ? schema.components.schemas.height
             : undefined;
-        const maybeNumOutputs = inputs?.num_outputs
-            ? schema.components.schemas.num_outputs
-            : undefined;
         setPromptInputData({
             prompt: inputs?.prompt,
             initImage: inputs?.init_image,
+            numOutputs: inputs?.num_outputs,
             width: maybeWidth
                 ? {
                       ...(maybeWidth as WidthInput),
@@ -198,12 +194,6 @@ export const UserInferface = ({
                 ? {
                       ...(maybeHeight as HeightInput),
                       default: inputs?.height?.default,
-                  }
-                : undefined,
-            numOutputs: maybeNumOutputs
-                ? {
-                      ...(maybeNumOutputs as NumOutputsInput),
-                      default: inputs?.num_outputs?.default,
                   }
                 : undefined,
         });
