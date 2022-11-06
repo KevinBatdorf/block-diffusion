@@ -13,7 +13,7 @@ type Props = {
 };
 export const InputGenerator = ({ inputsData, disabled }: Props) => {
     const { width, height, prompt, numOutputs, setInput } = useInputsState();
-    console.log({ inputsData });
+
     useEffect(() => {
         setInput('width', inputsData?.width?.default ?? 512);
         setInput('height', inputsData?.height?.default ?? 512);
