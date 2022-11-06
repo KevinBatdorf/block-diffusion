@@ -2,6 +2,7 @@ import { Icon } from '@wordpress/components';
 import { useEffect, useLayoutEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { fabric } from 'fabric';
+import { IEvent } from 'fabric/fabric-impl';
 import { AnimatePresence } from 'framer-motion';
 import { useFabric } from '../../hooks/useFabric';
 import { zoomInIcon, zoomOutIcon } from '../../icons';
@@ -69,10 +70,25 @@ export const CanvasPanel = ({
     const [mainRect, setMainRect] = useState<fabric.Rect>();
     const [zoom, setZoom] = useState(1);
     const { width, height, setInput } = useInputsState();
-    const { images } = useCanvasState();
+    const { images, setEnabled } = useCanvasState();
     const { fc } = useFabric(canvas);
     const hasOutputs =
         prediction?.status === 'succeeded' && prediction?.output?.length;
+    const handleSnapToGrid = ({ target }: IEvent) => {
+        if (
+            target?.left &&
+            target?.top &&
+            mainRect?.left &&
+            mainRect?.top &&
+            Math.abs(target.left - mainRect.left) < 16 &&
+            Math.abs(target.top - mainRect.top) < 16
+        ) {
+            target.set({
+                left: mainRect.left + 1,
+                top: mainRect.top + 1,
+            });
+        }
+    };
 
     useLayoutEffect(() => {
         // Only add this once
@@ -108,6 +124,11 @@ export const CanvasPanel = ({
     }, [images, canvas, mainRect]);
 
     useEffect(() => {
+        setEnabled(true);
+        return () => setEnabled(false);
+    }, [setEnabled]);
+
+    useEffect(() => {
         if (!canvas || !mainRect) return;
         canvas.zoomToPoint(mainRect.getCenterPoint(), zoom);
     }, [zoom, canvas, mainRect]);
@@ -128,6 +149,7 @@ export const CanvasPanel = ({
                         onObjectRemoved={() =>
                             handleUpdateInitInput(canvas, mainRect, setInput)
                         }
+                        onObjectMoving={handleSnapToGrid}
                     />
                 </AnimatePresence>
             </div>

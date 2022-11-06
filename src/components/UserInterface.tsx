@@ -324,10 +324,6 @@ export const UserInferface = ({
     );
 };
 
-// Import to media library (dont close view)
-// check input resiliancy
-// can i mask transparent pixels? - maybe next version
-
 type MainPanelProps = {
     inputsData: InputsData;
     prediction: PredictionData | undefined;

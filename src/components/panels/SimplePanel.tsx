@@ -9,16 +9,18 @@ export const SimplePanel = () => {
         aspectRatio: `${width}/${height}`,
     };
     return (
-        <AnimatePresence>
-            <motion.div
-                key="canvas-placeholder"
-                role="button"
-                transition={{ type: 'Tween' }}
-                className="border border-gray-500 flex items-center justify-center bg-cover m-auto"
-                animate={imageOutput}
-                initial={imageOutput}>
-                <div className="w-screen" />
-            </motion.div>
-        </AnimatePresence>
+        <div className="w-full h-full flex items-center justify-center">
+            <AnimatePresence>
+                <motion.div
+                    key="canvas-placeholder"
+                    role="button"
+                    transition={{ type: 'Tween' }}
+                    className="border border-gray-500 flex items-center justify-center bg-cover m-auto"
+                    animate={imageOutput}
+                    initial={imageOutput}>
+                    <div className="w-screen" />
+                </motion.div>
+            </AnimatePresence>
+        </div>
     );
 };

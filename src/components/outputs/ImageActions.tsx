@@ -22,7 +22,7 @@ export const ImageActions = ({
     forceShowHud,
     callback,
 }: ActionProps) => {
-    const { addImage } = useCanvasState();
+    const { addImage, enabled: canvasEnabled } = useCanvasState();
     const btnClass =
         'bg-gray-900 text-white p-2 px-4 text-left outline-none focus:shadow-none focus:ring-wp focus:ring-wp-theme-500 cursor-pointer hover:bg-wp-theme-500 transition-all duration-200';
     const { setImportingMessage } = useGlobalState();
@@ -69,12 +69,14 @@ export const ImageActions = ({
                     {__('Import into editor', 'stable-diffusion')}
                 </button>
             )}
-            <button
-                className={btnClass}
-                onClick={handleAddToCanvas}
-                type="button">
-                {__('Add to canvas', 'stable-diffusion')}
-            </button>
+            {canvasEnabled && (
+                <button
+                    className={btnClass}
+                    onClick={handleAddToCanvas}
+                    type="button">
+                    {__('Add to canvas', 'stable-diffusion')}
+                </button>
+            )}
             <button className={btnClass} onClick={handleDownload} type="button">
                 {__('Download', 'stable-diffusion')}
             </button>
