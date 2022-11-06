@@ -1,6 +1,6 @@
 === Block Diffusion - Generate images from text prompts  ===
 Contributors:      kbat82
-Tags:              block, stable diffusion, ai, prompt, artificial intelligence
+Tags:              block, stable diffusion, ai, prompt, artificial intelligence, generate, pokemon, dall-e, midjourney
 Tested up to:      6.1
 Stable tag:        0.5.0
 License:           GPL-2.0-or-later
@@ -29,7 +29,7 @@ Semi interactive demo at [https://www.block-diffusion.com/](https://www.block-di
 
 = Upcoming Features =
 - Add an image mask to only generate specific areas
-- View your prediction history - import
+- View your prediction history
 
 = More Info =
 - Follow [@kevinbatdorf](https://twitter.com/kevinbatdorf) on Twitter
