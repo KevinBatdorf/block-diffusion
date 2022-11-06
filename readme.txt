@@ -25,7 +25,7 @@ Semi interactive demo at [https://www.block-diffusion.com/](https://www.block-di
 - Prompt suggestion + preview
 
 = Pro version =
- All pro features will be added to this version on wordpress.org. You may [sponsor the project on GitHub](https://github.com/sponsors/KevinBatdorf) (there are monthly and one-time payment options). Thank you.
+ All pro features will be added to this open source version on wordpress.org. You may [sponsor the project on GitHub](https://github.com/sponsors/KevinBatdorf) (there are monthly and one-time payment options). Thank you.
 
 = Upcoming Features =
 - Add an image mask to only generate specific areas
