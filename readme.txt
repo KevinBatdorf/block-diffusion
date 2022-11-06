@@ -56,6 +56,10 @@ We also offer additional features on top of the Replicate API, such as prompt/ou
 
 == Changelog ==
 
+
+- Tweak: Adjust spacing on model switch ui
+
+
 = 0.4.0 - 2022-10-10 =
 - Feature: Support multiple outputs
 - Feature: Add download and copy buttons
