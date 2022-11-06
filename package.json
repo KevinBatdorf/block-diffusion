@@ -14,7 +14,8 @@
         "plugin-zip": "wp-scripts plugin-zip",
         "start": "wp-scripts start",
         "eject": "node scripts/eject.mjs",
-        "rename": "node scripts/rename.mjs"
+        "rename": "node scripts/rename.mjs",
+        "env:refresh": "yes | wp-env destroy && wp-env start --update"
     },
     "devDependencies": {
         "@trivago/prettier-plugin-sort-imports": "^3.3.0",
@@ -29,6 +30,7 @@
         "@wordpress/url": "^3.19.0",
         "autoprefixer": "^10.4.12",
         "cypress": "^10.9.0",
+        "cypress-wait-until": "^1.7.2",
         "dotenv": "^16.0.3",
         "eslint": "^8.24.0",
         "eslint-config-prettier": "^8.5.0",
