@@ -74,7 +74,6 @@ export const InputGenerator = ({ inputsData, disabled }: Props) => {
                         value={numOutputs}
                         disabled={disabled}
                         onChange={(v) => setInput('numOutputs', v)}
-                        // get range from minimum to maximum
                         options={Array.from(
                             {
                                 length:
