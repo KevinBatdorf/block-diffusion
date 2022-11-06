@@ -2,7 +2,7 @@
 Contributors:      kbat82
 Tags:              block, stable diffusion, ai, prompt, artificial intelligence
 Tested up to:      6.1
-Stable tag:        0.4.0
+Stable tag:        0.5.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,17 +20,16 @@ Semi interactive demo at [https://www.block-diffusion.com/](https://www.block-di
 - Stable Diffusion model
 - Text to Pokémon model
 - Multiple outputs
+- Image input with basic controls
 - Download, copy, or import into the editor
 - Prompt suggestion + preview
 
 = Pro version =
-There are no plans to lock any features behind a pro or premium plugin. All features will be added to this version on wordpress.org. Over time I plan to add all features supported by Replicate, as well as additional features for the WordPress community specifically. If you are interested in helping support the development of this plugin, in the spirit of open source, you may [sponsor the project on GitHub](https://github.com/sponsors/KevinBatdorf) (there are monthly and one-time payment options). Thank you.
+ All pro features will be added to this version on wordpress.org. You may [sponsor the project on GitHub](https://github.com/sponsors/KevinBatdorf) (there are monthly and one-time payment options). Thank you.
 
 = Upcoming Features =
-- Use an existing image as starting point
 - Add an image mask to only generate specific areas
-- Have more control over the image generation steps
-- View your prediction history
+- View your prediction history - import
 
 = More Info =
 - Follow [@kevinbatdorf](https://twitter.com/kevinbatdorf) on Twitter
@@ -56,9 +55,10 @@ We also offer additional features on top of the Replicate API, such as prompt/ou
 
 == Changelog ==
 
-
+= 0.4.0 - 2022-11-06 =
+- Feature: Add interactive image input 🚀
 - Tweak: Adjust spacing on model switch ui
-
+- Fix: Fix nested scroll bars showing
 
 = 0.4.0 - 2022-10-10 =
 - Feature: Support multiple outputs
