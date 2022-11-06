@@ -1,5 +1,5 @@
 import apiFetch from '@wordpress/api-fetch';
-import { Icon, Tooltip, Popover, ToggleControl } from '@wordpress/components';
+import { Icon, Tooltip, ToggleControl } from '@wordpress/components';
 import { useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Dialog } from '@headlessui/react';
