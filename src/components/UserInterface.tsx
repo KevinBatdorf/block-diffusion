@@ -1,4 +1,5 @@
 import apiFetch from '@wordpress/api-fetch';
+import { Icon, Tooltip } from '@wordpress/components';
 import { Spinner } from '@wordpress/components';
 import {
     useEffect,
@@ -11,7 +12,6 @@ import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useModel } from '../hooks/useModel';
 import { usePrediction } from '../hooks/usePrediction';
-import { downloadImage, copyImage } from '../lib/image';
 import { useAuthStore } from '../state/auth';
 import { useGlobalState } from '../state/global';
 import { useInputsState } from '../state/inputs';
@@ -21,14 +21,17 @@ import {
     HeightInput,
     ImageLike,
     NumOutputsInput,
-    PredictionData,
-    PromptInputs,
+    InputsData,
     WidthInput,
+    PredictionData,
 } from '../types';
 import { InputGenerator } from './InputGenerator';
 import { ModelCard } from './ModelCard';
 import { GoButton } from './inputs/GoButton';
 import { FocusHelperButton } from './misc/FocusHelperButton';
+import { ImagesOutput } from './outputs/ImagesOutput';
+import { CanvasPanel } from './panels/CanvasPanel';
+import { SimplePanel } from './panels/SimplePanel';
 
 type StableDiffusionProps = {
     setImage: (image: ImageLike) => void;
@@ -46,12 +49,19 @@ export const UserInferface = ({
     const { data: modelInfo } = useModel(modelName);
     const { importingMessage, setMaybeImporting, maybeImporting } =
         useGlobalState();
-    const { width, height, prompt, numOutputs: num_outputs } = useInputsState();
+    const {
+        width,
+        height,
+        prompt,
+        numOutputs: num_outputs,
+        initImage: init_image,
+        resetInputs,
+    } = useInputsState();
     const { has } = useSettingsStore();
     const { apiToken } = useAuthStore();
     const [errorMsg, setErrorMsg] = useState('');
     const [statusMessage, setStatusMessage] = useState('');
-    const [promptInputData, setPromptInputData] = useState<PromptInputs>({});
+    const [inputsData, setPromptInputData] = useState<InputsData>({});
     const importButtonRef = useRef<HTMLButtonElement>(null);
     const focusArea = useRef<HTMLFormElement>(null);
     const [generateId, setGenerateId] = useState<string>('');
@@ -71,10 +81,6 @@ export const UserInferface = ({
     const handleSubmit = async () => {
         setErrorMsg('');
         setGenerateId('');
-        if (!prompt) {
-            setErrorMsg(__('Please enter a prompt', 'stable-diffusion'));
-            return;
-        }
         if (!modelInfo?.latest_version?.id) {
             setErrorMsg(
                 __(
@@ -84,13 +90,20 @@ export const UserInferface = ({
             );
             return;
         }
+        if (maybeImporting) return;
         setMaybeImporting(true);
         const response = await apiFetch<GenerateResponse>({
             path: `kevinbatdorf/stable-diffusion/generate?cache=${Date.now()}`,
             method: 'POST',
             headers: { Authorization: `Token ${apiToken}` },
             data: {
-                input: { width, height, prompt, num_outputs },
+                input: {
+                    width: width || undefined,
+                    height: height || undefined,
+                    prompt: prompt || undefined,
+                    num_outputs: num_outputs || undefined,
+                    init_image: init_image || undefined,
+                },
                 version: modelInfo.latest_version.id,
                 webhook_completed: has('optIns', 'prompt-share')
                     ? 'https://www.block-diffusion.com/api/v1/replicate'
@@ -174,6 +187,7 @@ export const UserInferface = ({
             : undefined;
         setPromptInputData({
             prompt: inputs?.prompt,
+            initImage: inputs?.init_image,
             width: maybeWidth
                 ? {
                       ...(maybeWidth as WidthInput),
@@ -193,15 +207,17 @@ export const UserInferface = ({
                   }
                 : undefined,
         });
-    }, [modelInfo]);
+        // Also reset input state
+        resetInputs();
+    }, [modelInfo, resetInputs]);
 
     useLayoutEffect(() => {
         resetState();
-    }, [promptInputData, width, height, num_outputs]);
+    }, [inputsData, width, height, num_outputs]);
 
     useEffect(() => {
         focusFirstItem();
-    }, [promptInputData]);
+    }, [inputsData]);
 
     if (!modelInfo) {
         return (
@@ -212,7 +228,7 @@ export const UserInferface = ({
         );
     }
 
-    if (!Object.keys(promptInputData).length) {
+    if (!Object.keys(inputsData).length) {
         return (
             <div className="flex items-center justify-center w-full">
                 {__(
@@ -225,7 +241,7 @@ export const UserInferface = ({
 
     return (
         <>
-            <div className="flex flex-col justify-between md:w-96 flex-shrink-0 overflow-y-scroll bg-white">
+            <div className="flex flex-col justify-between md:w-96 flex-shrink-0 overflow-y-auto bg-white">
                 <form
                     ref={focusArea}
                     className="flex flex-col gap-y-6 flex-shrink-0 p-6 pb-0 flex-grow"
@@ -233,9 +249,9 @@ export const UserInferface = ({
                         e.preventDefault();
                         handleSubmit();
                     }}>
-                    {promptInputData && (
+                    {inputsData && (
                         <InputGenerator
-                            promptInputData={promptInputData}
+                            inputsData={inputsData}
                             disabled={processing}
                         />
                     )}
@@ -269,154 +285,55 @@ export const UserInferface = ({
                     <ModelCard modelInfo={modelInfo} />
                 </AnimatePresence>
             </div>
-            <div className="bg-gray-50 flex flex-col h-full items-center overflow-y-scroll p-6 w-full relative">
+            <div className="bg-gray-50 overflow-hidden w-full h-full relative flex items-center justify-center">
+                {/* // TODO: This section could add support for additional outputs */}
                 <AnimatePresence>
-                    <MainPanel setImage={setImage} prediction={prediction} />
+                    {prediction?.status === 'succeeded' &&
+                        prediction?.output?.length && (
+                            <div className="absolute bg-white z-high inset-0 w-full h-full flex items-center justify-center">
+                                <button
+                                    className="p-2 px-4 z-high absolute top-1 text-white bg-gray-900 hover:bg-wp-theme-500 cursor-pointer outline-none focus:shadow-none focus:border-wp-theme-500 flex items-center justify-center"
+                                    type="button"
+                                    onClick={() => {
+                                        resetState();
+                                    }}>
+                                    {__('Go back', 'stable-diffusion')}
+                                </button>
+                                <ImagesOutput
+                                    setImage={setImage}
+                                    prediction={prediction}
+                                    resetState={resetState}
+                                />
+                            </div>
+                        )}
                 </AnimatePresence>
+                <div className="relative w-full h-full">
+                    {processing && (
+                        <div
+                            className="absolute inset-0 z-high"
+                            aria-hidden="true"
+                        />
+                    )}
+                    <MainPanel
+                        inputsData={inputsData}
+                        prediction={prediction}
+                    />
+                </div>
             </div>
         </>
     );
 };
 
 type MainPanelProps = {
-    prediction?: PredictionData;
-    setImage: (image: ImageLike) => void;
+    inputsData: InputsData;
+    prediction: PredictionData | undefined;
 };
-const MainPanel = ({ prediction, setImage }: MainPanelProps) => {
-    const { width, height, prompt } = useInputsState();
-    const { id, output, input } = prediction || {};
-    const { importingMessage } = useGlobalState();
 
-    if (prediction?.status === 'succeeded' && output?.length) {
-        return (
-            <div
-                className={classNames(
-                    'flex flex-col h-full w-full items-center',
-                    {
-                        'pointer-events-none': importingMessage.length > 0,
-                    },
-                )}>
-                {output?.length > 1 && (
-                    <p className="font-mono m-0 mb-4 text-center">
-                        {__(
-                            'Hover over an image for options',
-                            'stable-diffusion',
-                        )}
-                    </p>
-                )}
-                <motion.div
-                    key={prediction.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className={classNames('gap-6 grid w-full self-start', {
-                        'lg:grid-cols-2': output?.length >= 2,
-                    })}>
-                    {prediction?.output?.map((url, i) => (
-                        <div
-                            key={url}
-                            className={classNames(
-                                'flex items-center justify-center group',
-                                {
-                                    'relative bg-gray-100':
-                                        output?.length !== 1,
-                                },
-                            )}>
-                            <div
-                                className={classNames(
-                                    'w-full bg-no-repeat bg-contain',
-                                    {
-                                        '': output?.length === 1,
-                                    },
-                                )}
-                                style={{
-                                    maxWidth: `${width}px`,
-                                    aspectRatio: `${width}/${height}`,
-                                    backgroundImage: `url(${url})`,
-                                }}>
-                                <ImageActions
-                                    id={`${id}-image-${i}`}
-                                    url={url}
-                                    caption={input?.prompt || prompt}
-                                    setImage={setImage}
-                                    forceShowHud={output?.length === 1}
-                                />
-                            </div>
-                        </div>
-                    ))}
-                </motion.div>
-            </div>
-        );
+const MainPanel = ({ inputsData, prediction }: MainPanelProps) => {
+    if (inputsData?.initImage) {
+        return <CanvasPanel prediction={prediction} />;
     }
-    const imageOutput = {
-        maxWidth: `${width}px`,
-        maxHeight: 'calc(100% - 2.5rem)',
-        aspectRatio: `${width}/${height}`,
-    };
-    return (
-        <motion.div
-            key="canvas-placeholder"
-            role="button"
-            transition={{ type: 'Tween' }}
-            className="border border-gray-500 flex items-center justify-center bg-cover m-auto"
-            animate={imageOutput}
-            initial={imageOutput}>
-            <div className="w-screen" />
-        </motion.div>
-    );
-};
-
-type ActionProps = {
-    id: string;
-    url: string;
-    caption: string;
-    forceShowHud?: boolean;
-    setImage: (image: ImageLike) => void;
-};
-const ImageActions = ({
-    setImage,
-    id,
-    url,
-    caption,
-    forceShowHud,
-}: ActionProps) => {
-    const btnClass =
-        'bg-gray-900 text-white p-2 px-4 text-left outline-none focus:shadow-none focus:ring-wp focus:ring-wp-theme-500 cursor-pointer hover:bg-wp-theme-500 transition-all duration-200';
-    const { setImportingMessage } = useGlobalState();
-    const handleImport = () => {
-        if (!id) return;
-        setImage({ id, url, caption });
-    };
-    const handleDownload = async () => {
-        await downloadImage(url, `block-diffusion-${id}`);
-    };
-    const handleCopy = async () => {
-        setImportingMessage(__('Copying...', 'stable-diffusion'));
-        await copyImage(url);
-        setImportingMessage('');
-    };
-    return (
-        <div
-            className={classNames(
-                'absolute top-0 left-0 flex flex-col items-start gap-1 pt-1 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300',
-                {
-                    'lg:opacity-0': !forceShowHud,
-                },
-            )}
-            style={{
-                background:
-                    'radial-gradient(100% 65px at left top, rgb(255 255 255 / 65%) 0px, rgb(0 0 0 / 0%))',
-            }}>
-            <button className={btnClass} onClick={handleImport} type="button">
-                {__('Import into editor', 'stable-diffusion')}
-            </button>
-            <button className={btnClass} onClick={handleDownload} type="button">
-                {__('Download', 'stable-diffusion')}
-            </button>
-            <button className={btnClass} onClick={handleCopy} type="button">
-                {__('Copy', 'stable-diffusion')}
-            </button>
-        </div>
-    );
+    return <SimplePanel />;
 };
 
 type StatusMessageProps = {

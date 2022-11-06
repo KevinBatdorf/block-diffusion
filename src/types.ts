@@ -79,8 +79,9 @@ export type PromptResponse = {
     imageUrls?: string[];
 };
 
-export type PromptInputs = {
+export type InputsData = {
     prompt?: PromptInput;
+    initImage?: InitImageInput;
     width?: WidthInput;
     height?: HeightInput;
     numOutputs?: NumOutputsInput;
@@ -90,6 +91,13 @@ export type PromptInput = {
     default: string;
     description: string;
     title: string;
+};
+export type InitImageInput = {
+    type: string;
+    format: string;
+    description: string;
+    title: string;
+    default?: string;
 };
 export type WidthInput = {
     default?: number;
@@ -123,6 +131,7 @@ export type OpenApiSchema = {
             Input: {
                 properties: {
                     prompt?: PromptInput;
+                    init_image?: InitImagePrompt;
                     width?: {
                         default: number;
                         description: string;

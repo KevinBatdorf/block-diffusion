@@ -13,7 +13,7 @@ export const ModalDefault = ({
     return (
         <>
             <ModalControls onClose={onClose} title={title} />
-            <div className="overflow-y-scroll md:flex flex-grow w-screen max-w-full md:pt-0 bg-gray-50 divide-x h-screen lg:h-auto pt-16">
+            <div className="overflow-y-auto md:flex flex-grow w-screen max-w-full md:pt-0 bg-gray-50 divide-x h-screen lg:h-auto pt-16">
                 {children}
             </div>
         </>

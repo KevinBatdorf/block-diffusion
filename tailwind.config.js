@@ -25,9 +25,9 @@ module.exports = {
         colors: {
             ...colors,
             'wp-theme': {
-                500: 'var(--wp-admin-theme-color)',
-                600: 'var(--wp-admin-theme-color-darker-10)',
-                700: 'var(--wp-admin-theme-color-darker-20)',
+                500: 'var(--wp-admin-theme-color, #3959e9)',
+                600: 'var(--wp-admin-theme-color-darker-10, #2e4eb8)',
+                700: 'var(--wp-admin-theme-color-darker-20, #243e87)',
             },
             wp: {
                 alert: {

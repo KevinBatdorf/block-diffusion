@@ -16,7 +16,7 @@ export const ModelSwitch = () => {
             <FocusHelperButton initialFocus={initialFocus} />
             <div
                 data-cy="model-switch-grid"
-                className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 h-screen md:h-auto overflow-y-scroll p-6 pb-10 md:pb-6 w-full">
+                className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 h-screen md:h-auto overflow-y-auto p-6 pb-10 md:pb-6 w-full">
                 {models.map((model) => (
                     <button
                         key={model.id}
