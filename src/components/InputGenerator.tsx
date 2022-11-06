@@ -10,7 +10,7 @@ type Props = {
     disabled: boolean;
 };
 export const InputGenerator = ({ promptInputData, disabled }: Props) => {
-    const { width, height, prompt, setInput } = useInputsState();
+    const { width, height, prompt, numOutputs, setInput } = useInputsState();
 
     useEffect(() => {
         setInput('width', promptInputData?.width?.default ?? 512);
@@ -28,7 +28,7 @@ export const InputGenerator = ({ promptInputData, disabled }: Props) => {
                     label={__('Text prompt', 'stable-diffusion')}
                 />
             )}
-            <div className="flex gap-x-4">
+            <div className="grid md:grid-cols-2 gap-4">
                 {promptInputData?.width && (
                     <NumberSelect
                         label={__('Width', 'stable-diffusion')}
@@ -53,6 +53,15 @@ export const InputGenerator = ({ promptInputData, disabled }: Props) => {
                                 128, 256, 512, 768, 1024,
                             ]
                         }
+                    />
+                )}
+                {promptInputData?.numOutputs && (
+                    <NumberSelect
+                        label={__('Number of outputs', 'stable-diffusion')}
+                        value={numOutputs}
+                        disabled={disabled}
+                        onChange={(v) => setInput('numOutputs', v)}
+                        options={promptInputData?.numOutputs?.enum ?? [1]}
                     />
                 )}
             </div>

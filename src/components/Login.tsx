@@ -58,7 +58,7 @@ export const Login = ({ onClose }: LoginProps) => {
                 url: image,
             }}
             initialFocus={initialFocus}>
-            <div className="flex flex-col justify-between flex-grow bg-white h-auto lg:h-72">
+            <div className="flex flex-col justify-between flex-grow h-auto lg:h-72">
                 <div className="flex flex-col flex-grow">
                     <form
                         className="mb-2"

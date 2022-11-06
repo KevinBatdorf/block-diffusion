@@ -45,7 +45,7 @@ export const DialogWithImageModal = ({
                         exit={{ y: 0, opacity: 0 }}
                         className="sm:flex relative shadow-2xl max-w-screen-md2 mx-auto bg-white overflow-y-scroll md:overflow-hidden h-screen md:h-auto flex-grow">
                         <Dialog.Title className="sr-only">{title}</Dialog.Title>
-                        <div className="flex flex-col md:flex-row flex-grow w-full relative h-screen md:h-auto overflow-y-scroll">
+                        <div className="flex flex-col md:flex-row flex-grow w-full relative h-screen md:h-auto">
                             <a
                                 href={image.href}
                                 target="_blank"
@@ -64,7 +64,7 @@ export const DialogWithImageModal = ({
                                     </div>
                                     <ModalCloseButton onClose={onClose} />
                                 </div>
-                                <div className="md:overflow-y-scroll flex flex-grow w-screen max-w-full flex-col space-y-4 p-6 bg-gray-50">
+                                <div className="flex flex-grow w-screen max-w-full flex-col space-y-4 p-6 bg-gray-50">
                                     {children}
                                 </div>
                             </div>

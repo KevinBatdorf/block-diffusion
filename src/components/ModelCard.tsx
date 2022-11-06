@@ -41,7 +41,7 @@ const ModelMetadata = ({
         </div>
 
         {(url || paper_url || license_url || github_url) && (
-            <div className="h-0 group-hover:h-10 transition-all duration-500 overflow-hidden">
+            <div className="h-0 group-hover:h-10 focus-within:h-10 transition-all duration-500 overflow-hidden">
                 <div className="flex gap-x-2">
                     {url && (
                         <a href={url} target="_blank" rel="noopener noreferrer">
