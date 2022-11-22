@@ -20,6 +20,15 @@ export const models: ModelAttributes[] = [
         ),
         image: 'https://bucketeer-be99e627-94e7-4e5b-a292-54eeb40ac303.s3.amazonaws.com/public/models_models_cover_image/05b2d987-7b48-4ecf-b08f-c949d763be3e/pokemontage.jpg',
     },
+    {
+        id: 'prompthero/openjourney',
+        name: __('MidJourney Style Images', 'stable-diffusion'),
+        description: __(
+            'Stable Diffusion fine tuned on Midjourney v4 images',
+            'stable-diffusion',
+        ),
+        image: 'https://bucketeer-be99e627-94e7-4e5b-a292-54eeb40ac303.s3.amazonaws.com/public/models_models_featured_image/bf86b681-da40-4090-88bb-73a1f060dc5c/out-0-4.png',
+    },
     // {
     //     id: 'tencentarc/gfpgan',
     //     name: __('Reverse Image to Prompt', 'stable-diffusion'),

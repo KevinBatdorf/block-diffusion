@@ -1,6 +1,7 @@
 export type AvailableModels =
     | 'stability-ai/stable-diffusion'
     | 'lambdal/text-to-pokemon'
+    | 'prompthero/openjourney'
     | 'methexis-inc/img2prompt'
     | 'tencentarc/gfpgan'
     | 'deforum/deforum_stable_diffusion';
