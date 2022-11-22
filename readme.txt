@@ -2,7 +2,7 @@
 Contributors:      kbat82
 Tags:              block, stable diffusion, ai, prompt, artificial intelligence, generate, pokemon, dall-e, midjourney
 Tested up to:      6.1
-Stable tag:        0.5.0
+Stable tag:        0.6.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,8 +17,9 @@ This plugin interfaces with the Replicate API and allows you to run open-source 
 Semi interactive demo at [https://www.block-diffusion.com/](https://www.block-diffusion.com/)
 
 = Features =
-- Stable Diffusion model
-- Text to Pokémon model
+- Stable Diffusion - A latent text-to-image diffusion model capable of generating photo-realistic images given any text input
+- Text to Pokémon - Generate Pokémon from a text description
+- Open Journey - Stable Diffusion fine tuned on Midjourney v4 images.
 - Multiple outputs
 - Image input with basic controls
 - Download, copy, or import into the editor
@@ -54,6 +55,9 @@ We also offer additional features on top of the Replicate API, such as prompt/ou
 2. Choose from various models to run
 
 == Changelog ==
+
+= 0.6.0 - 2022-11-22 =
+- Feature: Add OpenJourney model - Stable Diffusion fine tuned on Midjourney v4 images.
 
 = 0.5.0 - 2022-11-06 =
 - Feature: Add interactive image input 🚀

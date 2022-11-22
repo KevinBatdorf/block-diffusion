@@ -26,7 +26,12 @@ export const PromptGenerator = ({
     const [prompt, setPrompt] = useState<string>();
 
     // For now only show on this model
-    if (currentModel !== 'stability-ai/stable-diffusion') return null;
+    if (
+        !['stability-ai/stable-diffusion', 'prompthero/openjourney'].includes(
+            currentModel,
+        )
+    )
+        return null;
 
     const handlePress = async () => {
         if (!has('optIns', 'prompt-accept')) {
