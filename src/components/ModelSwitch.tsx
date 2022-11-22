@@ -16,7 +16,7 @@ export const ModelSwitch = () => {
             <FocusHelperButton initialFocus={initialFocus} />
             <div
                 data-cy="model-switch-grid"
-                className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 h-screen md:h-auto overflow-y-auto p-6 pb-10 md:pb-6 w-full">
+                className="grid md:grid-cols-2 lg:grid-cols-3 h-screen md:h-auto overflow-y-auto p-6 pb-10 md:pb-6 w-full">
                 {models.map((model) => (
                     <button
                         key={model.id}
@@ -95,14 +95,20 @@ const ModalContainer = ({
                         <Dialog.Title className="sr-only">
                             {__('Select a model', 'stable-diffusion')}
                         </Dialog.Title>
-                        <div className="md:flex flex-col w-full relative">
-                            <div className="flex items-center justify-between w-full border-b gap-x-4 bg-white h-10">
+                        <div
+                            className="md:flex flex-col w-full relative overflow-y-auto h-screen pt-10"
+                            style={{
+                                maxHeight: 'calc(100vh - 10rem)',
+                            }}>
+                            <div className="flex items-center justify-between w-full border-b gap-x-4 bg-white h-10 absolute top-0">
                                 <div className="font-mono font-semibold text-sm px-6">
                                     {__('Select a model', 'stable-diffusion')}
                                 </div>
                                 <ModalCloseButton onClose={onClose} />
                             </div>
-                            <div className="flex">{children}</div>
+                            <div className="flex overflow-y-auto">
+                                {children}
+                            </div>
                         </div>
                     </motion.div>
                 </AnimatePresence>
