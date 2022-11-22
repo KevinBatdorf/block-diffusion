@@ -17,7 +17,7 @@ export const InputGenerator = ({ inputsData, disabled }: Props) => {
     useEffect(() => {
         setInput('width', inputsData?.width?.default ?? 512);
         setInput('height', inputsData?.height?.default ?? 512);
-        setInput('prompt', inputsData?.prompt?.default ?? '');
+        // setInput('prompt', inputsData?.prompt?.default ?? '');
     }, [inputsData, setInput]);
 
     return (
