@@ -27,9 +27,11 @@ export const PromptGenerator = ({
 
     // For now only show on this model
     if (
-        !['stability-ai/stable-diffusion', 'prompthero/openjourney'].includes(
-            currentModel,
-        )
+        ![
+            'stability-ai/stable-diffusion',
+            'prompthero/openjourney',
+            'cjwbw/stable-diffusion-v2',
+        ].includes(currentModel)
     )
         return null;
 
