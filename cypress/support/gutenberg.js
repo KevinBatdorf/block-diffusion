@@ -69,7 +69,13 @@ export const closeBlockInserter = () => {
 };
 export const addBlock = (slug) => {
     cy.openBlockInserter();
-    cy.get(`button[class*="${slug}"]`).click();
+    cy.window().then((win) => {
+        cy.waitUntil(() =>
+            win.document.querySelector(`button[class*="${slug}"]`),
+        );
+        cy.get(`button[class*="${slug}"]`).should('exist');
+        cy.get(`button[class*="${slug}"]`).click({ force: true });
+    });
 };
 export const wpDataSelect = (store, selector, ...parameters) => {
     cy.window().then((win) => {
