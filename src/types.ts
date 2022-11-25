@@ -1,5 +1,6 @@
 export type AvailableModels =
     | 'stability-ai/stable-diffusion'
+    | 'cjwbw/stable-diffusion-v2'
     | 'lambdal/text-to-pokemon'
     | 'prompthero/openjourney'
     | 'methexis-inc/img2prompt'

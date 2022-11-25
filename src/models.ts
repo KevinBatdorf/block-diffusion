@@ -12,6 +12,15 @@ export const models: ModelAttributes[] = [
         image: 'https://bucketeer-be99e627-94e7-4e5b-a292-54eeb40ac303.s3.amazonaws.com/public/models_models_featured_image/c63d605d-b5e3-4fb0-9b0d-79f00a710f7c/out-0.png',
     },
     {
+        id: 'cjwbw/stable-diffusion-v2',
+        name: __('Stable Diffusion v2 (Test)', 'stable-diffusion'),
+        description: __(
+            'Test implimentation of Stable Diffusion V2',
+            'stable-diffusion',
+        ),
+        image: 'https://bucketeer-be99e627-94e7-4e5b-a292-54eeb40ac303.s3.amazonaws.com/public/models_models_featured_image/d8e0c1ca-1256-43d2-b5e6-773c61ffc629/out-0_2.png',
+    },
+    {
         id: 'lambdal/text-to-pokemon',
         name: __('Text to Pokémon', 'stable-diffusion'),
         description: __(
