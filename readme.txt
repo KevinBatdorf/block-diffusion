@@ -18,6 +18,7 @@ Semi interactive demo at [https://www.block-diffusion.com/](https://www.block-di
 
 = Features =
 - Stable Diffusion - A latent text-to-image diffusion model capable of generating photo-realistic images given any text input
+- Stable Diffusion V2 test version
 - Text to Pokémon - Generate Pokémon from a text description
 - Open Journey - Stable Diffusion fine tuned on Midjourney v4 images.
 - Multiple outputs
