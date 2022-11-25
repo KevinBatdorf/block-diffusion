@@ -15,7 +15,7 @@ jobs:
                   CI: true
 
             - name: Package
-              uses: actions/upload-artifact@v2
+              uses: actions/upload-artifact@v3
               with:
                   name: stable-diffusion
                   retention-days: 5
