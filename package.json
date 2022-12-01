@@ -27,7 +27,7 @@
         "@wordpress/block-editor": "^10.1.0",
         "@wordpress/env": "^5.3.0",
         "@wordpress/scripts": "^24.2.0",
-        "@wordpress/url": "^3.19.0",
+        "@wordpress/url": "^3.23.0",
         "autoprefixer": "^10.4.12",
         "cypress": "^10.9.0",
         "cypress-wait-until": "^1.7.2",
