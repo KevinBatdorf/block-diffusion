@@ -2,7 +2,7 @@
 Contributors:      kbat82
 Tags:              block, stable diffusion, ai, prompt, artificial intelligence, generate, pokemon, dall-e, midjourney
 Tested up to:      6.1
-Stable tag:        0.7.0
+Stable tag:        0.7.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -56,6 +56,9 @@ We also offer additional features on top of the Replicate API, such as prompt/ou
 2. Choose from various models to run
 
 == Changelog ==
+
+= 0.7.1 - 2022-12-07 =
+- Tweak: Remove v2 test version as it was merged into the main model
 
 = 0.7.0 - 2022-11-24 =
 - Feature: Add test version of Stable Diffusion v2
