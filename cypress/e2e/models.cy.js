@@ -5,7 +5,10 @@ context('Model checks', () => {
         cy.maybeLogin();
 
         // First we should see the stable diffusion model
-        cy.get('[data-cy="modal-controls"]').should('contain', 'Text to Image');
+        cy.get('[data-cy="modal-controls"]').should(
+            'contain',
+            'Stable Diffusion V2',
+        );
 
         cy.get('[data-cy="modal-controls"]').contains('Switch Models').click();
 
