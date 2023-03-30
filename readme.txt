@@ -1,7 +1,7 @@
 === Block Diffusion - Generate images from text prompts  ===
 Contributors:      kbat82
 Tags:              block, stable diffusion, ai, prompt, artificial intelligence, generate, pokemon, dall-e, midjourney
-Tested up to:      6.1
+Tested up to:      6.2
 Stable tag:        0.7.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
