@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import classNames from 'classnames';
 import { fabric } from 'fabric';
-import { downloadImage, copyImage } from '../../lib/image';
+import { downloadImage, copyImage } from '../../../../lib/image';
 import { useCanvasState } from '../../state/canvas';
 import { useGlobalState } from '../../state/global';
 import { ImageLike } from '../../types';

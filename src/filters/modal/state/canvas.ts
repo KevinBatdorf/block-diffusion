@@ -1,5 +1,5 @@
 import { fabric } from 'fabric';
-import create from 'zustand';
+import {create} from 'zustand';
 import { devtools } from 'zustand/middleware';
 
 type CanvasState = {

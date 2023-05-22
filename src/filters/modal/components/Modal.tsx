@@ -3,7 +3,6 @@ import { Dialog } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ModalDefault } from '../layouts/ModalDefault';
 import { models } from '../models';
-import { useAuthStore } from '../state/auth';
 import { useGlobalState } from '../state/global';
 import { ImageLike } from '../types';
 import { UserInferface } from './UserInterface';
@@ -15,10 +14,10 @@ type ModalProps = {
 
 export const Modal = ({ setImage, onClose }: ModalProps) => {
     const { currentModel } = useGlobalState();
-    const { apiToken } = useAuthStore();
     const name = models.find((m) => m.id === currentModel)?.name;
     const initialFocus = useRef(null);
 
+    // todo if name is not found, maybe we clear it out?
     if (!name) return null;
 
     return (
@@ -27,7 +26,7 @@ export const Modal = ({ setImage, onClose }: ModalProps) => {
             data-cy="model-screen"
             initialFocus={initialFocus}
             key="main-modal"
-            open={Boolean(currentModel) && Boolean(apiToken)}
+            open={Boolean(currentModel)}
             onClose={onClose}>
             <div className="absolute mx-auto w-full h-full overflow-hidden md:p-8 md:flex justify-center items-center z-high">
                 <div

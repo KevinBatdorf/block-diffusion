@@ -9,19 +9,13 @@ type ModalProps = {
     testingId?: string;
     children: React.ReactNode;
     initialFocus: React.RefObject<HTMLElement>;
-    image: {
-        url: string;
-        href: string;
-        title: string;
-    };
 };
-export const DialogWithImageModal = ({
+export const SimpleDialog = ({
     title,
     onClose,
     open,
     testingId,
     initialFocus,
-    image,
     children,
 }: ModalProps) => {
     return (
@@ -42,20 +36,9 @@ export const DialogWithImageModal = ({
                         initial={{ y: 5 }}
                         animate={{ y: 0 }}
                         exit={{ y: 0, opacity: 0 }}
-                        className="sm:flex relative shadow-2xl max-w-screen-md2 mx-auto bg-white overflow-y-auto md:overflow-hidden h-screen md:h-auto flex-grow">
+                        className="sm:flex relative shadow-2xl max-w-screen-sm mx-auto bg-white overflow-y-auto md:overflow-hidden h-screen md:h-auto flex-grow">
                         <Dialog.Title className="sr-only">{title}</Dialog.Title>
-                        <div className="flex flex-col md:flex-row flex-grow w-full relative h-screen md:h-auto">
-                            <a
-                                href={image.href}
-                                target="_blank"
-                                rel="noreferrer"
-                                title={image.title}
-                                className="bg-center mt-12 md:mt-0 w-full md:w-60 lg:w-96 h-56 md:h-full bg-cover flex-shrink-0"
-                                style={{
-                                    backgroundImage: `url(${image.url})`,
-                                }}>
-                                <span className="sr-only">{image.title}</span>
-                            </a>
+                        <div className="w-full relative">
                             <div className="flex flex-col md:overflow-x-hidden flex-grow">
                                 <div className="flex items-center justify-between w-full border-b gap-x-4 bg-white h-10">
                                     <div className="font-mono font-semibold text-sm px-6">

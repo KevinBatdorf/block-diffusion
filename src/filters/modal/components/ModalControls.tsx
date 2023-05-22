@@ -1,28 +1,34 @@
+import apiFetch from '@wordpress/api-fetch';
 import { Icon, Tooltip } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { useAuth } from '../hooks/useAuth';
+import { mutate } from 'swr';
 import { closeXIcon } from '../icons';
 import { useGlobalState } from '../state/global';
 
 type ModalControlsProps = {
     onClose: () => void;
     title: string;
+    hide?: boolean;
 };
-export const ModalControls = ({ onClose, title }: ModalControlsProps) => {
+export const ModalControls = ({ onClose, title, hide }: ModalControlsProps) => {
     return (
         <div
             data-cy="modal-controls"
-            className="flex items-center w-full border-b fixed md:static top-0 bg-white h-10">
+            className="flex items-center justify-between w-full border-b fixed md:static top-0 bg-white h-10">
             <div className="flex-shrink-0 font-mono font-semibold text-sm px-6">
                 {title}
             </div>
             <div className="flex justify-between items-center w-full">
-                <div className="flex items-center gap-2">
-                    <SwitchButton />
-                    <SettingsButton />
-                </div>
+                {hide ? (
+                    <div />
+                ) : (
+                    <div className="flex items-center gap-2">
+                        <SwitchButton />
+                        <SettingsButton />
+                    </div>
+                )}
                 <div className="flex gap-x-2 h-full items-center justify-end">
-                    <LogoutButton />
+                    {hide ? <div /> : <LogoutButton />}
                     <ModalCloseButton onClose={onClose} />
                 </div>
             </div>
@@ -60,7 +66,16 @@ export const SwitchButton = () => {
 };
 
 export const LogoutButton = () => {
-    const { logout } = useAuth();
+    const { setImageBlockId } = useGlobalState();
+    const logout = async () => {
+        await apiFetch({
+            path: '/kevinbatdorf/stable-diffusion/save-token',
+            method: 'POST',
+            data: { token: '' },
+        });
+        setImageBlockId(undefined);
+        mutate(() => true, undefined, { revalidate: true });
+    };
     return (
         <button
             className={toolbarBtnClx}

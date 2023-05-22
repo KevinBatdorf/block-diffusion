@@ -1,8 +1,27 @@
 import apiFetch from '@wordpress/api-fetch';
 import { useEffect, useState } from '@wordpress/element';
-import create from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
-import { getSettings } from '../lib/wp';
+import { create } from 'zustand';
+import { createJSONStorage, devtools, persist } from 'zustand/middleware';
+
+type OptIns = typeof optInsOptions[number];
+type DisabledFeatures = typeof disabledFeatures[number];
+type SettingsFn = <T extends keyof typeof initialState>(
+    type: T,
+    value: typeof initialState[T][number],
+) => void;
+type SettingsTypes = {
+    seenNotices: string[];
+    optIns: OptIns[];
+    disabledFeatures: DisabledFeatures[];
+
+    add: SettingsFn;
+    remove: SettingsFn;
+    toggle: SettingsFn;
+    has: <T extends keyof typeof initialState>(
+        type: T,
+        value: typeof initialState[T][number],
+    ) => boolean;
+};
 
 const optInsOptions = [
     'prompt-accept', // user has accepted to request prompts
@@ -15,6 +34,41 @@ const initialState = {
     seenNotices: [] as string[],
     optIns: [] as OptIns[],
     disabledFeatures: [] as DisabledFeatures[],
+};
+
+export const getSettings = async (name: string) => {
+    const settings = await apiFetch({
+        path: '/kevinbatdorf/stable-diffusion/options',
+    });
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
+    return settings?.[name];
+};
+const storage = {
+    getItem: async (name: string) => {
+        const settings = await getSettings(name);
+        return JSON.stringify({
+            version: settings.version,
+            state: settings,
+        });
+    },
+    setItem: async (name: string, value: string) => {
+        const { state, version } = JSON.parse(value);
+        const data = {
+            [name]: Object.assign(
+                await getSettings(name),
+                // filter out items not in the initial state
+                state,
+                { version },
+            ),
+        };
+        await apiFetch({
+            path: '/kevinbatdorf/stable-diffusion/options',
+            method: 'POST',
+            data,
+        });
+    },
+    removeItem: () => undefined,
 };
 
 export const useSettingsStore = create<SettingsTypes>()(
@@ -47,32 +101,7 @@ export const useSettingsStore = create<SettingsTypes>()(
         ),
         {
             name: 'stable_diffusion_options',
-            getStorage: () => ({
-                getItem: async (name: string) => {
-                    const settings = await getSettings(name, initialState);
-                    return JSON.stringify({
-                        version: settings.version,
-                        state: settings,
-                    });
-                },
-                setItem: async (name: string, value: string) => {
-                    const { state, version } = JSON.parse(value);
-                    const data = {
-                        [name]: Object.assign(
-                            await getSettings(name, initialState),
-                            // filter out items not in the initial state
-                            state,
-                            { version },
-                        ),
-                    };
-                    await apiFetch({
-                        path: '/wp/v2/settings',
-                        method: 'POST',
-                        data,
-                    });
-                },
-                removeItem: () => undefined,
-            }),
+            storage: createJSONStorage(() => storage),
         },
     ),
 );
@@ -90,24 +119,4 @@ export const useSettingsStoreReady = () => {
         };
     }, []);
     return hydrated;
-};
-
-type OptIns = typeof optInsOptions[number];
-type DisabledFeatures = typeof disabledFeatures[number];
-type SettingsFn = <T extends keyof typeof initialState>(
-    type: T,
-    value: typeof initialState[T][number],
-) => void;
-type SettingsTypes = {
-    seenNotices: string[];
-    optIns: OptIns[];
-    disabledFeatures: DisabledFeatures[];
-
-    add: SettingsFn;
-    remove: SettingsFn;
-    toggle: SettingsFn;
-    has: <T extends keyof typeof initialState>(
-        type: T,
-        value: typeof initialState[T][number],
-    ) => boolean;
 };

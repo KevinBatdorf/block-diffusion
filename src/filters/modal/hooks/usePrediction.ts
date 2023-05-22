@@ -1,24 +1,18 @@
 import apiFetch from '@wordpress/api-fetch';
 import { useEffect, useRef } from '@wordpress/element';
 import useSWRImmutable from 'swr/immutable';
-import { useAuthStore } from '../state/auth';
 import { PredictionData } from '../types';
 
-const fetcher = (
-    predictionId: string,
-    apiToken: string,
-): Promise<PredictionData> =>
+const fetcher = (predictionId: string): Promise<PredictionData> =>
     apiFetch({
         method: 'GET',
         path: `kevinbatdorf/stable-diffusion/get-prediction?id=${predictionId}&cache=${Date.now()}`,
-        headers: { Authorization: `Token ${apiToken}` },
     });
 
 export const usePrediction = (id: string) => {
-    const { apiToken } = useAuthStore();
     const paused = useRef(false);
     const { data, error } = useSWRImmutable<PredictionData>(
-        id ? [id, apiToken] : null,
+        id ? id : null,
         fetcher,
         {
             refreshInterval: 1000,

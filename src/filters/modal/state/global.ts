@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { models } from '../models';
 import { AvailableModels } from '../types';
@@ -9,13 +9,13 @@ type GlobalState = {
     importingMessage: string;
     currentModel: AvailableModels;
     showSelectScreen: boolean;
-    imageBlockId: string;
+    imageBlockId?: string;
     maybeImporting: boolean;
     settingsTab?: SettingsTabs;
     setImportingMessage: (loading: string) => void;
     goToModel: (id: AvailableModels) => void;
     setShowSelectScreen: (show: boolean) => void;
-    setImageBlockId: (imageBlockId: string) => void;
+    setImageBlockId: (imageBlockId?: string) => void;
     setMaybeImporting: (maybeImporting: boolean) => void;
     setSettingsTab: (tab?: SettingsTabs) => void;
 };
@@ -39,7 +39,7 @@ export const useGlobalState = create<GlobalState>()(
                 get().setShowSelectScreen(false);
             },
             setShowSelectScreen: (show) => set({ showSelectScreen: show }),
-            setImageBlockId: (imageBlockId: string) => {
+            setImageBlockId: (imageBlockId) => {
                 set({ imageBlockId });
             },
             setMaybeImporting: (maybeImporting) => set({ maybeImporting }),

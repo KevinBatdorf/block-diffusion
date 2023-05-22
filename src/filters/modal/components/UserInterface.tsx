@@ -11,7 +11,6 @@ import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useModel } from '../hooks/useModel';
 import { usePrediction } from '../hooks/usePrediction';
-import { useAuthStore } from '../state/auth';
 import { useGlobalState } from '../state/global';
 import { useInputsState } from '../state/inputs';
 import { useSettingsStore } from '../state/settings';
@@ -56,7 +55,6 @@ export const UserInferface = ({
         resetInputs,
     } = useInputsState();
     const { has } = useSettingsStore();
-    const { apiToken } = useAuthStore();
     const [errorMsg, setErrorMsg] = useState('');
     const [statusMessage, setStatusMessage] = useState('');
     const [inputsData, setPromptInputData] = useState<InputsData>({});
@@ -93,7 +91,6 @@ export const UserInferface = ({
         const response = await apiFetch<GenerateResponse>({
             path: `kevinbatdorf/stable-diffusion/generate?cache=${Date.now()}`,
             method: 'POST',
-            headers: { Authorization: `Token ${apiToken}` },
             data: {
                 input: {
                     width: width || undefined,
@@ -131,7 +128,6 @@ export const UserInferface = ({
         apiFetch({
             path: 'kevinbatdorf/stable-diffusion/cancel',
             method: 'POST',
-            headers: { Authorization: `Token ${apiToken}` },
             data: { id: generateId },
         });
 

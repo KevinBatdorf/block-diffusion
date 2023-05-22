@@ -1,5 +1,12 @@
-import { store as blockEditorStore } from '@wordpress/block-editor';
+import {
+    BlockControls,
+    store as blockEditorStore,
+} from '@wordpress/block-editor';
+import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
+import { blockIcon } from '../icons';
+import { useGlobalState } from '../state/global';
 import { Loader } from './Loader';
 
 export const BlockFilter = (
@@ -10,6 +17,7 @@ export const BlockFilter = (
 ) => {
     // eslint-disable-next-line
     const { attributes, setAttributes, clientId } = props;
+    const { setImageBlockId } = useGlobalState();
     const showMenu = useSelect(
         (select) => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -26,12 +34,17 @@ export const BlockFilter = (
     }
     return (
         <>
-            <CurrentMenuItems {...props} />
-            <Loader
-                attributes={attributes}
-                setAttributes={setAttributes}
-                clientId={clientId}
-            />
+            {CurrentMenuItems && <CurrentMenuItems {...props} />}
+            <BlockControls controls>
+                <ToolbarGroup>
+                    <ToolbarButton
+                        icon={blockIcon}
+                        label={__('Generate AI Image', 'stable-diffusion')}
+                        onClick={() => setImageBlockId(clientId)}
+                    />
+                </ToolbarGroup>
+            </BlockControls>
+            <Loader attributes={attributes} setAttributes={setAttributes} />
         </>
     );
 };
