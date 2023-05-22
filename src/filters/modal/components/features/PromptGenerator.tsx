@@ -25,8 +25,6 @@ export const PromptGenerator = ({
     const [showOptin, setShowOptin] = useState(false);
     const [prompt, setPrompt] = useState<string>();
 
-    console.log({ ready });
-
     // For now only show on this model
     if (
         ![
