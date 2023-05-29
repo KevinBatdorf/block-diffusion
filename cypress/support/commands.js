@@ -1,5 +1,7 @@
 import { BLOCK_CONTAINER } from '../constants';
-import { closeOurModal, maybeLogin, maybeLogout } from './block';
+import { closeModal } from './features/image-modal';
+import { loginToApi } from './features/login';
+import { openLoginPrompt } from './features/login';
 import {
     addBlock,
     closeWelcomeGuide,
@@ -16,6 +18,7 @@ import {
     visitToLoginPage,
 } from './navigate-pages';
 import { installPlugin, uninstallPlugin } from './plugins';
+import { resetDatabase } from './wp-cli';
 
 // Port more commands from WP here:
 // https://github.com/WordPress/gutenberg/tree/trunk/packages/e2e-test-utils/src
@@ -52,17 +55,15 @@ Cypress.Commands.add('wpDataSelect', (store, selector, ...parameters) =>
     wpDataSelect(store, selector, ...parameters),
 );
 
+// Server
+Cypress.Commands.add('resetDatabase', () => resetDatabase());
+
 // Manage plugins
 Cypress.Commands.add('installPlugin', (slug) => installPlugin(slug));
 Cypress.Commands.add('uninstallPlugin', (slug) => uninstallPlugin(slug));
 
-// Our stuff
-Cypress.Commands.add('addOurBlock', () => {
-    cy.addBlock('stable-diffusion');
-    // Check the core image block is there
-    cy.getPostContent('.wp-block[class$="wp-block-image"]').should('exist');
-    cy.maybeLogout();
-});
-Cypress.Commands.add('closeModal', () => closeOurModal());
-Cypress.Commands.add('maybeLogin', () => maybeLogin());
-Cypress.Commands.add('maybeLogout', () => maybeLogout());
+Cypress.Commands.add('closeModal', () => closeModal());
+Cypress.Commands.add('loginToApi', () => loginToApi());
+
+// Login
+Cypress.Commands.add('openLoginPrompt', () => openLoginPrompt());

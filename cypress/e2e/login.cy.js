@@ -1,38 +1,59 @@
+beforeEach(() => {
+    cy.resetDatabase();
+    cy.clearBrowserStorage();
+    cy.loginUser();
+});
+afterEach(() => {
+    cy.logoutUser();
+});
+
 context('Login checks', () => {
-    it('The wrong API key will show an error', () => {
-        // Adds our block
-        cy.addOurBlock();
-
-        // Click the login with nothing entered
-        cy.get('[data-cy="login-button"]').should('exist').click();
-
-        // See no error
-        cy.get('[data-cy="login-error"]').should('not.exist');
-
-        // Type in random stuff and click login
-        cy.get('#replicate-api-key').type('random');
-        cy.get('[data-cy="login-button"]').should('exist').click();
-
-        // See error
-        cy.get('[data-cy="login-error"]').should('exist');
-
-        cy.closeModal();
+    it('The login prompt can be opened from plugins API Key', () => {
+        cy.visitAdminPage('plugins.php');
+        cy.get('[data-cy="api-token-action"]').should('exist').click();
+        cy.get('[data-cy="login-screen"]').should('exist');
     });
 
-    it('Successful login will show the stable diffusion screen', () => {
-        // Adds our block
-        cy.addOurBlock();
+    it('Can log in properly', () => {
+        cy.openLoginPrompt();
+        // See no error
+        cy.get('[data-cy="login-error"]').should('not.exist');
+        // Try to login with no api token
+        cy.get('[data-cy="login-button"]').should('exist').click();
+        // See error
+        cy.get('[data-cy="login-error"]').should('exist');
+        // Enter any token
+        cy.get('#replicate-api-key').type('123');
+        // Login accepts any token, it will force relogin later if it fails
+        cy.get('[data-cy="login-button"]').should('exist').click();
+        // See no error
+        cy.get('[data-cy="login-error"]').should('not.exist');
+        // Modal shoudl be closed
+        cy.get('[data-cy="login-screen"]').should('not.exist');
+        // See toast success
+        cy.get('[data-cy="login-success-toast"]')
+            .should('exist')
+            .contains('The token was successfully saved.');
+    });
 
-        // Confirm model screen is not there
-        cy.get('[data-cy="model-screen"]').should('not.exist');
+    it('Opening the modal should prompt login', () => {
+        cy.visitNewPageEditor();
+        cy.addBlock('core/image');
+        cy.get('button[aria-label="Generate AI Image"]').click();
 
-        // Type in real API Token
-        cy.get('#replicate-api-key').type(Cypress.env('API_TOKEN'));
+        cy.get('[data-cy="login-screen"]').should('exist');
+        // Type wrong token
+        cy.get('#replicate-api-key').type('123');
         cy.get('[data-cy="login-button"]').should('exist').click();
 
-        // See model select screen
-        cy.get('[data-cy="model-screen"]').should('exist');
+        // Prompt leaves
+        cy.get('[data-cy="login-screen"]').should('not.exist');
 
-        cy.closeModal();
+        // prompt should show again
+        cy.get('[data-cy="login-screen"]').should('exist');
+        cy.get('[data-cy="login-screen"]').should(
+            'contain',
+            'Please log in to continue',
+        );
     });
 });

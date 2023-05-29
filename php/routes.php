@@ -1,6 +1,6 @@
 <?php
 
-defined( 'ABSPATH' ) or die;
+defined('ABSPATH') or die;
 
 add_action('rest_api_init', function() {
     KBSDRouter::post('/login', function($payload) {
@@ -74,6 +74,29 @@ add_action('rest_api_init', function() {
         return new WP_REST_Response(
             json_decode(wp_remote_retrieve_body($stableDiffusionResponse), true),
             wp_remote_retrieve_response_code($stableDiffusionResponse)
+        );
+    });
+
+    KBSDRouter::post('/save-token', function($payload) {
+        update_option('stable_diffusion_settings', [
+            'apiToken' => (string) $payload->get_param('token')
+        ]);
+        return new WP_REST_Response(['success' => true], 200);
+    });
+
+    KBSDRouter::post('/options', function($payload) {
+        if (isset($payload['stable_diffusion_options'])) {
+            update_option('stable_diffusion_options', $payload['stable_diffusion_options']);
+        }
+        return new WP_REST_Response(
+            ['stable_diffusion_options' => get_option('stable_diffusion_options')],
+            200
+        );
+    });
+    KBSDRouter::get('/options', function($payload) {
+        return new WP_REST_Response(
+            ['stable_diffusion_options' => get_option('stable_diffusion_options')],
+            200
         );
     });
 });
