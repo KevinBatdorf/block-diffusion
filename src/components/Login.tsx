@@ -96,9 +96,7 @@ export const Login = ({ onClose, incomingError }: LoginProps) => {
                                 data-cy="login-button"
                                 className="h-10 px-4 bg-gray-900 text-white rounded-none border border-gray-900 focus:outline-none focus:ring-1 ring-offset-1 ring-wp-theme-500 cursor-pointer focus:shadow-none"
                                 disabled={loggingIn}
-                                onClick={() => {
-                                    token && login(token);
-                                }}>
+                                onClick={() => login(token)}>
                                 {loggingIn
                                     ? __('...', 'stable-diffusion')
                                     : __('Login', 'stable-diffusion')}

@@ -1,17 +1,12 @@
 import domReady from '@wordpress/dom-ready';
 import { render, createRoot } from '@wordpress/element';
-import { ApiKeyButton } from './components/ApiKeyButton';
+import { LoginPrompt } from './components/LoginPrompt';
 import './editor.css';
 
 domReady(() => {
-    const rows = document
-        ?.getElementById('deactivate-stable-diffusion')
-        ?.closest('.row-actions');
-    rows?.lastElementChild?.querySelector('a')?.after(' | ');
-
     const span = document.createElement('span');
-    rows?.lastElementChild?.after(span);
+    document.body.appendChild(span);
 
-    if (createRoot) createRoot(span).render(<ApiKeyButton />);
-    else render(<ApiKeyButton />, span);
+    if (createRoot) createRoot(span).render(<LoginPrompt />);
+    else render(<LoginPrompt />, span);
 });

@@ -52,6 +52,7 @@ const storage = {
             state: settings,
         });
     },
+    // todo fix initial state bug
     setItem: async (name: string, value: string) => {
         const { state, version } = JSON.parse(value);
         const data = {
