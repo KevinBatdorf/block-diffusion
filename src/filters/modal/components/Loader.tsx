@@ -1,3 +1,5 @@
+import { store as blockEditorStore } from '@wordpress/block-editor';
+import { useDispatch } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { SWRConfig } from 'swr';
@@ -9,15 +11,11 @@ import { Modal } from './Modal';
 import { ModelSwitch } from './ModelSwitch';
 import { SettingsModal } from './SetingsModal';
 
-type LoaderProps = {
-    attributes: ImageLike;
-    setAttributes: (attributes: ImageLike) => void;
-};
-
-export const Loader = ({ setAttributes }: LoaderProps) => {
+export const Loader = () => {
     const { setImportingMessage, imageBlockId, setImageBlockId } =
         useGlobalState();
     const [loginError, setLoginError] = useState<string>();
+    const { updateBlockAttributes } = useDispatch(blockEditorStore);
 
     const onClose = () => {
         setImportingMessage('');
@@ -28,7 +26,7 @@ export const Loader = ({ setAttributes }: LoaderProps) => {
         setImportingMessage(__('Importing...', 'stable-diffusion'));
         setImage(image).then(async (newImage) => {
             if (!newImage) return;
-            setAttributes({
+            updateBlockAttributes(imageBlockId, {
                 id: newImage.id,
                 caption: newImage.caption.raw,
                 url: newImage.source_url,

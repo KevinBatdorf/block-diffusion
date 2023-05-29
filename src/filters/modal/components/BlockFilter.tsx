@@ -16,7 +16,7 @@ export const BlockFilter = (
     props: any,
 ) => {
     // eslint-disable-next-line
-    const { attributes, setAttributes, clientId } = props;
+    const { clientId } = props;
     const { setImageBlockId } = useGlobalState();
     const showMenu = useSelect(
         (select) => {
@@ -44,7 +44,7 @@ export const BlockFilter = (
                     />
                 </ToolbarGroup>
             </BlockControls>
-            <Loader attributes={attributes} setAttributes={setAttributes} />
+            <Loader />
         </>
     );
 };
