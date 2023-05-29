@@ -49,16 +49,14 @@ const storage = {
         const settings = await getSettings(name);
         return JSON.stringify({
             version: settings.version,
-            state: settings,
+            state: settings || initialState,
         });
     },
-    // todo fix initial state bug
     setItem: async (name: string, value: string) => {
         const { state, version } = JSON.parse(value);
         const data = {
             [name]: Object.assign(
-                await getSettings(name),
-                // filter out items not in the initial state
+                (await getSettings(name)) || initialState,
                 state,
                 { version },
             ),
