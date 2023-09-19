@@ -12,5 +12,7 @@
     },
     "textdomain": "stable-diffusion",
     "editorScript": "file:./index.js",
-    "editorStyle": "file:./index.css"
+    "editorStyle": "file:./index.css",
+    "style": "file:./style-index.css",
+    "viewScript": "file:./front.js"
 }

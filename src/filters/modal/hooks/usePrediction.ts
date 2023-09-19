@@ -1,12 +1,13 @@
 import apiFetch from '@wordpress/api-fetch';
 import { useEffect, useRef } from '@wordpress/element';
 import useSWRImmutable from 'swr/immutable';
-import { PredictionData } from '../types';
+import { PredictionData } from '../../../types';
+import { API_PREFIX } from '../constants';
 
 const fetcher = (predictionId: string): Promise<PredictionData> =>
     apiFetch({
         method: 'GET',
-        path: `kevinbatdorf/stable-diffusion/get-prediction?id=${predictionId}&cache=${Date.now()}`,
+        path: `${API_PREFIX}/get-prediction?id=${predictionId}&cache=${Date.now()}`,
     });
 
 export const usePrediction = (id: string) => {

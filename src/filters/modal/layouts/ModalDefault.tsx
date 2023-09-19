@@ -1,6 +1,6 @@
 import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { ModalControls } from '../components/ModalControls';
+import { ModalControls } from '../../../components/ModalControls';
 import { useAuth } from '../hooks/useAuth';
 import { useGlobalState } from '../state/global';
 

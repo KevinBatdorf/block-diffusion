@@ -2,9 +2,9 @@ import { useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Dialog } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { ModalCloseButton } from '../../../components/ModalControls';
 import { models } from '../models';
 import { useGlobalState } from '../state/global';
-import { ModalCloseButton } from './ModalControls';
 import { FocusHelperButton } from './misc/FocusHelperButton';
 
 export const ModelSwitch = () => {
@@ -77,7 +77,7 @@ const ModalContainer = ({
 
     return (
         <Dialog
-            className="stable-diffusion-editor stable-diffusion-modal"
+            className="block-diffusion-editor stable-diffusion-modal"
             data-cy="modal-switch"
             key="modal-switch"
             initialFocus={initialFocus}

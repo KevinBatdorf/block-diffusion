@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { ModelAttributes } from './types';
+import { ModelAttributes } from '../../types';
 
 export const models: ModelAttributes[] = [
     {

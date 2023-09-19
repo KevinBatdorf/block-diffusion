@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
+import { AvailableModels } from '../../../types';
 import { models } from '../models';
-import { AvailableModels } from '../types';
 
 export type SettingsTabs = 'optins' | 'disables' | 'account';
 

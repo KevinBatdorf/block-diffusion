@@ -4,11 +4,11 @@ import { __ } from '@wordpress/i18n';
 import { fabric } from 'fabric';
 import { IEvent } from 'fabric/fabric-impl';
 import { AnimatePresence } from 'framer-motion';
+import { zoomInIcon, zoomOutIcon } from '../../../../icons';
+import { PredictionData } from '../../../../types';
 import { useFabric } from '../../hooks/useFabric';
-import { zoomInIcon, zoomOutIcon } from '../../icons';
 import { useCanvasState } from '../../state/canvas';
 import { useInputsState } from '../../state/inputs';
-import { PredictionData } from '../../types';
 import { FabricCanvas } from '../FabricCanvas';
 
 const animateMainRect = (

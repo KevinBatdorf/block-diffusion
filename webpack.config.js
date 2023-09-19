@@ -6,5 +6,6 @@ module.exports = {
     entry: {
         index: './src/index.tsx',
         global: './src/global.tsx',
+        front: './src/block/front/front.ts',
     },
 };

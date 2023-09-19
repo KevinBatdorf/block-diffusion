@@ -1,7 +1,7 @@
 import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { InputsData } from '../../../types';
 import { useInputsState } from '../state/inputs';
-import { InputsData } from '../types';
 import { ImageUploader } from './inputs/ImageUploader';
 import { MediaUploader } from './inputs/MediaUploader';
 import { NumberSelect } from './inputs/NumberSelect';

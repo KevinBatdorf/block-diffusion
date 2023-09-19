@@ -2,7 +2,7 @@ import { Icon } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import classNames from 'classnames';
 import { fabric } from 'fabric';
-import { uploadImageIcon } from '../../icons';
+import { uploadImageIcon } from '../../../../icons';
 import { useCanvasState } from '../../state/canvas';
 
 type ImageUploaderProps = {

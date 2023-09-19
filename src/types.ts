@@ -1,6 +1,5 @@
 export type AvailableModels =
     | 'stability-ai/stable-diffusion'
-    | 'cjwbw/stable-diffusion-v2'
     | 'lambdal/text-to-pokemon'
     | 'prompthero/openjourney'
     | 'methexis-inc/img2prompt'
@@ -159,3 +158,25 @@ export type OpenApiSchema = {
         };
     };
 };
+
+export type PromptSuggestion = {
+    label: string;
+    text: string;
+};
+
+export type BlockAttributes = {
+    id: string;
+    startingModel: AvailableModels;
+    availableModels: string[];
+    capabilityRestriction: string[];
+    promptSuggestions: PromptSuggestion[];
+};
+declare global {
+    interface Window {
+        blockDiffusionInit: () => void;
+        blockDiffusion: {
+            nonce: string;
+            restUrl: boolean;
+        };
+    }
+}

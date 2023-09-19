@@ -16,8 +16,15 @@
 add_action('init', function () {
     register_block_type(__DIR__ . '/build');
     wp_set_script_translations('kevinbatdorf/stable-diffusion', 'stable-diffusion');
+
+    wp_add_inline_script('kevinbatdorf-stable-diffusion-view-script', 'window.blockDiffusion = ' . wp_json_encode([
+        'nonce' => wp_create_nonce('wp_rest'),
+        'restUrl' => esc_url_raw(rest_url('kevinbatdorf/stable-diffusion/block')),
+    ]) . ';', 'before');
 });
 
 include_once(__DIR__ . '/php/global-scripts.php');
-include_once(__DIR__ . '/php/router.php');
-include_once(__DIR__ . '/php/routes.php');
+include_once(__DIR__ . '/php/router/image-filter.php');
+include_once(__DIR__ . '/php/router/global.php');
+include_once(__DIR__ . '/php/router/block.php');
+include_once(__DIR__ . '/php/db.php');

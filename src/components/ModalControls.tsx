@@ -2,8 +2,9 @@ import apiFetch from '@wordpress/api-fetch';
 import { Icon, Tooltip } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { mutate } from 'swr';
+import { GLOBAL_API_PREFIX } from '../constants';
+import { useGlobalState } from '../filters/modal/state/global';
 import { closeXIcon } from '../icons';
-import { useGlobalState } from '../state/global';
 
 type ModalControlsProps = {
     onClose: () => void;
@@ -69,7 +70,7 @@ export const LogoutButton = () => {
     const { setImageBlockId } = useGlobalState();
     const logout = async () => {
         await apiFetch({
-            path: '/kevinbatdorf/stable-diffusion/save-token',
+            path: `${GLOBAL_API_PREFIX}/save-token?cache=${Date.now()}`,
             method: 'POST',
             data: { token: '' },
         });

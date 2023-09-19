@@ -9,11 +9,6 @@ import {
 import { sprintf, __ } from '@wordpress/i18n';
 import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useModel } from '../hooks/useModel';
-import { usePrediction } from '../hooks/usePrediction';
-import { useGlobalState } from '../state/global';
-import { useInputsState } from '../state/inputs';
-import { useSettingsStore } from '../state/settings';
 import {
     AvailableModels,
     HeightInput,
@@ -21,7 +16,13 @@ import {
     InputsData,
     WidthInput,
     PredictionData,
-} from '../types';
+} from '../../../types';
+import { API_PREFIX } from '../constants';
+import { useModel } from '../hooks/useModel';
+import { usePrediction } from '../hooks/usePrediction';
+import { useGlobalState } from '../state/global';
+import { useInputsState } from '../state/inputs';
+import { useSettingsStore } from '../state/settings';
 import { InputGenerator } from './InputGenerator';
 import { ModelCard } from './ModelCard';
 import { GoButton } from './inputs/GoButton';
@@ -89,7 +90,7 @@ export const UserInferface = ({
         if (maybeImporting) return;
         setMaybeImporting(true);
         const response = await apiFetch<GenerateResponse>({
-            path: `kevinbatdorf/stable-diffusion/generate?cache=${Date.now()}`,
+            path: `${API_PREFIX}/generate?cache=${Date.now()}`,
             method: 'POST',
             data: {
                 input: {
@@ -126,7 +127,7 @@ export const UserInferface = ({
 
     const handleCancel = () =>
         apiFetch({
-            path: 'kevinbatdorf/stable-diffusion/cancel',
+            path: `${API_PREFIX}/cancel?cache=${Date.now()}`,
             method: 'POST',
             data: { id: generateId },
         });

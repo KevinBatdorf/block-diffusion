@@ -1,12 +1,16 @@
 import { Dialog } from '@headlessui/react';
+import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ModalCloseButton } from '../components/ModalControls';
+import { ModalCloseButton } from './ModalControls';
 
 type ModalProps = {
     onClose: () => void;
     title: string;
     open: boolean;
+    disablePadding?: boolean;
     testingId?: string;
+    maxHeight?: number;
+    maxWClass?: string;
     children: React.ReactNode;
     initialFocus: React.RefObject<HTMLElement>;
 };
@@ -14,13 +18,16 @@ export const SimpleDialog = ({
     title,
     onClose,
     open,
+    disablePadding,
     testingId,
+    maxHeight,
     initialFocus,
+    maxWClass = 'max-w-screen-sm',
     children,
 }: ModalProps) => {
     return (
         <Dialog
-            className="stable-diffusion-editor stable-diffusion-modal"
+            className="block-diffusion-editor stable-diffusion-modal"
             initialFocus={initialFocus}
             data-cy={testingId}
             open={open}
@@ -36,7 +43,12 @@ export const SimpleDialog = ({
                         initial={{ y: 5 }}
                         animate={{ y: 0 }}
                         exit={{ y: 0, opacity: 0 }}
-                        className="sm:flex relative shadow-2xl max-w-screen-sm mx-auto bg-white overflow-y-auto md:overflow-hidden h-screen md:h-auto flex-grow">
+                        className={classNames(
+                            'sm:flex relative shadow-2xl mx-auto bg-white overflow-y-auto md:overflow-hidden h-screen md:h-auto flex-grow',
+                            {
+                                [maxWClass]: maxWClass,
+                            },
+                        )}>
                         <Dialog.Title className="sr-only">{title}</Dialog.Title>
                         <div className="w-full relative">
                             <div className="flex flex-col md:overflow-x-hidden flex-grow">
@@ -46,7 +58,14 @@ export const SimpleDialog = ({
                                     </div>
                                     <ModalCloseButton onClose={onClose} />
                                 </div>
-                                <div className="flex flex-grow w-screen max-w-full flex-col space-y-4 p-6 bg-gray-50">
+                                <div
+                                    style={{ maxHeight }}
+                                    className={classNames(
+                                        'flex flex-grow w-screen max-w-full flex-col space-y-4 bg-gray-50 overflow-auto',
+                                        {
+                                            'p-6': !disablePadding,
+                                        },
+                                    )}>
                                     {children}
                                 </div>
                             </div>

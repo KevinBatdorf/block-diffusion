@@ -2,8 +2,18 @@
 
 defined('ABSPATH') or die;
 
+include_once(__DIR__ . '/router.php');
+
 add_action('rest_api_init', function() {
-    KBSDRouter::post('/login', function($payload) {
+    $prefix = '/image-filter';
+
+    KBSDRouter::post($prefix . '/login', function($payload) {
+        if (!current_user_can('upload_files')) {
+            return new WP_REST_Response(
+                ['message' => 'You do not have permission'],
+                403
+            );
+        }
         $stableDiffusionHeaders = ['Authorization' => $payload->get_header('authorization')];
         $stableDiffusionResponse = wp_remote_get(
             "https://api.replicate.com/v1/predictions",
@@ -15,7 +25,13 @@ add_action('rest_api_init', function() {
         );
     });
 
-    KBSDRouter::get('/get-model', function($payload) {
+    KBSDRouter::get($prefix . '/get-model', function($payload) {
+        if (!current_user_can('upload_files')) {
+            return new WP_REST_Response(
+                ['message' => 'You do not have permission'],
+                403
+            );
+        }
         $stableDiffusionSettings = $payload->get_param('model');
         $stableDiffusionResponse = wp_remote_get(
             "https://api.replicate.com/v1/models/{$stableDiffusionSettings}",
@@ -27,7 +43,13 @@ add_action('rest_api_init', function() {
         );
     });
 
-    KBSDRouter::post('/generate', function($payload) {
+    KBSDRouter::post($prefix . '/generate', function($payload) {
+        if (!current_user_can('upload_files')) {
+            return new WP_REST_Response(
+                ['message' => 'You do not have permission'],
+                403
+            );
+        }
         $stableDiffusionResponse = wp_remote_post(
             'https://api.replicate.com/v1/predictions',
             [
@@ -45,7 +67,13 @@ add_action('rest_api_init', function() {
         );
     });
 
-    KBSDRouter::get('/get-prediction', function($payload) {
+    KBSDRouter::get($prefix . '/get-prediction', function($payload) {
+        if (!current_user_can('upload_files')) {
+            return new WP_REST_Response(
+                ['message' => 'You do not have permission'],
+                403
+            );
+        }
         $stableDiffusionSettings = $payload->get_param('id');
         $stableDiffusionResponse = wp_remote_get(
             "https://api.replicate.com/v1/predictions/{$stableDiffusionSettings}",
@@ -57,7 +85,13 @@ add_action('rest_api_init', function() {
         );
     });
 
-    KBSDRouter::post('/cancel', function($payload) {
+    KBSDRouter::post($prefix . '/cancel', function($payload) {
+        if (!current_user_can('upload_files')) {
+            return new WP_REST_Response(
+                ['message' => 'You do not have permission'],
+                403
+            );
+        }
         $stableDiffusionSettings = $payload->get_param('id');
         $stableDiffusionResponse = wp_remote_post(
             "https://api.replicate.com/v1/predictions/{$stableDiffusionSettings}/cancel",
@@ -69,7 +103,13 @@ add_action('rest_api_init', function() {
         );
     });
 
-    KBSDRouter::get('/prompt-suggestion', function($payload) {
+    KBSDRouter::get($prefix . '/prompt-suggestion', function($payload) {
+        if (!current_user_can('upload_files')) {
+            return new WP_REST_Response(
+                ['message' => 'You do not have permission'],
+                403
+            );
+        }
         $stableDiffusionResponse = wp_remote_get("https://www.block-diffusion.com/api/v1/prompt");
         return new WP_REST_Response(
             json_decode(wp_remote_retrieve_body($stableDiffusionResponse), true),
@@ -77,14 +117,13 @@ add_action('rest_api_init', function() {
         );
     });
 
-    KBSDRouter::post('/save-token', function($payload) {
-        update_option('stable_diffusion_settings', [
-            'apiToken' => (string) $payload->get_param('token')
-        ]);
-        return new WP_REST_Response(['success' => true], 200);
-    });
-
-    KBSDRouter::post('/options', function($payload) {
+    KBSDRouter::post($prefix . '/options', function($payload) {
+        if (!current_user_can('upload_files')) {
+            return new WP_REST_Response(
+                ['message' => 'You do not have permission'],
+                403
+            );
+        }
         if (isset($payload['stable_diffusion_options'])) {
             update_option('stable_diffusion_options', $payload['stable_diffusion_options']);
         }
@@ -93,7 +132,13 @@ add_action('rest_api_init', function() {
             200
         );
     });
-    KBSDRouter::get('/options', function($payload) {
+    KBSDRouter::get($prefix . '/options', function($payload) {
+        if (!current_user_can('upload_files')) {
+            return new WP_REST_Response(
+                ['message' => 'You do not have permission'],
+                403
+            );
+        }
         return new WP_REST_Response(
             ['stable_diffusion_options' => get_option('stable_diffusion_options')],
             200

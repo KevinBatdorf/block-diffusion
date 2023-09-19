@@ -2,7 +2,8 @@ import apiFetch from '@wordpress/api-fetch';
 import { useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { mutate } from 'swr';
-import { SimpleDialog } from '../filters/modal/layouts/SimpleDialog';
+import { GLOBAL_API_PREFIX } from '../constants';
+import { SimpleDialog } from './SimpleDialog';
 
 type LoginProps = {
     onClose?: (status?: string) => void;
@@ -26,7 +27,7 @@ export const Login = ({ onClose, incomingError }: LoginProps) => {
         }
         try {
             await apiFetch({
-                path: '/kevinbatdorf/stable-diffusion/save-token',
+                path: `${GLOBAL_API_PREFIX}/save-token?cache=${Date.now()}`,
                 method: 'POST',
                 data: { token },
             });

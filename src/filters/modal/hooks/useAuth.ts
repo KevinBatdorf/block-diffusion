@@ -1,11 +1,12 @@
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
 import useSWR from 'swr';
+import { API_PREFIX } from '../constants';
 
 const fetcher = () =>
     apiFetch({
         method: 'POST',
-        path: `kevinbatdorf/stable-diffusion/login?cache=${Date.now()}`,
+        path: `${API_PREFIX}/login?cache=${Date.now()}`,
     });
 export const useAuth = () => {
     const { data, error, mutate } = useSWR('login', fetcher);

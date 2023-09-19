@@ -4,9 +4,9 @@ import { __ } from '@wordpress/i18n';
 import { Dialog } from '@headlessui/react';
 import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
+import { ModalCloseButton } from '../../../components/ModalControls';
 import { SettingsTabs, useGlobalState } from '../state/global';
 import { useSettingsStore } from '../state/settings';
-import { ModalCloseButton } from './ModalControls';
 
 export const SettingsModal = () => {
     const togglesRef = useRef<HTMLDivElement>(null);
@@ -75,7 +75,7 @@ const SettingsModalContainer = ({
     tab?: SettingsTabs;
 }) => (
     <Dialog
-        className="stable-diffusion-editor stable-diffusion-modal"
+        className="block-diffusion-editor stable-diffusion-modal"
         data-cy="modal-settings"
         key="modal-settings"
         open={Boolean(tab)}

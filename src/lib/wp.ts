@@ -1,5 +1,5 @@
 import apiFetch from '@wordpress/api-fetch';
-import { ImageLike, WpImage } from '../filters/modal/types';
+import { ImageLike, WpImage } from '../types';
 import { imageUrlToBlob } from './image';
 
 export const importImage = async (

@@ -5,11 +5,12 @@ import { __ } from '@wordpress/i18n';
 import { Dialog } from '@headlessui/react';
 import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
-import { previewImageIcon, refreshIcon } from '../../icons';
+import { ModalCloseButton } from '../../../../components/ModalControls';
+import { previewImageIcon, refreshIcon } from '../../../../icons';
+import { PromptResponse } from '../../../../types';
+import { API_PREFIX } from '../../constants';
 import { useGlobalState } from '../../state/global';
 import { useSettingsStore, useSettingsStoreReady } from '../../state/settings';
-import { PromptResponse } from '../../types';
-import { ModalCloseButton } from '../ModalControls';
 import { ImageActions } from '../outputs/ImageActions';
 
 export const PromptGenerator = ({
@@ -46,7 +47,7 @@ export const PromptGenerator = ({
         setFetching(true);
         const { prompt, imageUrls } = await apiFetch<PromptResponse>({
             method: 'GET',
-            path: `kevinbatdorf/stable-diffusion/prompt-suggestion?cache=${Date.now()}`,
+            path: `${API_PREFIX}/prompt-suggestion?cache=${Date.now()}`,
         }).catch((e) => {
             setFetching(false);
             return { prompt: `Error: ${e.message}`, imageUrls: [] };
@@ -86,7 +87,7 @@ export const PromptGenerator = ({
                 <PreviewPopover url={preview} prompt={prompt} />
             </AnimatePresence>
             <Dialog
-                className="stable-diffusion-editor stable-diffusion-modal"
+                className="block-diffusion-editor stable-diffusion-modal"
                 data-cy="modal-prompt-generator"
                 key="modal-prompt-generator"
                 open={showOptin}
@@ -126,7 +127,7 @@ const PreviewPopover = ({ url, prompt }: { url?: string; prompt?: string }) => {
                 </motion.button>
             </Tooltip>
             <Dialog
-                className="stable-diffusion-editor stable-diffusion-modal"
+                className="block-diffusion-editor stable-diffusion-modal"
                 data-cy="modal-switch"
                 key="modal-switch"
                 open={pressed}

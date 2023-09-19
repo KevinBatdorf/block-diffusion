@@ -1,6 +1,6 @@
 const tailwind = require('./tailwind.config');
 
-module.exports = ({ mode }) => ({
+module.exports = ({ mode, file }) => ({
     ident: 'postcss',
     sourceMap: mode !== 'production',
     plugins: [
@@ -9,8 +9,12 @@ module.exports = ({ mode }) => ({
         require('tailwindcss')({
             ...tailwind,
             // Scope the editor css separately from the frontend css.
-            content: ['./src/**/*.{ts,tsx}'],
-            important: tailwind.important + '-editor',
+            content: file.endsWith('style.css')
+                ? ['./src/**/front/**/*.{ts,tsx}']
+                : ['./src/**/*.{ts,tsx}'],
+            important:
+                tailwind.important +
+                (file.endsWith('style.css') ? '' : '-editor'),
         }),
         (css) =>
             css.walkRules((rule) => {

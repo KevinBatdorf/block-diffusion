@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { motion } from 'framer-motion';
-import { ModelData } from '../types';
+import { ModelData } from '../../../types';
 
 type ModelCardProps = {
     modelInfo?: ModelData;

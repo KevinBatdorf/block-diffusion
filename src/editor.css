@@ -1,4 +1,4 @@
-.stable-diffusion-editor {
+.block-diffusion-editor {
     --tw-border-spacing-x: 0;
     --tw-border-spacing-y: 0;
     --tw-translate-x: 0;
@@ -45,7 +45,7 @@
     --tw-backdrop-sepia:
 }
 
-.stable-diffusion-editor ::-webkit-backdrop {
+.block-diffusion-editor ::-webkit-backdrop {
     --tw-border-spacing-x: 0;
     --tw-border-spacing-y: 0;
     --tw-translate-x: 0;
@@ -92,7 +92,7 @@
     --tw-backdrop-sepia:
 }
 
-.stable-diffusion-editor ::backdrop {
+.block-diffusion-editor ::backdrop {
     --tw-border-spacing-x: 0;
     --tw-border-spacing-y: 0;
     --tw-translate-x: 0;
@@ -139,25 +139,25 @@
     --tw-backdrop-sepia:
 }
 
-.stable-diffusion-editor *,
-.stable-diffusion-editor *:after,
-.stable-diffusion-editor *:before {
+.block-diffusion-editor *,
+.block-diffusion-editor *:after,
+.block-diffusion-editor *:before {
     box-sizing: border-box;
-    border: 0 solid #e5e7eb;
+    /* border: 0 solid #e5e7eb; */
 }
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 /* Add more styles here specific to the editor only */
 
-.stable-diffusion-editor.stable-diffusion-modal {
+.block-diffusion-editor.stable-diffusion-modal {
     @apply fixed z-high inset-0 overflow-y-auto;
 }
-.stable-diffusion-editor .components-button.is-destructive:focus:not(:disabled) {
+.block-diffusion-editor .components-button.is-destructive:focus:not(:disabled) {
     @apply text-white;
 }
 
-.stable-diffusion-editor .spin {
+.block-diffusion-editor .spin {
     animation: stable-diffusion-spin 1s linear infinite
 }
 @keyframes stable-diffusion-spin {

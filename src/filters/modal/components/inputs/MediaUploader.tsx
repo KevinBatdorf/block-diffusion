@@ -5,9 +5,9 @@ import { __ } from '@wordpress/i18n';
 import { MediaUpload as MeidiaLibrary } from '@wordpress/media-utils';
 import classNames from 'classnames';
 import { fabric } from 'fabric';
-import { uploadImageIcon } from '../../icons';
+import { uploadImageIcon } from '../../../../icons';
+import { ImageLike } from '../../../../types';
 import { useCanvasState } from '../../state/canvas';
-import { ImageLike } from '../../types';
 
 type MediaUploaderProps = {
     disabled: boolean;

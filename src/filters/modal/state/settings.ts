@@ -2,6 +2,7 @@ import apiFetch from '@wordpress/api-fetch';
 import { useEffect, useState } from '@wordpress/element';
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
+import { API_PREFIX } from '../constants';
 
 type OptIns = typeof optInsOptions[number];
 type DisabledFeatures = typeof disabledFeatures[number];
@@ -38,7 +39,7 @@ const initialState = {
 
 export const getSettings = async (name: string) => {
     const settings = await apiFetch({
-        path: '/kevinbatdorf/stable-diffusion/options',
+        path: `${API_PREFIX}/options`,
     });
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore-next-line
@@ -62,10 +63,10 @@ const storage = {
             ),
         };
         await apiFetch({
-            path: '/kevinbatdorf/stable-diffusion/options',
+            path: `${API_PREFIX}/options?cache=${Date.now()}`,
             method: 'POST',
             data,
-        });
+        }).catch(console.log);
     },
     removeItem: () => undefined,
 };

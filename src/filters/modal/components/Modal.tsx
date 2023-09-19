@@ -1,10 +1,10 @@
 import { useRef } from '@wordpress/element';
 import { Dialog } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { ImageLike } from '../../../types';
 import { ModalDefault } from '../layouts/ModalDefault';
 import { models } from '../models';
 import { useGlobalState } from '../state/global';
-import { ImageLike } from '../types';
 import { UserInferface } from './UserInterface';
 
 type ModalProps = {
@@ -22,7 +22,7 @@ export const Modal = ({ setImage, onClose }: ModalProps) => {
 
     return (
         <Dialog
-            className="stable-diffusion-editor stable-diffusion-modal"
+            className="block-diffusion-editor stable-diffusion-modal"
             data-cy="model-screen"
             initialFocus={initialFocus}
             key="main-modal"

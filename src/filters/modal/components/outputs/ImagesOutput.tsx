@@ -1,9 +1,9 @@
 import { __ } from '@wordpress/i18n';
 import classNames from 'classnames';
 import { motion } from 'framer-motion';
+import { ImageLike, PredictionData } from '../../../../types';
 import { useGlobalState } from '../../state/global';
 import { useInputsState } from '../../state/inputs';
-import { ImageLike, PredictionData } from '../../types';
 import { ImageActions } from './ImageActions';
 
 type ImageOutputProps = {

@@ -44,7 +44,7 @@ export const LoginPrompt = () => {
     }, []);
 
     const SuccessToast = () => (
-        <div className="stable-diffusion-editor">
+        <div className="block-diffusion-editor">
             <div className="w-full fixed bottom-4 left-0 right-0 px-4 flex justify-end z-max pointer-events-none">
                 <div className="shadow-2xl" data-cy="login-success-toast">
                     <Snackbar>

@@ -8,7 +8,7 @@ delete colors['blueGray'];
 // See postcss.config.js for more parsing options.
 module.exports = {
     // Tnis should match the namespace you use in your css styles.
-    important: '.stable-diffusion',
+    important: '.block-diffusion',
     theme: {
         screens: {
             xxs: '280px',
